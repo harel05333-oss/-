@@ -91,7 +91,7 @@ a { color: inherit; text-decoration: none; }
 .container { max-width: 1140px; margin: 0 auto; padding: 40px 24px 90px; }
 
 .section-title { font-size: 1.6rem; font-weight: 900; margin-bottom: 6px; }
-.section-title .bar { display: inline-block; width: 6px; height: 22px; background: var(--red); border-radius: 3px; margin-left: 10px; vertical-align: -3px; }
+.section-title .bar { display: inline-block; width: 6px; height: 22px; background: var(--red); border-radius: 3px; margin-inline-end: 10px; vertical-align: -3px; }
 .section-sub { color: var(--gray); margin-bottom: 26px; }
 
 .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
@@ -179,7 +179,7 @@ textarea { resize: vertical; min-height: 70px; }
 .toast.err { border-color: var(--red); }
 
 .reg-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
-.reg-table th, .reg-table td { text-align: right; padding: 9px 10px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+.reg-table th, .reg-table td { text-align: start; padding: 9px 10px; border-bottom: 1px solid var(--line); white-space: nowrap; }
 .reg-table th { color: var(--gray); font-weight: 800; }
 
 .hint { color: var(--muted); font-size: 0.82rem; }
@@ -199,14 +199,23 @@ textarea { resize: vertical; min-height: 70px; }
 .stat .l { color: var(--gray); font-size: 0.82rem; margin-top: 4px; }
 .stat .v.red { color: var(--red); }
 
-/* Live map (radar) */
-.map-wrap { position: relative; background: var(--black); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
-#liveMap { display: block; width: 100%; height: auto; }
-.legend { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 12px; font-size: 0.85rem; color: var(--gray-light); }
-.legend .dot { display: inline-block; width: 12px; height: 12px; border-radius: 50%; margin-left: 6px; vertical-align: -1px; }
-.dot.me { background: var(--red); }
-.dot.comp { background: var(--white); }
-.dot.near { background: var(--gray); }
+/* Device connect */
+.device-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; }
+.device-opt {
+  position: relative; cursor: pointer; font-family: inherit; font-weight: 700; font-size: 0.95rem;
+  background: var(--black); color: var(--white); border: 1px solid var(--line); border-radius: 14px;
+  padding: 18px 12px; display: flex; flex-direction: column; align-items: center; gap: 8px; transition: all 0.15s;
+}
+.device-opt:hover { border-color: var(--red-line); }
+.device-opt.active { border-color: var(--red); background: var(--red-soft); box-shadow: 0 0 0 3px var(--red-soft); }
+.device-opt .dicon { font-size: 1.8rem; }
+.device-opt .dstate { position: absolute; top: 10px; inset-inline-end: 12px; color: var(--green); font-size: 0.7rem; }
+
+/* Route map (Leaflet) */
+.route-map { height: 440px; width: 100%; border-radius: 16px; overflow: hidden; border: 1px solid var(--line); z-index: 0; }
+.leaflet-container { background: #0b0b0d; font-family: inherit; }
+.leaflet-control-attribution { background: rgba(11,11,13,0.7) !important; color: var(--muted) !important; }
+.leaflet-control-attribution a { color: var(--gray) !important; }
 
 .verdict { border-radius: 12px; padding: 14px 16px; font-weight: 700; }
 .verdict.ok { background: rgba(22,163,74,0.14); border: 1px solid rgba(22,163,74,0.5); color: #86efac; }

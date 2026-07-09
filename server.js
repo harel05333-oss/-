@@ -387,6 +387,7 @@ app.post('/api/runs', (req, res) => {
     avgCadence: verdict.avgCadence,
     verified: verdict.verified,
     flags: verdict.flags,
+    device: ['garmin', 'apple_watch', 'phone'].includes(b.device) ? b.device : 'phone',
     lastPos: last && typeof last.lat === 'number' ? { lat: last.lat, lng: last.lng } : null,
     createdAt: new Date().toISOString(),
   };
@@ -396,64 +397,59 @@ app.post('/api/runs', (req, res) => {
   res.status(201).json({ run, verdict, pointsEarned, dailyBonus, user: publicUser(db, user) });
 });
 
-// מפה חיה בסגנון סטרבה: רצים בקרבת מקום
-// מחזיר משתתפים באותה תחרות + רצים נוספים בסביבה (חלקם מדומים לצורך הדגמה)
-app.get('/api/live', (req, res) => {
-  const lat = Number(req.query.lat);
-  const lng = Number(req.query.lng);
-  const raceId = req.query.raceId || null;
-  if (!Number.isFinite(lat) || !Number.isFinite(lng)) {
-    return res.status(400).json({ error: 'נדרשים lat ו-lng' });
-  }
-  const db = readDb();
-
-  // רצים אמיתיים אחרונים עם מיקום (5 דקות אחרונות)
-  const now = Date.now();
-  const realRunners = db.runs
-    .filter((r) => r.lastPos && now - new Date(r.createdAt).getTime() < 5 * 60 * 1000)
-    .map((r) => {
-      const u = db.users.find((x) => x.id === r.userId);
-      return {
-        id: r.id,
-        name: u ? u.name || 'רץ/ה' : 'רץ/ה',
-        lat: r.lastPos.lat,
-        lng: r.lastPos.lng,
-        inRace: raceId ? r.raceId === raceId : false,
-        distanceKm: Math.round(haversineKm({ lat, lng }, r.lastPos) * 1000) / 1000,
-        live: true,
-        simulated: false,
-      };
-    });
-
-  // רצים מדומים בסביבה להדגמת המפה (מיקום דטרמיניסטי-יחסי)
-  const seed = Math.floor((lat + lng) * 1000);
-  const rand = (n) => {
-    const x = Math.sin(seed + n) * 10000;
-    return x - Math.floor(x);
+// ---------- אינטגרציות מכשירים (Garmin / Apple Watch / טלפון) ----------
+// כל אינטגרציה "מוגדרת" רק אם קיימים משתני הסביבה המתאימים. אחרת פועלת במצב סימולציה.
+function integrationsStatus() {
+  const garminConfigured = Boolean(process.env.GARMIN_CLIENT_ID && process.env.GARMIN_CLIENT_SECRET);
+  const appleConfigured = process.env.APPLE_WATCH_ENABLED === 'true';
+  return {
+    garmin: {
+      id: 'garmin',
+      configured: garminConfigured,
+      // בייצור: OAuth מול Garmin Connect / Health API. ללא credentials רצים בסימולציה.
+      authUrl: garminConfigured ? '/api/integrations/garmin/auth' : null,
+    },
+    apple_watch: {
+      id: 'apple_watch',
+      configured: appleConfigured,
+      // Apple Watch מסתנכרן דרך HealthKit באפליקציית iOS מלווה. בדפדפן — סימולציה.
+      authUrl: null,
+    },
+    phone: {
+      id: 'phone',
+      configured: true, // חיישני הטלפון / דפדפן (Geolocation) תמיד זמינים, עם נפילה לסימולציה
+      authUrl: null,
+    },
   };
-  const names = ['נועה', 'איתי', 'שירה', 'עומר', 'מאיה', 'דן'];
-  const simulated = names.map((name, i) => {
-    const dLat = (rand(i) - 0.5) * 0.03; // ~1.5 ק"מ ברדיוס
-    const dLng = (rand(i + 100) - 0.5) * 0.03;
-    const pos = { lat: lat + dLat, lng: lng + dLng };
-    return {
-      id: `sim-${i}`,
-      name,
-      lat: pos.lat,
-      lng: pos.lng,
-      inRace: raceId ? rand(i + 200) > 0.5 : false,
-      distanceKm: Math.round(haversineKm({ lat, lng }, pos) * 1000) / 1000,
-      live: true,
-      simulated: true,
-    };
-  });
+}
 
-  res.json({ center: { lat, lng }, runners: [...realRunners, ...simulated] });
+app.get('/api/integrations', (req, res) => {
+  res.json({ integrations: integrationsStatus() });
 });
 
-// קונפיגורציה ציבורית (חוקי נקודות) לשימוש בממשק
+// "חיבור" מכשיר. בסביבה ללא credentials מוחזר חיבור מדומה (simulated=true).
+app.post('/api/integrations/:provider/connect', (req, res) => {
+  const provider = req.params.provider;
+  const status = integrationsStatus();
+  if (!status[provider]) return res.status(404).json({ error: 'ספק לא נתמך / Unsupported provider' });
+  const configured = status[provider].configured && provider !== 'phone';
+  res.json({
+    provider,
+    connected: true,
+    simulated: !configured, // ללא credentials אמיתיים - נתוני חיישנים מדומים
+    sessionToken: crypto.randomUUID(),
+  });
+});
+
+// קונפיגורציה ציבורית (חוקי נקודות + סטטוס אינטגרציות) לשימוש בממשק
 app.get('/api/config', (req, res) => {
-  res.json({ pointsPerKm: POINTS_PER_KM, dailyGoalKm: DAILY_GOAL_KM, dailyGoalBonus: DAILY_GOAL_BONUS, pointsPerIls: POINTS_PER_ILS });
+  res.json({
+    pointsPerKm: POINTS_PER_KM,
+    dailyGoalKm: DAILY_GOAL_KM,
+    dailyGoalBonus: DAILY_GOAL_BONUS,
+    pointsPerIls: POINTS_PER_ILS,
+    integrations: integrationsStatus(),
+  });
 });
 
 app.listen(PORT, () => {
