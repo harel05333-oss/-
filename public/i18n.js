@@ -1,6 +1,9 @@
 'use strict';
 
-// מודול דו-לשוני (עברית / אנגלית) עם החלפת כיווניות RTL/LTR
+// מודול דו-לשוני (עברית / אנגלית) עם החלפת כיווניות RTL/LTR.
+// עטוף ב-IIFE כדי לא לזהם את ה-scope הגלובלי (סקריפטים קלאסיים חולקים scope,
+// כך שהגדרות גלובליות היו מתנגשות עם `const { t } = window.i18n` בדפים).
+(function () {
 const I18N = {
   he: {
     'lang.toggle': 'EN',
@@ -385,3 +388,4 @@ function initI18n(onChange) {
 }
 
 window.i18n = { t, getLang, setLang, applyI18n, initI18n, deviceName };
+})();
