@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>מרוצים אונליין - המרוצים הקרובים</title>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo">🏃</span>
+      <span>מרוצים אונליין</span>
+    </div>
+    <nav class="nav-links">
+      <a class="btn btn-ghost" href="/admin.html">🔐 <span class="label-full">אזור מנהל</span></a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div class="hero-inner">
+      <h1>המרוצים הקרובים</h1>
+      <p>בחרו את המרוץ שלכם, בדקו את המרחק ומיקום המפגש, והירשמו בכמה קליקים. נתראה בקו הזינוק!</p>
+    </div>
+  </section>
+
+  <main class="container">
+    <h2 class="section-title">מרוצים פתוחים להרשמה</h2>
+    <p class="section-sub" id="subtitle">טוען מרוצים…</p>
+    <div id="races" class="grid"></div>
+  </main>
+
+  <!-- Registration modal -->
+  <div class="modal-overlay" id="regModal">
+    <div class="modal">
+      <h3>הרשמה למרוץ</h3>
+      <p class="sub" id="regRaceName"></p>
+      <form id="regForm" class="stack">
+        <div class="field">
+          <label for="regName">שם מלא *</label>
+          <input id="regName" name="name" type="text" required placeholder="לדוגמה: דנה כהן" />
+        </div>
+        <div class="field">
+          <label for="regPhone">טלפון *</label>
+          <input id="regPhone" name="phone" type="tel" required placeholder="050-0000000" />
+        </div>
+        <div class="field">
+          <label for="regEmail">אימייל</label>
+          <input id="regEmail" name="email" type="email" placeholder="name@example.com" />
+        </div>
+        <div class="modal-actions">
+          <button type="submit" class="btn btn-primary btn-block">אישור הרשמה</button>
+          <button type="button" class="btn btn-ghost" id="regCancel">ביטול</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="/app.js"></script>
+</body>
+</html>
