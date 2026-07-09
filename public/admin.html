@@ -3,103 +3,86 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ניהול מרוצים - אזור מנהל</title>
+  <title>ניהול · RUNRED</title>
   <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;600;700;800;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/styles.css" />
 </head>
 <body>
   <header class="topbar">
-    <div class="brand">
-      <span class="logo">🛠️</span>
-      <span>ניהול מרוצים</span>
-    </div>
+    <div class="brand"><span class="logo">🛠️</span><span>RUN<span class="accent">RED</span> · ניהול</span></div>
     <nav class="nav-links">
-      <a class="btn btn-ghost" href="/">🏃 <span class="label-full">לדף הציבורי</span></a>
-      <button class="btn btn-ghost" id="logoutBtn" style="display:none">התנתקות</button>
+      <a class="btn btn-ghost btn-sm" href="/">🏃 <span class="label-full">לדף הציבורי</span></a>
+      <button class="btn btn-ghost btn-sm" id="logoutBtn" style="display:none">התנתקות</button>
     </nav>
   </header>
 
-  <!-- Login gate -->
   <section class="container" id="loginView">
     <div class="panel" style="max-width:420px;margin:40px auto;">
-      <h2 class="section-title">כניסת מנהל</h2>
-      <p class="section-sub">הזינו את סיסמת המנהל כדי לנהל את המרוצים.</p>
+      <h2 class="section-title"><span class="bar"></span>כניסת מנהל</h2>
+      <p class="section-sub">הזינו את סיסמת המנהל.</p>
       <form id="loginForm" class="stack">
-        <div class="field">
-          <label for="adminKey">סיסמה</label>
-          <input id="adminKey" type="password" required placeholder="הזינו סיסמה" />
-        </div>
+        <div class="field"><label for="adminKey">סיסמה</label><input id="adminKey" type="password" required placeholder="הזינו סיסמה" /></div>
         <button type="submit" class="btn btn-primary btn-block">כניסה</button>
-        <p class="hint">ברירת מחדל לפיתוח: <b>admin123</b> (ניתן לשנות דרך משתנה הסביבה ADMIN_KEY).</p>
+        <p class="hint">ברירת מחדל לפיתוח: <b>admin123</b> (ניתן לשנות דרך ADMIN_KEY).</p>
       </form>
     </div>
   </section>
 
-  <!-- Admin dashboard -->
   <main class="container" id="adminView" style="display:none">
     <div class="panel">
-      <h2 class="section-title">יצירת מרוץ חדש</h2>
-      <p class="section-sub">מלאו את פרטי המרוץ. שדות עם * הם חובה.</p>
+      <h2 class="section-title"><span class="bar"></span>יצירת מרוץ חדש</h2>
+      <p class="section-sub">כולל עלות כניסה, פרסים למקומות 1-3 ואופן הזנקה. שדות עם * חובה.</p>
       <form id="raceForm">
         <div class="form-grid">
-          <div class="field">
-            <label for="title">שם המרוץ *</label>
-            <input id="title" type="text" required placeholder="לדוגמה: מרוץ הסתיו בפארק" />
+          <div class="field"><label for="title">שם המרוץ *</label><input id="title" type="text" required placeholder="מרוץ הסתיו" /></div>
+          <div class="field"><label for="distanceKm">מרחק (ק"מ) *</label><input id="distanceKm" type="number" min="0" step="0.1" required placeholder="10" /></div>
+          <div class="field"><label for="date">תאריך *</label><input id="date" type="date" required /></div>
+          <div class="field"><label for="time">שעת הזנקה</label><input id="time" type="time" /></div>
+          <div class="field"><label for="price">עלות כניסה (₪)</label><input id="price" type="number" min="0" step="1" placeholder="0 = חינם" /></div>
+          <div class="field"><label for="startMode">אופן הזנקה</label>
+            <select id="startMode">
+              <option value="collective">הזנקה קולקטיבית (כולם יחד)</option>
+              <option value="anytime">ריצה חופשית (מתי שרוצים)</option>
+            </select>
           </div>
-          <div class="field">
-            <label for="distanceKm">מרחק (ק"מ) *</label>
-            <input id="distanceKm" type="number" min="0" step="0.1" required placeholder="10" />
-          </div>
-          <div class="field">
-            <label for="date">תאריך *</label>
-            <input id="date" type="date" required />
-          </div>
-          <div class="field">
-            <label for="time">שעת זינוק</label>
-            <input id="time" type="time" />
-          </div>
-          <div class="field">
-            <label for="location">מיקום</label>
-            <input id="location" type="text" placeholder="פארק הירקון, תל אביב" />
-          </div>
-          <div class="field">
-            <label for="capacity">מקסימום משתתפים</label>
-            <input id="capacity" type="number" min="1" step="1" placeholder="ללא הגבלה" />
-          </div>
-          <div class="field full">
-            <label for="description">תיאור</label>
-            <textarea id="description" placeholder="פרטים על המסלול, רמת קושי, פרסים וכו'"></textarea>
-          </div>
-          <div class="field full">
-            <label for="howToJoin">איך מתחברים / מגיעים</label>
-            <textarea id="howToJoin" placeholder="נקודת מפגש, הוראות הגעה, קישור לקבוצת וואטסאפ וכו'"></textarea>
-          </div>
+          <div class="field"><label for="capacity">מקסימום משתתפים</label><input id="capacity" type="number" min="1" step="1" placeholder="ללא הגבלה" /></div>
+          <div class="field"><label for="location">מיקום / אזור</label><input id="location" type="text" placeholder="ארצי / פארק הירקון" /></div>
+          <div class="field"><label for="prizeFirst">🥇 פרס מקום ראשון</label><input id="prizeFirst" type="text" placeholder="₪1,000 + מדליה" /></div>
+          <div class="field"><label for="prizeSecond">🥈 פרס מקום שני</label><input id="prizeSecond" type="text" placeholder="₪500" /></div>
+          <div class="field"><label for="prizeThird">🥉 פרס מקום שלישי</label><input id="prizeThird" type="text" placeholder="₪250" /></div>
+          <div class="field full"><label for="description">תיאור</label><textarea id="description" placeholder="פרטי המסלול, רמת קושי וכו'"></textarea></div>
+          <div class="field full"><label for="howToJoin">איך מתחברים / מזניקים</label><textarea id="howToJoin" placeholder="הזנקה קולקטיבית ב-07:30, רצים מכל מקום, מתחברים לאפליקציה ומזדהים לפי GPS"></textarea></div>
         </div>
-        <div style="margin-top:18px">
-          <button type="submit" class="btn btn-primary">➕ יצירת מרוץ</button>
-        </div>
+        <div style="margin-top:18px"><button type="submit" class="btn btn-primary">➕ יצירת מרוץ</button></div>
       </form>
     </div>
 
-    <h2 class="section-title">המרוצים שנוצרו</h2>
+    <div class="panel">
+      <h2 class="section-title"><span class="bar"></span>קודי הנחה</h2>
+      <p class="section-sub">צרו קודי הנחה לשימוש בקופה.</p>
+      <form id="discountForm" class="row-gap">
+        <input id="dcCode" type="text" placeholder="קוד (למשל RUN20)" style="flex:2" />
+        <input id="dcPercent" type="number" min="1" max="100" placeholder="% הנחה" style="flex:1" />
+        <button type="submit" class="btn btn-primary">הוספה</button>
+      </form>
+      <div id="discountList" style="margin-top:16px"></div>
+    </div>
+
+    <h2 class="section-title"><span class="bar"></span>המרוצים שנוצרו</h2>
     <p class="section-sub" id="adminSubtitle">טוען…</p>
     <div id="adminRaces" class="grid"></div>
   </main>
 
-  <!-- Registrations modal -->
   <div class="modal-overlay" id="regsModal">
-    <div class="modal" style="max-width:640px">
+    <div class="modal wide">
       <h3 id="regsTitle">נרשמים</h3>
       <p class="sub" id="regsSub"></p>
       <div id="regsBody"></div>
-      <div class="modal-actions">
-        <button type="button" class="btn btn-ghost" id="regsClose">סגירה</button>
-      </div>
+      <div class="modal-actions"><button type="button" class="btn btn-ghost" id="regsClose">סגירה</button></div>
     </div>
   </div>
 
   <div class="toast" id="toast"></div>
-
   <script src="/admin.js"></script>
 </body>
 </html>

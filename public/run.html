@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ריצה חיה · RUNRED</title>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="logo">📍</span><span>RUN<span class="accent">RED</span> · ריצה חיה</span></div>
+    <nav class="nav-links">
+      <span class="points-chip" id="pointsChip" style="display:none"><span class="star">★</span><span id="pointsVal">0</span> נק'</span>
+      <a class="btn btn-ghost btn-sm" href="/">🏃 <span class="label-full">למרוצים</span></a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <!-- Identify -->
+    <div class="panel" id="identifyPanel">
+      <h2 class="section-title"><span class="bar"></span>מי רץ/ה?</h2>
+      <p class="section-sub">מזדהים לפי אימייל כדי לצבור נקודות ולעקוב אחר היעד היומי.</p>
+      <form id="identifyForm" class="row-gap">
+        <input id="idName" type="text" placeholder="שם" style="flex:1" />
+        <input id="idEmail" type="email" placeholder="אימייל" required style="flex:2" />
+        <button type="submit" class="btn btn-primary">כניסה</button>
+      </form>
+    </div>
+
+    <!-- Runner dashboard -->
+    <div id="runnerView" style="display:none">
+      <div class="panel">
+        <div class="row-gap">
+          <div>
+            <h2 class="section-title" style="margin:0"><span class="bar"></span>יעד יומי</h2>
+            <p class="hint" id="goalHint"></p>
+          </div>
+          <div class="spacer"></div>
+          <span class="points-chip"><span class="star">★</span><span id="pointsVal2">0</span> נק'</span>
+        </div>
+        <div class="progress" style="margin-top:14px"><span id="goalBar"></span></div>
+      </div>
+
+      <div class="panel">
+        <h2 class="section-title"><span class="bar"></span>ריצה חיה</h2>
+        <p class="section-sub">כל אחד רץ מהמקום שלו. בהזנקה קולקטיבית כולם מתחילים יחד ומזדהים לפי GPS. חובה דופק, תדר צעדים ומיקום לאימות.</p>
+        <div class="row-gap" style="margin-bottom:16px">
+          <div class="field" style="flex:2"><label for="raceSelect">מרוץ (אופציונלי)</label><select id="raceSelect"><option value="">אימון חופשי (ללא מרוץ)</option></select></div>
+          <label class="switch" title="שולח נתונים לא סבירים כדי להדגים את מנגנון האנטי-רמאות"><input type="checkbox" id="cheatToggle" /> הדגמת רמאות</label>
+        </div>
+
+        <div class="stat-grid" style="margin-bottom:16px">
+          <div class="stat"><div class="v red" id="stDist">0.00</div><div class="l">ק"מ</div></div>
+          <div class="stat"><div class="v" id="stTime">00:00</div><div class="l">זמן</div></div>
+          <div class="stat"><div class="v" id="stPace">—</div><div class="l">קצב /ק"מ</div></div>
+          <div class="stat"><div class="v" id="stHr">—</div><div class="l">דופק</div></div>
+          <div class="stat"><div class="v" id="stCad">—</div><div class="l">תדר צעדים</div></div>
+        </div>
+
+        <div class="row-gap">
+          <button class="btn btn-primary" id="startBtn">▶ התחלת ריצה</button>
+          <button class="btn btn-white" id="stopBtn" style="display:none">⏹ סיום ואימות</button>
+          <span class="hint" id="gpsStatus"></span>
+        </div>
+        <div id="verdictBox" style="margin-top:16px"></div>
+      </div>
+
+      <div class="panel">
+        <h2 class="section-title"><span class="bar"></span>מפה חיה · מי רץ באזור</h2>
+        <p class="section-sub">כמו בסטרבה — רואים אותך בלייב, מתחרים באותו מרוץ, ורצים נוספים בסביבה (שלא בתחרות).</p>
+        <div class="map-wrap"><canvas id="liveMap" width="900" height="460"></canvas></div>
+        <div class="legend">
+          <span><span class="dot me"></span>אני</span>
+          <span><span class="dot comp"></span>מתחרים באותו מרוץ</span>
+          <span><span class="dot near"></span>רצים בסביבה (לא בתחרות)</span>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div class="toast" id="toast"></div>
+  <script src="/run.js"></script>
+</body>
+</html>
