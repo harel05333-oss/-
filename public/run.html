@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RUNRED · Live run</title>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="logo">📍</span><span>RUN<span class="accent">RED</span> · <span data-i18n="run.brand">ריצה חיה</span></span></div>
+    <nav class="nav-links">
+      <span class="points-chip" id="pointsChip" style="display:none"><span class="star">★</span><span id="pointsVal">0</span> <span data-i18n="common.pts">נק'</span></span>
+      <button class="btn btn-ghost btn-sm" id="langToggle">EN</button>
+      <a class="btn btn-ghost btn-sm" href="/">🏃 <span class="label-full" data-i18n="nav.races">מרוצים</span></a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <div class="panel" id="identifyPanel">
+      <h2 class="section-title"><span class="bar"></span><span data-i18n="run.id.title">מי רץ/ה?</span></h2>
+      <p class="section-sub" data-i18n="run.id.sub"></p>
+      <form id="identifyForm" class="row-gap">
+        <input id="idName" type="text" data-i18n-ph="run.id.name" style="flex:1" />
+        <input id="idEmail" type="email" data-i18n-ph="run.id.email" required style="flex:2" />
+        <button type="submit" class="btn btn-primary" data-i18n="run.id.enter">כניסה</button>
+      </form>
+    </div>
+
+    <div id="runnerView" style="display:none">
+      <div class="panel">
+        <div class="row-gap">
+          <div>
+            <h2 class="section-title" style="margin:0"><span class="bar"></span><span data-i18n="run.goal.title">יעד יומי</span></h2>
+            <p class="hint" id="goalHint"></p>
+          </div>
+          <div class="spacer"></div>
+          <span class="points-chip"><span class="star">★</span><span id="pointsVal2">0</span> <span data-i18n="common.pts">נק'</span></span>
+        </div>
+        <div class="progress" style="margin-top:14px"><span id="goalBar"></span></div>
+      </div>
+
+      <div class="panel">
+        <h2 class="section-title"><span class="bar"></span><span data-i18n="run.dev.title">חיבור מכשיר</span></h2>
+        <p class="section-sub" data-i18n="run.dev.sub"></p>
+        <div class="device-grid" id="deviceGrid">
+          <button class="device-opt" data-device="garmin"><span class="dicon">⌚</span><span data-i18n="run.dev.garmin">Garmin</span><span class="dstate" data-state></span></button>
+          <button class="device-opt" data-device="apple_watch"><span class="dicon"></span><span data-i18n="run.dev.apple">Apple Watch</span><span class="dstate" data-state></span></button>
+          <button class="device-opt active" data-device="phone"><span class="dicon">📱</span><span data-i18n="run.dev.phone">טלפון</span><span class="dstate" data-state></span></button>
+        </div>
+        <p class="note" id="deviceNote" style="margin-top:14px;display:none"></p>
+      </div>
+
+      <div class="panel">
+        <h2 class="section-title"><span class="bar"></span><span data-i18n="run.live.title">ריצה חיה</span></h2>
+        <p class="section-sub" data-i18n="run.live.sub"></p>
+        <div class="row-gap" style="margin-bottom:16px">
+          <div class="field" style="flex:2"><label data-i18n="run.race.label">מרוץ (אופציונלי)</label>
+            <select id="raceSelect"><option value="" data-i18n="run.race.free">אימון חופשי</option></select>
+          </div>
+          <label class="switch"><input type="checkbox" id="cheatToggle" /> <span data-i18n="run.cheat">הדגמת רמאות</span></label>
+        </div>
+        <div class="stat-grid" style="margin-bottom:16px">
+          <div class="stat"><div class="v red" id="stDist">0.00</div><div class="l" data-i18n="run.stat.dist">ק"מ</div></div>
+          <div class="stat"><div class="v" id="stTime">00:00</div><div class="l" data-i18n="run.stat.time">זמן</div></div>
+          <div class="stat"><div class="v" id="stPace">—</div><div class="l" data-i18n="run.stat.pace">קצב /ק"מ</div></div>
+          <div class="stat"><div class="v" id="stHr">—</div><div class="l" data-i18n="run.stat.hr">דופק</div></div>
+          <div class="stat"><div class="v" id="stCad">—</div><div class="l" data-i18n="run.stat.cad">תדר צעדים</div></div>
+          <div class="stat"><div class="v" id="stCal">—</div><div class="l" data-i18n="run.stat.cal">קלוריות</div></div>
+        </div>
+        <div class="row-gap">
+          <button class="btn btn-primary" id="startBtn" data-i18n="run.start">▶ התחלת ריצה</button>
+          <button class="btn btn-white" id="stopBtn" style="display:none" data-i18n="run.stop">⏹ סיום ואימות</button>
+          <span class="hint" id="gpsStatus"></span>
+        </div>
+        <div id="verdictBox" style="margin-top:16px"></div>
+      </div>
+
+      <div class="panel">
+        <h2 class="section-title"><span class="bar"></span><span data-i18n="run.map.title">מפת המסלול</span></h2>
+        <p class="section-sub" data-i18n="run.map.sub"></p>
+        <div id="routeMap" class="route-map"></div>
+      </div>
+    </div>
+  </main>
+
+  <div class="toast" id="toast"></div>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+          integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="/i18n.js"></script>
+  <script src="/run.js"></script>
+</body>
+</html>

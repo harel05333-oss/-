@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RUNRED · Online races</title>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="logo">🏃</span><span>RUN<span class="accent">RED</span></span></div>
+    <nav class="nav-links">
+      <button class="btn btn-ghost btn-sm" id="langToggle">EN</button>
+      <a class="btn btn-ghost btn-sm" href="/run.html">📍 <span class="label-full" data-i18n="nav.run">ריצה חיה</span></a>
+      <a class="btn btn-ghost btn-sm" href="/admin.html">🔐 <span class="label-full" data-i18n="nav.admin">אזור מנהל</span></a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div class="hero-inner">
+      <h1><span data-i18n="pub.title1">רצים מכל מקום.</span> <span class="accent" data-i18n="pub.title2">מזניקים ביחד.</span></h1>
+      <p data-i18n="pub.sub"></p>
+      <div class="hero-cta">
+        <a class="btn btn-primary" href="#races" data-i18n="pub.cta1">למרוצים הקרובים</a>
+        <a class="btn btn-white" href="/run.html" data-i18n="pub.cta2">התחלת ריצה חיה</a>
+      </div>
+    </div>
+  </section>
+
+  <main class="container">
+    <h2 class="section-title" id="races"><span class="bar"></span><span data-i18n="pub.races.title">מרוצים פתוחים</span></h2>
+    <p class="section-sub" id="subtitle"></p>
+    <div id="racesEl" class="grid"></div>
+  </main>
+
+  <div class="modal-overlay" id="checkoutModal">
+    <div class="modal">
+      <h3 data-i18n="co.title">הרשמה ותשלום</h3>
+      <p class="sub" id="coRaceName"></p>
+      <form id="checkoutForm" class="stack">
+        <div class="field"><label data-i18n="co.name">שם מלא *</label><input id="coName" type="text" required /></div>
+        <div class="field"><label data-i18n="co.phone">טלפון *</label><input id="coPhone" type="tel" required /></div>
+        <div class="field"><label data-i18n="co.emailPoints">אימייל</label><input id="coEmail" type="email" placeholder="name@example.com" /></div>
+
+        <div class="field">
+          <label data-i18n="co.payMethod">אמצעי תשלום</label>
+          <div class="pay-methods" id="payMethods">
+            <div class="pay-opt active" data-method="apple_pay"><span class="picon"></span>Apple Pay</div>
+            <div class="pay-opt" data-method="credit_card"><span class="picon">💳</span><span data-i18n="co.card">כרטיס אשראי</span></div>
+            <div class="pay-opt" data-method="other"><span class="picon">🏦</span><span data-i18n="co.other">אחר</span></div>
+          </div>
+        </div>
+
+        <div id="cardFields" style="display:none" class="stack">
+          <div class="field"><label data-i18n="co.cardNumber">מספר כרטיס</label><input id="coCard" inputmode="numeric" placeholder="4242 4242 4242 4242" /></div>
+          <div class="row-gap">
+            <div class="field" style="flex:1"><label data-i18n="co.exp">תוקף</label><input id="coExp" placeholder="12/28" /></div>
+            <div class="field" style="flex:1"><label data-i18n="co.cvc">CVC</label><input id="coCvc" placeholder="123" /></div>
+          </div>
+        </div>
+
+        <div class="row-gap">
+          <input id="coDiscount" type="text" data-i18n-ph="co.discountPh" style="flex:1" />
+          <button type="button" class="btn btn-ghost" id="applyDiscount" data-i18n="co.apply">החלה</button>
+        </div>
+        <label class="switch" id="usePointsWrap" style="display:none">
+          <input type="checkbox" id="coUsePoints" /> <span id="pointsLabel"></span>
+        </label>
+
+        <div class="breakdown" id="breakdown"></div>
+
+        <div class="modal-actions">
+          <button type="submit" class="btn btn-primary btn-block" id="payBtn" data-i18n="co.pay">תשלום והרשמה</button>
+          <button type="button" class="btn btn-ghost" id="coCancel" data-i18n="common.cancel">ביטול</button>
+        </div>
+        <p class="hint" data-i18n="co.simNote"></p>
+      </form>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+  <script src="/i18n.js"></script>
+  <script src="/app.js"></script>
+</body>
+</html>

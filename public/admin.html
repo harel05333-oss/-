@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RUNRED · Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="logo">🛠️</span><span>RUN<span class="accent">RED</span> · <span data-i18n="adm.brand">ניהול</span></span></div>
+    <nav class="nav-links">
+      <button class="btn btn-ghost btn-sm" id="langToggle">EN</button>
+      <a class="btn btn-ghost btn-sm" href="/">🏃 <span class="label-full" data-i18n="nav.public">לדף הציבורי</span></a>
+      <button class="btn btn-ghost btn-sm" id="logoutBtn" style="display:none" data-i18n="nav.logout">התנתקות</button>
+    </nav>
+  </header>
+
+  <section class="container" id="loginView">
+    <div class="panel" style="max-width:420px;margin:40px auto;">
+      <h2 class="section-title"><span class="bar"></span><span data-i18n="adm.login.title">כניסת מנהל</span></h2>
+      <p class="section-sub" data-i18n="adm.login.sub">הזינו את סיסמת המנהל.</p>
+      <form id="loginForm" class="stack">
+        <div class="field"><label data-i18n="adm.login.password">סיסמה</label><input id="adminKey" type="password" required /></div>
+        <button type="submit" class="btn btn-primary btn-block" data-i18n="adm.login.enter">כניסה</button>
+        <p class="hint">admin123</p>
+      </form>
+    </div>
+  </section>
+
+  <main class="container" id="adminView" style="display:none">
+    <div class="panel">
+      <h2 class="section-title"><span class="bar"></span><span data-i18n="adm.create.title">יצירת מרוץ חדש</span></h2>
+      <p class="section-sub" data-i18n="adm.create.sub"></p>
+      <form id="raceForm">
+        <div class="form-grid">
+          <div class="field"><label data-i18n="adm.f.name">שם המרוץ *</label><input id="title" type="text" required /></div>
+          <div class="field"><label data-i18n="adm.f.km">מרחק *</label><input id="distanceKm" type="number" min="0" step="0.1" required placeholder="10" /></div>
+          <div class="field"><label data-i18n="adm.f.date">תאריך *</label><input id="date" type="date" required /></div>
+          <div class="field"><label data-i18n="adm.f.time">שעת הזנקה</label><input id="time" type="time" /></div>
+          <div class="field"><label data-i18n="adm.f.price">עלות כניסה (₪)</label><input id="price" type="number" min="0" step="1" placeholder="0" /></div>
+          <div class="field"><label data-i18n="adm.f.startMode">אופן הזנקה</label>
+            <select id="startMode">
+              <option value="collective" data-i18n="adm.opt.collective">הזנקה קולקטיבית</option>
+              <option value="anytime" data-i18n="adm.opt.free">ריצה חופשית</option>
+            </select>
+          </div>
+          <div class="field"><label data-i18n="adm.f.capacity">מקסימום משתתפים</label><input id="capacity" type="number" min="1" step="1" /></div>
+          <div class="field"><label data-i18n="adm.f.location">מיקום / אזור</label><input id="location" type="text" /></div>
+          <div class="field"><label data-i18n="adm.f.prize1">🥇 פרס מקום ראשון</label><input id="prizeFirst" type="text" /></div>
+          <div class="field"><label data-i18n="adm.f.prize2">🥈 פרס מקום שני</label><input id="prizeSecond" type="text" /></div>
+          <div class="field"><label data-i18n="adm.f.prize3">🥉 פרס מקום שלישי</label><input id="prizeThird" type="text" /></div>
+          <div class="field full"><label data-i18n="adm.f.desc">תיאור</label><textarea id="description"></textarea></div>
+          <div class="field full"><label data-i18n="adm.f.howToJoin">איך מתחברים / מזניקים</label><textarea id="howToJoin"></textarea></div>
+        </div>
+        <div style="margin-top:18px"><button type="submit" class="btn btn-primary" data-i18n="adm.create.btn">➕ יצירת מרוץ</button></div>
+      </form>
+    </div>
+
+    <div class="panel">
+      <h2 class="section-title"><span class="bar"></span><span data-i18n="adm.dc.title">קודי הנחה</span></h2>
+      <p class="section-sub" data-i18n="adm.dc.sub"></p>
+      <form id="discountForm" class="row-gap">
+        <input id="dcCode" type="text" data-i18n-ph="adm.dc.codePh" style="flex:2" />
+        <input id="dcPercent" type="number" min="1" max="100" data-i18n-ph="adm.dc.percentPh" style="flex:1" />
+        <button type="submit" class="btn btn-primary" data-i18n="adm.dc.add">הוספה</button>
+      </form>
+      <div id="discountList" style="margin-top:16px"></div>
+    </div>
+
+    <h2 class="section-title"><span class="bar"></span><span data-i18n="adm.races.title">המרוצים שנוצרו</span></h2>
+    <p class="section-sub" id="adminSubtitle"></p>
+    <div id="adminRaces" class="grid"></div>
+  </main>
+
+  <div class="modal-overlay" id="regsModal">
+    <div class="modal wide">
+      <h3 id="regsTitle"></h3>
+      <p class="sub" id="regsSub"></p>
+      <div id="regsBody"></div>
+      <div class="modal-actions"><button type="button" class="btn btn-ghost" id="regsClose" data-i18n="common.close">סגירה</button></div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+  <script src="/i18n.js"></script>
+  <script src="/admin.js"></script>
+</body>
+</html>
