@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>תזונה לרצים – הראל</title>
-<meta name="description" content="מדריך תזונה מעשי לרצים: מה עדיף לאכול לפני, במהלך ואחרי ריצה, תפריט לפי סוג אימון, נוזלים, קפאין ותוספים – מבוסס על קורס תזונת ספורט ומחקר עדכני.">
+<title>תזונה לרצים – הראל בן עזרא</title>
+<meta name="description" content="תזונה לרצים על פי הראל בן עזרא, מאמן ריצה וכוח: מה עדיף לאכול לפני, במהלך ואחרי ריצה, תפריט לפי סוג אימון, נוזלים, קפאין ותוספים – מבוסס על קורס תזונת ספורט ומחקר עדכני.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
@@ -39,6 +39,7 @@
   .nav .wrap { display: flex; align-items: center; gap: 18px; height: 60px; }
   .brand { font-weight: 900; font-size: 18px; white-space: nowrap; color: var(--text); text-decoration: none; }
   .brand span { color: var(--blue-glow); }
+  .brand-by { font-size: 14px; font-weight: 500; color: var(--text-2); }
   .nav-links { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; margin-inline-start: auto; }
   .nav-links::-webkit-scrollbar { display: none; }
   .nav-links a { color: var(--text-2); text-decoration: none; font-size: 14px; font-weight: 500; padding: 6px 10px; border-radius: 8px; white-space: nowrap; }
@@ -49,6 +50,10 @@
   .eyebrow { display: inline-block; font-size: 13px; font-weight: 700; letter-spacing: .5px; color: var(--blue-glow); background: var(--blue-soft); border: 1px solid var(--border); padding: 4px 14px; border-radius: 999px; margin-bottom: 18px; }
   .hero h1 { font-size: clamp(32px, 6vw, 54px); font-weight: 900; line-height: 1.15; margin-bottom: 16px; }
   .hero h1 span { color: var(--blue-glow); }
+  .byline { font-size: clamp(17px, 2.6vw, 22px); font-weight: 700; color: var(--text-2); margin: -4px 0 18px; }
+  .byline b { color: var(--text); font-weight: 900; }
+  .byline span { color: var(--blue-glow); margin: 0 6px; }
+  .tagline { color: var(--text); }
   .hero p { color: var(--text-2); font-size: 18px; max-width: 640px; margin: 0 auto 28px; }
   .hero-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
   .btn { display: inline-block; font-family: inherit; font-size: 16px; font-weight: 800; padding: 13px 28px; border-radius: 10px; text-decoration: none; cursor: pointer; border: 0; transition: transform .15s, box-shadow .15s, background .15s; }
@@ -172,7 +177,9 @@
     .menu-table td:not(:first-child)::before { content: attr(data-label); display: block; font-size: 12.5px; font-weight: 800; color: var(--blue-glow); margin-bottom: 2px; }
     .hero { padding: 52px 0 44px; }
     .hero p { font-size: 16px; }
+    .stat b { font-size: 20px; }
     .brand { font-size: 16px; }
+    .brand-by { display: none; }
   }
   @media print {
     .nav, .hero, footer, .no-print { display: none !important; }
@@ -187,7 +194,7 @@
 
 <nav class="nav" aria-label="ניווט ראשי">
   <div class="wrap">
-    <a href="#top" class="brand">תזונה <span>לרצים</span></a>
+    <a href="#top" class="brand">תזונה <span>לרצים</span><small class="brand-by"> · הראל בן עזרא</small></a>
     <div class="nav-links">
       <a href="#compare">מה עדיף?</a>
       <a href="#menus">לפי סוג ריצה</a>
@@ -206,9 +213,9 @@
 
 <header class="hero" id="top">
   <div class="wrap">
-    <div class="eyebrow">מדריך התזונה של הרצים של הראל</div>
-    <h1>לרוץ חזק יותר<br>מתחיל <span>בצלחת</span>.</h1>
-    <p>כמה פחמימות, מתי לאכול לפני ריצה, מה לקחת לריצה ארוכה ואיך להתאושש עד האימון הבא – הכל במקום אחד, בשפה פשוטה ועם תשובות ברורות.</p>
+    <h1>תזונה <span>לרצים</span></h1>
+    <div class="byline">על פי <b>הראל בן עזרא</b> <span aria-hidden="true">·</span> מאמן ריצה וכוח</div>
+    <p><b class="tagline">לרוץ חזק יותר מתחיל בצלחת.</b> כמה פחמימות, מתי לאכול לפני ריצה, מה לקחת לריצה ארוכה ואיך להתאושש עד האימון הבא – הכל במקום אחד, בשפה פשוטה ועם תשובות ברורות.</p>
     <div class="hero-actions">
       <a href="#compare" class="btn btn-primary">מה עדיף לאכול?</a>
       <a href="#menus" class="btn btn-ghost">תפריט לפי סוג ריצה</a>
@@ -827,7 +834,7 @@
 <footer>
   <div class="wrap">
     <p class="disclaimer">המידע באתר הוא כללי ולימודי ואינו מחליף ייעוץ אישי של דיאטנית קלינית או רופא. למצבים רפואיים, הריון, הפרעות אכילה או בני נוער – יש להתייעץ עם איש מקצוע.</p>
-    <p>© 2026 הראל בן עזרא – מאמן כושר ומרתוניסט</p>
+    <p>© 2026 תזונה לרצים על פי הראל בן עזרא – מאמן ריצה וכוח</p>
   </div>
 </footer>
 
