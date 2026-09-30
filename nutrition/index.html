@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>תזונה לרצים – הראל</title>
-<meta name="description" content="מדריך תזונה מעשי לרצים: מחשבון צרכים יומי, מתכנן תדלוק לריצה, נוזלים, קפאין ותוספים – מבוסס על קורס תזונת ספורט ומחקר עדכני.">
+<meta name="description" content="מדריך תזונה מעשי לרצים: מה עדיף לאכול לפני, במהלך ואחרי ריצה, תפריט לפי סוג אימון, נוזלים, קפאין ותוספים – מבוסס על קורס תזונת ספורט ומחקר עדכני.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
@@ -102,37 +102,22 @@
   tr:last-child td { border-bottom: 0; }
   td b { color: var(--text); }
 
-  /* FORMS */
-  .tool { background: var(--surface); border: 1px solid var(--border); border-radius: 18px; padding: 26px; box-shadow: 0 10px 40px rgba(0,0,0,.35); }
-  .tool-grid { display: grid; grid-template-columns: 340px 1fr; gap: 28px; }
-  .field { margin-bottom: 16px; }
-  .field label { display: block; font-size: 14px; font-weight: 700; margin-bottom: 6px; color: var(--text); }
-  .field .hint { font-size: 12.5px; color: var(--muted); margin-top: 4px; }
-  input[type=number], input[type=time], select { width: 100%; font-family: inherit; font-size: 16px; background: var(--bg); color: var(--text); border: 1px solid var(--border-soft); border-radius: 10px; padding: 11px 12px; outline: none; }
-  input:focus, select:focus { border-color: var(--blue-glow); box-shadow: 0 0 0 3px var(--blue-soft); }
-  input[type=range] { width: 100%; accent-color: var(--blue); }
-  .range-row { display: flex; align-items: center; gap: 12px; }
-  .range-row output { min-width: 74px; text-align: center; font-weight: 800; background: var(--bg); border: 1px solid var(--border-soft); border-radius: 8px; padding: 6px 8px; font-size: 15px; }
-  .check { display: flex; align-items: flex-start; gap: 10px; font-size: 14.5px; color: var(--text-2); cursor: pointer; margin-bottom: 10px; }
-  .check input { width: 18px; height: 18px; accent-color: var(--blue); margin-top: 3px; flex: none; }
-  .seg { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
-  .seg input { position: absolute; opacity: 0; pointer-events: none; }
-  .seg label { display: block; text-align: center; margin: 0; padding: 9px 6px; font-size: 14px; font-weight: 600; border: 1px solid var(--border-soft); border-radius: 10px; cursor: pointer; color: var(--text-2); background: var(--bg); }
-  .seg input:checked + label { background: var(--blue); border-color: var(--blue); color: #fff; }
-  .seg input:focus-visible + label { outline: 2px solid var(--blue-glow); outline-offset: 2px; }
-
-  .results { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; align-content: start; }
-  .res { background: var(--bg); border: 1px solid var(--border-soft); border-radius: 12px; padding: 16px; }
-  .res .k { font-size: 13px; color: var(--muted); font-weight: 600; }
-  .res .v { font-size: 26px; font-weight: 900; line-height: 1.2; margin: 2px 0; }
-  .res .v small { font-size: 14px; font-weight: 600; color: var(--muted); }
-  .res .d { font-size: 13px; color: var(--text-2); }
-  .res.carb .v { color: #60a5fa; } .res.prot .v { color: #34d399; } .res.kcal .v { color: #f472b6; } .res.fluid .v { color: #38bdf8; }
-  .res.wide { grid-column: 1 / -1; }
-  .bar { display: flex; height: 12px; border-radius: 6px; overflow: hidden; margin-top: 10px; background: var(--surface-2); }
-  .bar i { display: block; height: 100%; }
-  .legend { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 8px; font-size: 13px; color: var(--text-2); }
-  .legend span::before { content: ""; display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-inline-end: 6px; background: var(--c); vertical-align: middle; }
+  /* COMPARE */
+  .tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+  .tab { font-family: inherit; font-size: 15px; font-weight: 700; color: var(--text-2); background: var(--surface); border: 1px solid var(--border-soft); border-radius: 999px; padding: 8px 18px; cursor: pointer; }
+  .tab:hover { color: var(--text); border-color: var(--border); }
+  .tab.active { background: var(--blue); border-color: var(--blue); color: #fff; }
+  .tab:focus-visible { outline: 2px solid var(--blue-glow); outline-offset: 2px; }
+  .vs[hidden] { display: none; }
+  .vs .phase { font-size: 12px; font-weight: 800; color: var(--muted); margin-bottom: 4px; }
+  .vs .win { background: rgba(34,197,94,.1); border: 1px solid rgba(34,197,94,.3); color: #bbf7d0; border-radius: 10px; padding: 8px 12px; font-size: 14.5px; margin: 8px 0 10px; }
+  .vs .win b { color: #fff; }
+  .food { padding: 16px; }
+  .food b { display: block; font-size: 16px; }
+  .food p { font-size: 14px; margin-top: 2px; }
+  .food .icon { font-size: 22px; margin-bottom: 4px; }
+  .menu-table { min-width: 760px; }
+  .menu-table small { color: var(--muted); }
 
   /* TIMELINE */
   .timeline { position: relative; padding-inline-start: 0; list-style: none; }
@@ -170,7 +155,6 @@
   footer .disclaimer { max-width: 720px; margin: 0 auto 14px; }
 
   @media (max-width: 900px) {
-    .tool-grid { grid-template-columns: 1fr; }
     .g4 { grid-template-columns: repeat(2, 1fr); }
     .g3, .steps { grid-template-columns: 1fr; }
   }
@@ -178,8 +162,14 @@
     section { padding: 52px 0; }
     .wrap { padding: 0 16px; }
     .g2, .g4 { grid-template-columns: 1fr; }
-    .results { grid-template-columns: 1fr; }
-    .tool { padding: 18px; }
+    .foods { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .food { padding: 12px; }
+    .table-wrap:has(.menu-table) { overflow: visible; border: 0; background: none; }
+    .menu-table, .menu-table tbody, .menu-table tr, .menu-table td { display: block; min-width: 0; width: 100%; }
+    .menu-table thead { display: none; }
+    .menu-table tr { background: var(--surface); border: 1px solid var(--border-soft); border-radius: 12px; margin-bottom: 12px; overflow: hidden; }
+    .menu-table td:first-child { background: var(--surface-2); font-size: 16px; }
+    .menu-table td:not(:first-child)::before { content: attr(data-label); display: block; font-size: 12.5px; font-weight: 800; color: var(--blue-glow); margin-bottom: 2px; }
     .hero { padding: 52px 0 44px; }
     .hero p { font-size: 16px; }
     .brand { font-size: 16px; }
@@ -188,8 +178,8 @@
     .nav, .hero, footer, .no-print { display: none !important; }
     body { background: #fff; color: #000; }
     section { border: 0; padding: 12px 0; background: #fff !important; }
-    .card, .tool, .res, .table-wrap { background: #fff; border-color: #ccc; box-shadow: none; }
-    .card p, .card li, td, .tl p, .res .d, .lead { color: #222; }
+    .card, .table-wrap { background: #fff; border-color: #ccc; box-shadow: none; }
+    .card p, .card li, td, .tl p, .lead { color: #222; }
   }
 </style>
 </head>
@@ -199,14 +189,16 @@
   <div class="wrap">
     <a href="#top" class="brand">תזונה <span>לרצים</span></a>
     <div class="nav-links">
-      <a href="#calc">מחשבון יומי</a>
-      <a href="#planner">תדלוק לריצה</a>
+      <a href="#compare">מה עדיף?</a>
+      <a href="#menus">לפי סוג ריצה</a>
       <a href="#basics">יסודות</a>
       <a href="#carbs">פחמימות</a>
       <a href="#protein">חלבון</a>
       <a href="#fluids">נוזלים</a>
       <a href="#caffeine">קפאין</a>
       <a href="#supps">תוספים</a>
+      <a href="#mistakes">טעויות</a>
+      <a href="#myths">מיתוסים</a>
       <a href="#sources">מקורות</a>
     </div>
   </div>
@@ -216,10 +208,10 @@
   <div class="wrap">
     <div class="eyebrow">מדריך התזונה של הרצים של הראל</div>
     <h1>לרוץ חזק יותר<br>מתחיל <span>בצלחת</span>.</h1>
-    <p>כמה פחמימות, מתי לאכול לפני ריצה, מה לקחת לריצה ארוכה ואיך להתאושש עד האימון הבא – הכל במקום אחד, עם מחשבונים שמותאמים למשקל ולאימונים שלך.</p>
+    <p>כמה פחמימות, מתי לאכול לפני ריצה, מה לקחת לריצה ארוכה ואיך להתאושש עד האימון הבא – הכל במקום אחד, בשפה פשוטה ועם תשובות ברורות.</p>
     <div class="hero-actions">
-      <a href="#calc" class="btn btn-primary">לחשב את הצרכים שלי</a>
-      <a href="#planner" class="btn btn-ghost">לתכנן תדלוק לריצה</a>
+      <a href="#compare" class="btn btn-primary">מה עדיף לאכול?</a>
+      <a href="#menus" class="btn btn-ghost">תפריט לפי סוג ריצה</a>
     </div>
     <div class="stats">
       <div class="stat"><b>3-12</b><small>גר׳ פחמימה לק״ג ביום</small></div>
@@ -231,116 +223,197 @@
 
 <main>
 
-<!-- ============ DAILY CALCULATOR ============ -->
-<section id="calc">
+<!-- ============ WHAT'S BETTER ============ -->
+<section id="compare">
   <div class="wrap">
-    <div class="label">כלי 1</div>
-    <h2>מחשבון צרכים יומי</h2>
-    <p class="lead">הזן משקל ורמת אימון – ותקבל טווחים יומיים של פחמימות, חלבון, קלוריות ונוזלים. אלה טווחי יעד, לא תפריט: בימים קלים היה בקצה התחתון, בימים ארוכים וקשים – בעליון.</p>
+    <div class="label">מה עדיף?</div>
+    <h2>זה או זה – לפני, במהלך ואחרי</h2>
+    <p class="lead">השאלות שהרצים שואלים הכי הרבה, עם תשובה אחת ברורה ולמה. בחר שלב כדי לסנן.</p>
 
-    <div class="tool">
-      <div class="tool-grid">
-        <form id="calcForm" onsubmit="return false">
-          <div class="field">
-            <label for="c-weight">משקל גוף (ק״ג)</label>
-            <div class="range-row">
-              <input type="range" id="c-weight-r" min="40" max="120" step="1" value="70" aria-label="משקל גוף">
-              <output id="c-weight-o">70 ק״ג</output>
-            </div>
-            <input type="number" id="c-weight" min="35" max="160" value="70" inputmode="decimal" style="margin-top:8px">
-          </div>
+    <div class="tabs no-print" role="tablist" aria-label="סינון לפי שלב">
+      <button class="tab active" data-filter="all" role="tab" aria-selected="true">הכל</button>
+      <button class="tab" data-filter="before" role="tab" aria-selected="false">⏰ לפני</button>
+      <button class="tab" data-filter="during" role="tab" aria-selected="false">🏃 במהלך</button>
+      <button class="tab" data-filter="after" role="tab" aria-selected="false">🔄 אחרי</button>
+    </div>
 
-          <div class="field">
-            <label for="c-level">נפח אימונים</label>
-            <select id="c-level">
-              <option value="1">בסיסי – 3-4 ריצות בשבוע, 30-60 דק׳, קל-בינוני</option>
-              <option value="2" selected>בינוני – כשעה ביום, 5-6 אימונים בשבוע</option>
-              <option value="3">גבוה – 1-3 שעות ביום, בינוני-עצים (בניית מרתון)</option>
-              <option value="4">קיצוני – 4+ שעות ביום / אולטרה / אימונים כפולים</option>
-            </select>
-          </div>
+    <div class="grid g3 vs-grid">
+      <article class="card vs" data-phase="before">
+        <div class="phase">לפני</div>
+        <h3>לחם לבן או לחם מלא?</h3>
+        <div class="win">✅ לפני ריצה: <b>לבן</b></div>
+        <p>פחות סיבים = עיכול מהיר ופחות "יציאות חירום" באמצע. הלחם המלא נשאר לארוחות הרגילות של היום, רחוק מהאימון.</p>
+      </article>
+      <article class="card vs" data-phase="before">
+        <div class="phase">לפני</div>
+        <h3>בננה או תפוח?</h3>
+        <div class="win">✅ <b>בננה</b></div>
+        <p>יותר פחמימה, פחות סיבים, רכה לקיבה. התפוח (עם הקליפה) מצוין – אבל אחרי הריצה.</p>
+      </article>
+      <article class="card vs" data-phase="before">
+        <div class="phase">לפני</div>
+        <h3>שיבולת שועל או פרוסה עם דבש?</h3>
+        <div class="win">✅ תלוי בזמן: <b>3-4 ש׳ – שיבולת שועל · שעה – פרוסה עם דבש</b></div>
+        <p>שיבולת שועל משחררת אנרגיה לאט ומתאימה לארוחה המלאה. קרוב לריצה צריך פחמימה פשוטה שנספגת מהר ולא יושבת בבטן.</p>
+      </article>
+      <article class="card vs" data-phase="before">
+        <div class="phase">לפני</div>
+        <h3>ריצת בוקר – על ריק או לאכול?</h3>
+        <div class="win">✅ קלה עד שעה – <b>אפשר על ריק</b> · איכות / ארוכה – <b>לאכול</b></div>
+        <p>אחרי לילה של צום המאגרים בכבד חלקיים. אינטרוולים או ריצה ארוכה על ריק = אימון פחות איכותי, ולרוב גם התקפי מתוק ואכילת יתר בהמשך היום. מספיקה בננה, 2 תמרים או פרוסה עם דבש.</p>
+      </article>
+      <article class="card vs" data-phase="before">
+        <div class="phase">ערב לפני</div>
+        <h3>פסטה ברוטב שמנת או ברוטב עגבניות?</h3>
+        <div class="win">✅ <b>עגבניות / שמן זית ועשבי תיבול</b></div>
+        <p>רוטב שמנת כבד ושמן מתעכל לאט ועלול לגרום לאי נוחות וליציאות מוגברות בבוקר.</p>
+      </article>
+      <article class="card vs" data-phase="before">
+        <div class="phase">ערב לפני</div>
+        <h3>סלט ענק או אורז לבן?</h3>
+        <div class="win">✅ <b>אורז / פסטה / תפו״א</b> + מעט ירקות</div>
+        <p>ירקות עשירים בסיבים (חסה, כרוב, קטניות) חשובים ביום-יום, אבל לפני ריצה ארוכה הם יכולים לשלוח אתכם לחפש שיח. את הסלט הגדול שומרים לאחרי.</p>
+      </article>
+      <article class="card vs" data-phase="before">
+        <div class="phase">ערב לפני</div>
+        <h3>צלחת פסטה ענקית או ארוחה רגילה?</h3>
+        <div class="win">✅ <b>ארוחה רגילה, עם דגש על פחמימה</b></div>
+        <p>מילוי המאגרים נבנה לאורך יום-יומיים, לא בארוחה אחת. לאכול עד שובע נעים – לא לקום כבדים. לבחור מזון מוכר שעובד לכם.</p>
+      </article>
+      <article class="card vs" data-phase="before">
+        <div class="phase">לפני</div>
+        <h3>מים או סודה?</h3>
+        <div class="win">✅ <b>מים</b></div>
+        <p>משקאות מוגזים גורמים לנפיחות אצל רוב האנשים. כ-2 כוסות מים כחצי שעה לפני, ולא יותר מדי.</p>
+      </article>
 
-          <div class="field">
-            <label>מטרה נוכחית</label>
-            <div class="seg" role="radiogroup">
-              <input type="radio" name="goal" id="g-perf" value="perf" checked><label for="g-perf">ביצועים / שמירה</label>
-              <input type="radio" name="goal" id="g-cut" value="cut"><label for="g-cut">ירידה במשקל</label>
-              <input type="radio" name="goal" id="g-load" value="load"><label for="g-load">העמסת פחמימות</label>
-              <input type="radio" name="goal" id="g-rest" value="rest"><label for="g-rest">יום מנוחה</label>
-            </div>
-          </div>
+      <article class="card vs" data-phase="during">
+        <div class="phase">במהלך</div>
+        <h3>ג׳ל או תמרים?</h3>
+        <div class="win">✅ <b>שניהם עובדים</b> – מה שהבטן שלכם סובלת</div>
+        <p>ג׳ל: מדויק, קל לסחוב ונספג מהר. תמרים: זולים וטבעיים (2 מג׳הול ≈ 30 גר׳ פחמימה), אבל עם סיבים וקצת מסורבלים בקצב גבוה. מחקר מ-2010 לא מצא הבדל בביצועים בין צימוקים לג׳ל.</p>
+      </article>
+      <article class="card vs" data-phase="during">
+        <div class="phase">במהלך</div>
+        <h3>מים או משקה ספורט?</h3>
+        <div class="win">✅ עד שעה – <b>מים</b> · מעל שעה / בחום – <b>משקה ספורט</b></div>
+        <p>בריצה ארוכה צריך גם סוכר וגם מלח. אפשר גם מים + ג׳ל + כמוסת מלח. משקה ביתי: ליטר מים + 60-80 גר׳ סוכר + ¼ כפית מלח.</p>
+      </article>
+      <article class="card vs" data-phase="during">
+        <div class="phase">במהלך</div>
+        <h3>ג׳ל סמיך או ג׳ל נוזלי?</h3>
+        <div class="win">✅ <b>נוזלי</b> – או סמיך עם לגימת מים</div>
+        <p>ג׳ל נוזלי קל יותר לבליעה ולספיגה. ג׳ל סמיך בלי מים עלול להכביד על הקיבה. שיקולים נוספים: טעם, אריזה שנפתחת בקלות, וכמה פחמימה יש בכל אחד (לבדוק בתווית).</p>
+      </article>
+      <article class="card vs" data-phase="during">
+        <div class="phase">במהלך</div>
+        <h3>לאכול כשמרגישים חולשה או לפי שעון?</h3>
+        <div class="win">✅ <b>לפי שעון</b></div>
+        <p>מנה כל 20-40 דקות, מתחילים כבר בדקה 30-45. כשמרגישים חולשה – כבר מאוחר, והקיר קרוב.</p>
+      </article>
 
-          <div class="field">
-            <label for="c-train">זמן אימון היום (דקות)</label>
-            <input type="number" id="c-train" min="0" max="600" step="5" value="60" inputmode="numeric">
-            <div class="hint">משמש לחישוב תוספת הנוזלים.</div>
-          </div>
-        </form>
-
-        <div>
-          <div class="results" id="calcOut" aria-live="polite"></div>
-          <div id="calcNote"></div>
-        </div>
-      </div>
+      <article class="card vs" data-phase="after">
+        <div class="phase">אחרי</div>
+        <h3>שייק חלבון או שוקו?</h3>
+        <div class="win">✅ <b>שוקו</b> (או יוגורט חלבון + בננה)</div>
+        <p>אחרי ריצה צריך פחמימה וחלבון ביחס של כ-3:1 – בדיוק מה שיש בשוקו. זול, נוזלי ונכנס גם בלי תיאבון. שייק חלבון לבד – חסרה בו הפחמימה.</p>
+      </article>
+      <article class="card vs" data-phase="after">
+        <div class="phase">אחרי</div>
+        <h3>חזה עוף עם סלט או עם אורז?</h3>
+        <div class="win">✅ אחרי ריצה ארוכה / איכות: <b>עם אורז</b> (+ סלט)</div>
+        <p>החלבון מתקן את השריר, אבל בלי פחמימה המאגרים לא מתמלאים לאימון הבא. למשל: פסטה עם ~100 גר׳ חזה עוף וסלט ירקות.</p>
+      </article>
+      <article class="card vs" data-phase="after">
+        <div class="phase">אחרי</div>
+        <h3>לא רעב אחרי – לדלג?</h3>
+        <div class="win">✅ <b>לא לדלג – לשתות</b></div>
+        <p>אחרי מאמץ יש דיכוי רעב זמני. דילוג על הארוחה מביא לאכילת יתר בהמשך. שייק (פירות יער קפואים, בננה, יוגורט יווני וחלב) או שוקו נכנסים בקלות.</p>
+      </article>
+      <article class="card vs" data-phase="after">
+        <div class="phase">אחרי</div>
+        <h3>BCAA או יוגורט / קוטג׳?</h3>
+        <div class="win">✅ <b>יוגורט / קוטג׳ / ביצים</b></div>
+        <p>חלבון מלא כבר מכיל את כל ה-BCAA ועוד את שאר חומצות האמינו שהשריר צריך. זול יותר, עם יותר תועלת.</p>
+      </article>
+      <article class="card vs" data-phase="after">
+        <div class="phase">אחרי</div>
+        <h3>חייבים לאכול תוך 30 דק׳?</h3>
+        <div class="win">✅ <b>רק אם יש עוד אימון תוך פחות מ-8 שעות</b></div>
+        <p>"חלון ההזדמנויות" קריטי כשההתאוששות קצרה (אימון כפול, ערב → בוקר). לרץ חובבן שהאימון הבא שלו רק מחר, מה שקובע הוא סך היומי – אבל לאכול תוך שעה-שעתיים עדיין עוזר ומונע רעב קיצוני.</p>
+      </article>
+      <article class="card vs" data-phase="after">
+        <div class="phase">אחרי</div>
+        <h3>אחרי ריצת ערב – לאכול או ישר לישון?</h3>
+        <div class="win">✅ <b>ארוחה קלה</b> ואז לישון</div>
+        <p>שינה של 7-8 שעות בלי כלום אחרי מאמץ = התאוששות חלשה. פרוסות עם קוטג׳ וביצה, יוגורט עם גרנולה, או שוקו ובננה.</p>
+      </article>
     </div>
   </div>
 </section>
 
-<!-- ============ RUN PLANNER ============ -->
-<section id="planner">
+<!-- ============ MENUS BY RUN TYPE ============ -->
+<section id="menus">
   <div class="wrap">
-    <div class="label">כלי 2</div>
-    <h2>מתכנן תדלוק לריצה</h2>
-    <p class="lead">מה לאכול ומתי – לפני, במהלך ואחרי. הכנס את שעת היציאה, משך הריצה והמשקל, ותקבל לוח זמנים עם כמויות מדויקות ורעיונות למזון.</p>
+    <div class="label">תפריט לפי סוג ריצה</div>
+    <h2>מה אוכלים – לפי האימון של היום</h2>
+    <p class="lead">לא כל ריצה צריכה אותו תדלוק. ריצה קלה של 40 דקות לא צריכה ג׳ל, וריצה ארוכה של שעתיים לא תצליח על כוס קפה.</p>
 
-    <div class="tool">
-      <div class="tool-grid">
-        <form id="planForm" onsubmit="return false">
-          <div class="grid g2" style="gap:12px">
-            <div class="field">
-              <label for="p-weight">משקל (ק״ג)</label>
-              <input type="number" id="p-weight" min="35" max="160" value="70" inputmode="decimal">
-            </div>
-            <div class="field">
-              <label for="p-start">שעת יציאה</label>
-              <input type="time" id="p-start" value="06:00">
-            </div>
-          </div>
-
-          <div class="field">
-            <label for="p-dur-r">משך הריצה</label>
-            <div class="range-row">
-              <input type="range" id="p-dur-r" min="20" max="360" step="5" value="90">
-              <output id="p-dur-o">1:30 ש׳</output>
-            </div>
-          </div>
-
-          <div class="field">
-            <label>סוג הריצה</label>
-            <div class="seg" role="radiogroup">
-              <input type="radio" name="type" id="t-easy" value="easy"><label for="t-easy">קלה / התאוששות</label>
-              <input type="radio" name="type" id="t-quality" value="quality"><label for="t-quality">אינטרוולים / טמפו</label>
-              <input type="radio" name="type" id="t-long" value="long" checked><label for="t-long">ריצה ארוכה</label>
-              <input type="radio" name="type" id="t-race" value="race"><label for="t-race">תחרות</label>
-            </div>
-          </div>
-
-          <label class="check"><input type="checkbox" id="p-gut"> אימנתי את מערכת העיכול לקבל 60+ גר׳ פחמימה בשעה</label>
-          <label class="check"><input type="checkbox" id="p-b2b"> יש לי אימון נוסף תוך פחות מ-24 שעות – Back to Back</label>
-          <label class="check"><input type="checkbox" id="p-heat"> חם / לח בחוץ, או שאני מזיע הרבה ויש לי כתמי מלח</label>
-          <label class="check"><input type="checkbox" id="p-caf"> אני משתמש בקפאין</label>
-
-          <button type="button" class="btn btn-ghost no-print" id="printPlan" style="width:100%; margin-top:6px">🖨️ הדפס / שמור את התוכנית</button>
-        </form>
-
-        <div>
-          <div class="results" id="planSummary" style="margin-bottom:22px"></div>
-          <ol class="timeline" id="planOut" aria-live="polite"></ol>
-        </div>
-      </div>
+    <div class="table-wrap">
+      <table class="menu-table">
+        <thead><tr><th>סוג ריצה</th><th>ערב לפני</th><th>לפני (1-3 ש׳)</th><th>במהלך</th><th>אחרי</th></tr></thead>
+        <tbody>
+          <tr>
+            <td data-label="סוג ריצה"><b>קלה / התאוששות</b><br><small>עד 60 דק׳</small></td>
+            <td data-label="ערב לפני">ארוחה רגילה ומאוזנת</td>
+            <td data-label="לפני (1-3 ש׳)">אופציונלי: בננה, תמר או פרוסה עם דבש. אפשר גם על ריק.</td>
+            <td data-label="במהלך">מים לפי צמא</td>
+            <td data-label="אחרי">הארוחה הבאה הרגילה, עם חלבון</td>
+          </tr>
+          <tr>
+            <td data-label="סוג ריצה"><b>אינטרוולים / טמפו</b><br><small>60-90 דק׳</small></td>
+            <td data-label="ערב לפני">ארוחה עם פחמימה טובה (אורז, פסטה, תפו״א) + חלבון</td>
+            <td data-label="לפני (1-3 ש׳)">יוגורט עם גרנולה, פרוסה עם חמאת בוטנים או דבש, דייסת שיבולת שועל (2-3 ש׳ לפני)</td>
+            <td data-label="במהלך">מים. מעל שעה – משקה ספורט או ג׳ל אחד</td>
+            <td data-label="אחרי">תוך שעה: שוקו / יוגורט + פרי. ארוחה מלאה עד שעתיים</td>
+          </tr>
+          <tr>
+            <td data-label="סוג ריצה"><b>ריצה ארוכה / תחרות</b><br><small>90 דק׳ ומעלה</small></td>
+            <td data-label="ערב לפני">דגש פחמימה: פסטה ברוטב עגבניות, אורז, מג׳דרה, בטטה. מעט ירקות, בלי לאכול יתר</td>
+            <td data-label="לפני (1-3 ש׳)">3-4 ש׳: פסטה/אורז עם מעט חלבון. שעה: פחמימה + מעט חלבון רזה (2 פרוסות עם גבינה רזה). 15-30 דק׳: תמרים / ג׳ל</td>
+            <td data-label="במהלך">30-60 גר׳ פחמימה לשעה (מעל 2.5 ש׳ – עד 90), + מים ומלח</td>
+            <td data-label="אחרי">מיד: שייק/שוקו. אחר כך לאכול כל כשעתיים במשך ~6 שעות</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
+
+    <h3 style="margin-top:40px">⚡ מה נותן כ-30 גרם פחמימה בריצה?</h3>
+    <div class="grid g4 foods" style="margin-top:12px">
+      <div class="card food"><span class="icon">🧃</span><b>ג׳ל אנרגיה</b><p>1 יחידה (20-30 גר׳ – לפי התווית)</p></div>
+      <div class="card food"><span class="icon">🌴</span><b>תמרים</b><p>2 מג׳הול או 4 תמרים קטנים</p></div>
+      <div class="card food"><span class="icon">🍌</span><b>בננה מעוכה</b><p>150 גר׳ (בשקית / פאוץ׳)</p></div>
+      <div class="card food"><span class="icon">🍌</span><b>צ׳יפס בננה</b><p>כ-40 גר׳</p></div>
+      <div class="card food"><span class="icon">🍇</span><b>צימוקים</b><p>חופן קטן (כ-40 גר׳)</p></div>
+      <div class="card food"><span class="icon">🥤</span><b>משקה איזוטוני</b><p>400-500 מ״ל</p></div>
+      <div class="card food"><span class="icon">🍯</span><b>פרוסה עם דבש</b><p>פרוסה לבנה + כף דבש</p></div>
+      <div class="card food"><span class="icon">🍬</span><b>סוכריות גומי</b><p>כ-6-8 יחידות</p></div>
+    </div>
+    <p class="note">כלל הזהב: <b>שום דבר חדש ביום התחרות.</b> כל ג׳ל, משקה, תמר או ארוחת בוקר – לנסות קודם בריצות הארוכות. הקיבה מתאמנת בדיוק כמו הרגליים.</p>
+
+    <h3 style="margin-top:40px">🏁 יום התחרות / הריצה הארוכה – צעד אחר צעד</h3>
+    <ol class="timeline" style="margin-top:14px">
+      <li class="tl"><span class="dot">🍝</span><div class="when">ערב לפני</div><h4>ארוחה עשירה בפחמימה, מוכרת ולא כבדה</h4><p>פסטה ברוטב עגבניות, אורז עם עוף, מג׳דרה, בטטה. מעט שומן, מעט סיבים, בלי מאכלים חריפים או חדשים.</p></li>
+      <li class="tl"><span class="dot">🍽️</span><div class="when">3-4 שעות לפני</div><h4>ארוחת בוקר מלאה</h4><p>1-2 גר׳ פחמימה לק״ג: פרוסות לבנות עם ריבה/דבש, דייסת שיבולת שועל עם בננה, יוגורט. חלבון מתון.</p></li>
+      <li class="tl"><span class="dot">🍌</span><div class="when">כשעה לפני</div><h4>חטיף קטן</h4><p>פחמימה + מעט חלבון רזה: 2 פרוסות לבנות עם גבינה רזה, או יוגורט עם פרי. + 300-500 מ״ל מים.</p></li>
+      <li class="tl"><span class="dot">⚡</span><div class="when">15-30 דק׳ לפני</div><h4>פחמימה פשוטה</h4><p>תמרים, ג׳ל או חצי כוס מיץ – אנרגיה זמינה מיד. ללכת לשירותים!</p></li>
+      <li class="tl"><span class="dot">🏃</span><div class="when">במהלך</div><h4>לפי שעון, לא לפי תחושה</h4><p>מנה כל 20-40 דק׳ (30-60 גר׳ פחמימה לשעה), לגימות מים/משקה בכל תחנה.</p></li>
+      <li class="tl"><span class="dot">🥛</span><div class="when">מיד בסיום</div><h4>שייק / שוקו + בננה</h4><p>פחמימה וחלבון ביחס 3:1, גם אם אין תיאבון.</p></li>
+      <li class="tl"><span class="dot">🍛</span><div class="when">6 השעות הבאות</div><h4>לאכול כל כשעתיים</h4><p>אי אפשר להשלים הכל בארוחה אחת. 2-3 ארוחות עם פחמימה וחלבון, ועכשיו גם הסלט הגדול. לשתות ולהשלים מלח.</p></li>
+    </ol>
   </div>
 </section>
+
 
 <!-- ============ BASICS ============ -->
 <section id="basics">
@@ -519,14 +592,12 @@
         <p style="margin-top:8px">¼ כפית מלח ≈ 1 גר׳ מלח ≈ 400 מ״ג נתרן. ריכוז של 6-8% סוכר נספג הכי טוב – מרוכז יותר מאט את הספיגה ועלול לגרום לבעיות בטן.</p>
       </div>
       <div class="card accent">
-        <h3>⚡ איך נראים 30 גר׳ פחמימה?</h3>
+        <h3>🧂 מלח בריצה</h3>
         <ul>
-          <li>ג׳ל אנרגיה אחד (20-30 גר׳ – בדוק תווית)</li>
-          <li>400-500 מ״ל משקה איזוטוני</li>
-          <li>2-3 תמרים (מג׳הול ≈ 18 גר׳ ליחידה)</li>
-          <li>פרוסה עם דבש</li>
-          <li>בננה גדולה</li>
-          <li>כ-6 סוכריות גומי</li>
+          <li>בריצות מעל שעה-שעתיים, ובעיקר בקיץ הישראלי – 300-600 מ״ג נתרן לשעה.</li>
+          <li>מזיעים כבדים (כתמי מלח לבנים על הבגדים) – עד 1,000 מ״ג לשעה.</li>
+          <li>מקורות: משקה ספורט, כמוסות / טבליות מלח, ג׳לים עם נתרן, בייגלה.</li>
+          <li>אחרי ריצה ארוכה בחום – אוכל מלוח ומשקה עם מלחים, לא רק מים.</li>
         </ul>
       </div>
     </div>
@@ -621,6 +692,75 @@
   </div>
 </section>
 
+<!-- ============ MISTAKES ============ -->
+<section id="mistakes">
+  <div class="wrap">
+    <div class="label">טעויות נפוצות</div>
+    <h2>6 טעויות שרצים עושים עם האוכל</h2>
+    <p class="lead">רוב הבעיות לא נובעות ממה שאוכלים – אלא מתי.</p>
+    <div class="grid g3">
+      <div class="card"><span class="icon">⏳</span><h3>לדחות את האוכל אחרי אימון</h3><p>"לא רעב" אחרי מאמץ זה זמני. הגוף נכנס ללחץ, וב-24 השעות הבאות אוכלים יותר.</p></div>
+      <div class="card"><span class="icon">🌙</span><h3>להגיע לאימון ערב מורעבים</h3><p>מדלגים על בוקר, אוכלים ענק בצהריים, לא אוכלים לפני האימון – ואחריו מתפוצצים. עדיף ארוחות מסודרות וחטיף 1-2 ש׳ לפני.</p></div>
+      <div class="card"><span class="icon">😴</span><h3>לישון בלי לאכול אחרי ריצת ערב</h3><p>שעות של שינה בלי חומרי בנייה ודלק = התאוששות חלשה. ארוחה קלה עם פחמימה וחלבון.</p></div>
+      <div class="card"><span class="icon">🌅</span><h3>אימון בוקר איכותי על ריק</h3><p>אחרי צום לילה – אימון חלש יותר, ואחריו חוסר אנרגיה, דחף למתוק ואכילה מוגברת.</p></div>
+      <div class="card"><span class="icon">📱</span><h3>אכילה לא מודעת</h3><p>אוכל בעמידה, מול מסך, "רק טעימה" – לא נספר, ומצטבר. רלוונטי במיוחד למי שרוצה לרדת במשקל.</p></div>
+      <div class="card"><span class="icon">🆕</span><h3>משהו חדש ביום התחרות</h3><p>ג׳ל חדש מהדוכן, ארוחת בוקר אחרת, קפאין לראשונה – מתכון לבעיות בטן. הכל נבדק קודם באימונים.</p></div>
+    </div>
+
+    <h3 style="margin-top:44px">🚽 "יציאת חירום" – למה זה קורה ואיך נמנעים</h3>
+    <div class="grid g2" style="margin-top:12px">
+      <div class="card accent">
+        <h3>למה?</h3>
+        <p>בריצה עצימה או ארוכה נכנסת לפעולה מערכת העצבים הסימפתטית ("הילחם או ברח"). היא מעבירה דם ומשאבים לשרירים – על חשבון מערכת העיכול. זה, יחד עם הטלטול של הריצה, מזרז את המעיים.</p>
+      </div>
+      <div class="card accent">
+        <h3>מה עושים?</h3>
+        <ul>
+          <li>ארוחה אחרונה 3-4 שעות לפני, דלה בסיבים ושומן.</li>
+          <li>ביום שלפני ריצה חשובה – להפחית קטניות, כרוב, חסה וירקות עשירי סיבים. ואם אתם רגישים, גם חלב ומזון חריף.</li>
+          <li>לא להגזים עם קפה – הוא מזרז את המעיים.</li>
+          <li>ללכת לשירותים לפני היציאה, ולתכנן מסלול עם שירותים.</li>
+          <li>לאמן את הקיבה: לאכול ולשתות במהלך ריצות ארוכות באופן קבוע.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MYTHS ============ -->
+<section id="myths">
+  <div class="wrap">
+    <div class="label">מיתוסים</div>
+    <h2>נכון או לא?</h2>
+    <p class="lead">מה שמסתובב בקבוצות הריצה – מול מה שהמחקר אומר.</p>
+
+    <details open>
+      <summary><span>"פחמימות משמינות – רץ צריך להוריד אותן" <span class="verdict v-no">לא נכון</span></span></summary>
+      <div class="body">שומן הוא מאגר מצוין לריצה איטית, אבל אינטרוולים, טמפו ותחרויות בדופק גבוה רצים על גליקוגן. מי שמוריד פחמימות לגמרי – פוגע באיכות האימונים ובהתאוששות. אפשר להפחית מעט בימים קלים, לא לבטל.</div>
+    </details>
+    <details>
+      <summary><span>"לפני מרתון צריך 3 ימים בלי פחמימות ואז העמסה" <span class="verdict v-no">מיושן</span></span></summary>
+      <div class="body">שיטת ה"ריקון" הישנה (3 ימים דלי פחמימה ואז 3 ימים של העמסה) כבר לא נחוצה. היום ממליצים פשוט להעלות פחמימות ל-10-12 גר׳ לק״ג ב-36-48 השעות שלפני מרוץ של 90 דק׳ ומעלה, יחד עם הורדת נפח – בלי שלב ריקון מתיש.</div>
+    </details>
+    <details>
+      <summary><span>"כמה שיותר מים – יותר טוב" <span class="verdict v-no">לא נכון</span></span></summary>
+      <div class="body">שתייה מעבר למה שמאבדים בזיעה, בלי מלח, עלולה לגרום להיפונתרמיה – ירידה מסוכנת בנתרן בדם. לשתות לפי צמא ולפי תוכנית, ובריצות ארוכות להוסיף מלח.</div>
+    </details>
+    <details>
+      <summary><span>"אם לא אוכלים תוך 30 דקות – האימון הלך לפח" <span class="verdict v-maybe">חצי נכון</span></span></summary>
+      <div class="body">החלון באמת חשוב כשיש אימון נוסף בפחות מ-8 שעות. לרוב הרצים החובבים, סך הפחמימה והחלבון לאורך היום חשוב יותר. אבל לאכול בשעה-שעתיים שאחרי עדיין עוזר, בעיקר כדי לא להגיע לרעב קיצוני.</div>
+    </details>
+    <details>
+      <summary><span>"ריצה על ריק שורפת יותר שומן, אז תמיד עדיף" <span class="verdict v-maybe">חצי נכון</span></span></summary>
+      <div class="body">בריצה קלה על ריק אחוז השומן בשריפה באמת עולה, וזה בסדר לריצות קצרות וקלות. אבל זה לא מתורגם לירידה גדולה יותר במשקל, ובאימוני איכות או ריצות ארוכות זה פוגע בביצועים.</div>
+    </details>
+    <details>
+      <summary><span>"תזונה טבעית עדיפה תמיד על ג׳לים" <span class="verdict v-maybe">תלוי</span></span></summary>
+      <div class="body">תמרים, צימוקים ובננה מספקים גלוקוז ופרוקטוז ועובדים מצוין. ג׳לים נוחים יותר לסחיבה ולמדידה. אין מנצח – יש מה שמתאים לקיבה ולנוחות שלכם. אפשר גם לשלב.</div>
+    </details>
+  </div>
+</section>
+
 <!-- ============ ENERGY AVAILABILITY ============ -->
 <section id="reds">
   <div class="wrap">
@@ -656,7 +796,7 @@
   <div class="wrap">
     <div class="label">מקורות</div>
     <h2>על מה זה מבוסס</h2>
-    <p class="lead">התוכן מבוסס על קורס תזונת ספורט למדריכי ריצה, ומתעדכן לפי ניירות עמדה ומחקר עדכני. בכל מקום שבו המחקר החדש שונה מהקורס – מסומן <span style="color:#fbbf24; font-weight:800">🔬 עדכון מחקרי</span>.</p>
+    <p class="lead">התוכן מבוסס על קורס תזונת ספורט למדריכי ריצה ועל כתבות מ-שוונג ו-RUNPANEL, ומתעדכן לפי ניירות עמדה ומחקר עדכני. בכל מקום שבו המחקר החדש שונה מהקורס – מסומן <span style="color:#fbbf24; font-weight:800">🔬 עדכון מחקרי</span>.</p>
     <ol class="sources">
       <li>עידו בר טל (דיאטן קליני וספורט, B.Sc) – "תזונת ספורט – קורס מדריכי ריצה" (מצגת הקורס).</li>
       <li>Kerksick et al. <i>ISSN exercise &amp; sport nutrition review: research &amp; recommendations.</i> JISSN, 2010/2018.</li>
@@ -669,6 +809,15 @@
       <li>Podlogar &amp; Wallis. <a href="https://journals.physiology.org/doi/full/10.1152/japplphysiol.00521.2023" target="_blank" rel="noopener"><i>Assessing exogenous carbohydrate intake needed to optimize human endurance performance.</i></a> J Appl Physiol, 2024.</li>
       <li><a href="https://www.gssiweb.org/sports-science-exchange/article/dietary-carbohydrate-and-the-endurance-athlete-contemporary-perspectives" target="_blank" rel="noopener">GSSI – Dietary carbohydrate and the endurance athlete: contemporary perspectives.</a></li>
       <li>Maughan et al. <i>IOC consensus statement: dietary supplements and the high-performance athlete.</i> BJSM, 2018.</li>
+      <li>שוונג – <a href="https://www.shvoong.co.il/%D7%9E%D7%94%D7%9F-%D7%90%D7%95%D7%9B%D7%9C%D7%99%D7%9D-%D7%9C%D7%A4%D7%A0%D7%99-%D7%95%D7%90%D7%97%D7%A8%D7%99-%D7%A8%D7%99%D7%A6%D7%95%D7%AA-%D7%90%D7%A8%D7%95%D7%9B%D7%95%D7%AA-%D7%91%D7%9E%D7%99/152928/" target="_blank" rel="noopener">מה אוכלים לפני ואחרי ריצות ארוכות במיוחד?</a></li>
+      <li>שוונג – <a href="https://www.shvoong.co.il/5-%D7%9E%D7%96%D7%95%D7%A0%D7%95%D7%AA-%D7%A9%D7%90%D7%A1%D7%95%D7%A8-%D7%9C%D7%9B%D7%9D-%D7%9C%D7%90%D7%9B%D7%95%D7%9C-%D7%9C%D7%A4%D7%A0%D7%99-%D7%90%D7%99%D7%9E%D7%95%D7%9F-%D7%90%D7%95-%D7%AA/69509/" target="_blank" rel="noopener">5 מזונות שאסור לכם לאכול לפני אימון או תחרות</a></li>
+      <li>שוונג – <a href="https://www.shvoong.co.il/6-%D7%98%D7%A2%D7%95%D7%99%D7%95%D7%AA-%D7%90%D7%9B%D7%99%D7%9C%D7%94-%D7%A9%D7%90%D7%AA%D7%9D-%D7%A2%D7%95%D7%A9%D7%99%D7%9D-%D7%9C%D7%90%D7%97%D7%A8-%D7%94%D7%A8%D7%99%D7%A6%D7%94/96904/" target="_blank" rel="noopener">6 טעויות אכילה שאתם עושים לאחר הריצה</a></li>
+      <li>שוונג – <a href="https://www.shvoong.co.il/%D7%97%D7%9C%D7%95%D7%9F-%D7%94%D7%94%D7%96%D7%93%D7%9E%D7%A0%D7%95%D7%99%D7%95%D7%AA-%D7%90%D7%97%D7%A8%D7%99-%D7%90%D7%99%D7%9E%D7%95%D7%9F-%D7%A1%D7%91%D7%95%D7%9C%D7%AA-%D7%9E%D7%99%D7%AA/209541/" target="_blank" rel="noopener">"חלון ההזדמנויות" אחרי אימון סבולת: מיתוס ישן או כלי התאוששות קריטי?</a></li>
+      <li>שוונג – <a href="https://www.shvoong.co.il/%D7%99%D7%A6%D7%99%D7%90%D7%AA-%D7%97%D7%99%D7%A8%D7%95%D7%9D-%D7%9C%D7%9E%D7%94-%D7%A8%D7%99%D7%A6%D7%94-%D7%92%D7%95%D7%A8%D7%9E%D7%AA-%D7%9C%D7%A6%D7%95%D7%A8%D7%9A-%D7%93%D7%97%D7%95%D7%A3-%D7%91/198725/" target="_blank" rel="noopener">יציאת חירום: למה ריצה גורמת לצורך דחוף בשירותים</a></li>
+      <li>שוונג – יעל דרור, <a href="https://www.shvoong.co.il/6-%D7%9E%D7%99%D7%AA%D7%95%D7%A1%D7%99%D7%9D-%D7%A2%D7%9C-%D7%AA%D7%96%D7%95%D7%A0%D7%94-%D7%91%D7%9E%D7%A8%D7%AA%D7%95%D7%9F-%D7%A9%D7%90%D7%AA%D7%9D-%D7%97%D7%99%D7%99%D7%91%D7%99%D7%9D-%D7%9C%D7%94/153309/" target="_blank" rel="noopener">6 מיתוסים על תזונה במרתון</a> (2022)</li>
+      <li>RUNPANEL – <a href="https://runpanel.co.il/natural-nutrition-for-runs/" target="_blank" rel="noopener">מה לאכול בריצה – 6 אלטרנטיבות טבעיות לג׳ל</a>; <a href="https://runpanel.co.il/natural-nutrition-aerobic/" target="_blank" rel="noopener">6 מזונות טבעיים לאימונים אירוביים ארוכים</a></li>
+      <li>RUNPANEL – חן שרייבר, <a href="https://runpanel.co.il/eat-to-run/" target="_blank" rel="noopener">פחמימות או לא להיות – ניפוץ מיתוסים בתזונה לרצים</a></li>
+      <li>RUNPANEL – גיא חלמיש, <a href="https://runpanel.co.il/10-%D7%98%D7%99%D7%A4%D7%99%D7%9D-%D7%A9%D7%9B%D7%93%D7%90%D7%99-%D7%9C%D7%93%D7%A2%D7%AA-%D7%A2%D7%9C-%D7%92%D7%9C-%D7%90%D7%A0%D7%A8%D7%92%D7%99%D7%94-%D7%92%D7%99%D7%90-%D7%97%D7%9C%D7%9E/" target="_blank" rel="noopener">10 טיפים שכדאי לדעת על ג׳ל אנרגיה</a></li>
     </ol>
   </div>
 </section>
@@ -685,248 +834,16 @@
 <script>
 (function () {
   'use strict';
-  var $ = function (id) { return document.getElementById(id); };
-  var r0 = function (x) { return Math.round(x); };
-  var r5 = function (x) { return Math.round(x / 5) * 5; };
-  var clamp = function (x, a, b) { return Math.min(b, Math.max(a, x)); };
-
-  var store = {
-    get: function (k) { try { return JSON.parse(localStorage.getItem('rn_' + k)); } catch (e) { return null; } },
-    set: function (k, v) { try { localStorage.setItem('rn_' + k, JSON.stringify(v)); } catch (e) {} }
-  };
-
-  function num(el, fallback) {
-    var v = parseFloat(el.value);
-    return isFinite(v) && v > 0 ? v : fallback;
-  }
-  function radio(name) {
-    var el = document.querySelector('input[name="' + name + '"]:checked');
-    return el ? el.value : null;
-  }
-  function range(a, b, unit) {
-    return a === b ? a + (unit ? ' <small>' + unit + '</small>' : '') : a + '-' + b + (unit ? ' <small>' + unit + '</small>' : '');
-  }
-
-  /* ---------- DAILY CALCULATOR ---------- */
-  // g/kg/day and kcal/kg/day by training level
-  var LEVELS = {
-    1: { carb: [3, 5], prot: [1.2, 1.4], kcal: [30, 38], name: 'בסיסי' },
-    2: { carb: [5, 7], prot: [1.4, 1.6], kcal: [38, 45], name: 'בינוני' },
-    3: { carb: [6, 10], prot: [1.5, 1.8], kcal: [45, 60], name: 'גבוה' },
-    4: { carb: [8, 12], prot: [1.6, 2.0], kcal: [60, 80], name: 'קיצוני' }
-  };
-
-  function calc() {
-    var w = clamp(num($('c-weight'), 70), 35, 160);
-    var lvl = LEVELS[$('c-level').value] || LEVELS[2];
-    var goal = radio('goal');
-    var train = clamp(parseFloat($('c-train').value) || 0, 0, 600);
-    var carb = lvl.carb.slice(), prot = lvl.prot.slice(), kcal = lvl.kcal.slice();
-    var note = '';
-
-    if (goal === 'cut') {
-      carb = [Math.max(3, carb[0] - 1), Math.max(4, carb[1] - 1.5)];
-      prot = [1.6, 2.2];
-      kcal = [kcal[0] - 6, kcal[1] - 6];
-      note = '<div class="note">בירידה במשקל: גירעון מתון של 300-500 קק״ל ביום, ירידה של עד ~0.5 ק״ג בשבוע. לשמור את הפחמימות סביב אימוני האיכות והריצות הארוכות, ולהוריד בימים הקלים. <b>לא בתקופת שיא / שבועיים לפני תחרות.</b></div>';
-    } else if (goal === 'load') {
-      carb = [10, 12];
-      kcal = [kcal[0] + 5, kcal[1] + 10];
-      note = '<div class="note">העמסה: 36-48 שעות לפני מרוץ של 90 דק׳ ומעלה (חצי מרתון ומעלה), יחד עם הורדת נפח. להעדיף פחמימות דלות סיבים ושומן (אורז לבן, פסטה, לחם לבן, מיצים, תמרים). עלייה של 1-2 ק״ג במשקל היא מים וגליקוגן – סימן שזה עובד.</div>';
-    } else if (goal === 'rest') {
-      carb = [3, Math.max(4, Math.min(5, carb[0]))];
-      kcal = [Math.max(28, kcal[0] - 8), Math.max(33, kcal[0] - 2)];
-      note = '<div class="note">ביום מנוחה החלבון נשאר כמו ביום אימון (ההתאוששות ממשיכה), הפחמימות יורדות. אם מחר ריצה ארוכה – ארוחת הערב היא המקום להעלות פחמימות.</div>';
-    }
-
-    var cg = [r5(carb[0] * w), r5(carb[1] * w)];
-    var pg = [r5(prot[0] * w), r5(prot[1] * w)];
-    var kc = [r0(kcal[0] * w / 50) * 50, r0(kcal[1] * w / 50) * 50];
-    var perMeal = [r0(0.3 * w), r0(0.4 * w)];
-    var trainHours = goal === 'rest' ? 0 : train / 60;
-    var baseFluid = 0.035 * w;
-    var fluid = [baseFluid + 0.5 * trainHours, baseFluid + 1.0 * trainHours];
-
-    // macro split at midpoints
-    var cMid = (cg[0] + cg[1]) / 2, pMid = (pg[0] + pg[1]) / 2, kMid = (kc[0] + kc[1]) / 2;
-    var fatKcal = Math.max(kMid - cMid * 4 - pMid * 4, kMid * 0.2);
-    var fg = r5(fatKcal / 9);
-    var tot = cMid * 4 + pMid * 4 + fg * 9;
-    var pc = r0(cMid * 4 / tot * 100), pp = r0(pMid * 4 / tot * 100), pf = 100 - pc - pp;
-
-    $('calcOut').innerHTML =
-      '<div class="res carb"><div class="k">פחמימות ליום</div><div class="v">' + range(cg[0], cg[1], 'גר׳') + '</div><div class="d">' + carb[0] + '-' + carb[1] + ' גר׳ לק״ג</div></div>' +
-      '<div class="res prot"><div class="k">חלבון ליום</div><div class="v">' + range(pg[0], pg[1], 'גר׳') + '</div><div class="d">' + perMeal[0] + '-' + perMeal[1] + ' גר׳ בכל ארוחה, 4-5 ארוחות</div></div>' +
-      '<div class="res kcal"><div class="k">קלוריות ליום (הערכה)</div><div class="v">' + range(kc[0].toLocaleString('he-IL'), kc[1].toLocaleString('he-IL'), 'קק״ל') + '</div><div class="d">שומן: ~' + fg + ' גר׳ (לפחות 20% מהקלוריות)</div></div>' +
-      '<div class="res fluid"><div class="k">נוזלים ליום</div><div class="v">' + range(fluid[0].toFixed(1), fluid[1].toFixed(1), 'ליטר') + '</div><div class="d">כולל תוספת לאימון. שתן בהיר = מספיק</div></div>' +
-      '<div class="res wide"><div class="k">חלוקה משוערת של הקלוריות</div>' +
-        '<div class="bar" role="img" aria-label="פחמימות ' + pc + '%, חלבון ' + pp + '%, שומן ' + pf + '%"><i style="width:' + pc + '%;background:#60a5fa"></i><i style="width:' + pp + '%;background:#34d399"></i><i style="width:' + pf + '%;background:#fbbf24"></i></div>' +
-        '<div class="legend"><span style="--c:#60a5fa">פחמימות ' + pc + '%</span><span style="--c:#34d399">חלבון ' + pp + '%</span><span style="--c:#fbbf24">שומן ' + pf + '%</span></div></div>';
-    $('calcNote').innerHTML = note;
-
-    store.set('calc', { w: w, lvl: $('c-level').value, goal: goal, train: train });
-    if (!$('p-weight').dataset.touched) $('p-weight').value = w;
-  }
-
-  function syncWeight(from) {
-    var v = clamp(parseFloat(from.value) || 70, 35, 160);
-    if (from.id === 'c-weight-r') $('c-weight').value = v;
-    else $('c-weight-r').value = clamp(v, 40, 120);
-    $('c-weight-o').textContent = r0(v) + ' ק״ג';
-    calc();
-  }
-
-  /* ---------- RUN PLANNER ---------- */
-  function fmtDur(min) {
-    var h = Math.floor(min / 60), m = min % 60;
-    return h + ':' + (m < 10 ? '0' : '') + m + ' ש׳';
-  }
-  function clock(startMin, offset) {
-    var t = ((startMin + offset) % 1440 + 1440) % 1440;
-    var h = Math.floor(t / 60), m = Math.round(t % 60);
-    if (m === 60) { h = (h + 1) % 24; m = 0; }
-    return (h < 10 ? '0' : '') + h + ':' + (m < 10 ? '0' : '') + m;
-  }
-  function item(icon, when, time, title, text, chips, skip) {
-    return '<li class="tl' + (skip ? ' skip' : '') + '"><span class="dot" aria-hidden="true">' + icon + '</span>' +
-      '<div class="when">' + when + (time ? '<time>' + time + '</time>' : '') + '</div>' +
-      '<h4>' + title + '</h4><p>' + text + '</p>' +
-      (chips && chips.length ? '<div class="chips">' + chips.map(function (c) { return '<span class="chip">' + c + '</span>'; }).join('') + '</div>' : '') +
-      '</li>';
-  }
-
-  function plan() {
-    var w = clamp(num($('p-weight'), 70), 35, 160);
-    var dur = parseInt($('p-dur-r').value, 10);
-    var type = radio('type');
-    var gut = $('p-gut').checked, b2b = $('p-b2b').checked, heat = $('p-heat').checked, caf = $('p-caf').checked;
-    var st = ($('p-start').value || '06:00').split(':');
-    var start = (parseInt(st[0], 10) || 0) * 60 + (parseInt(st[1], 10) || 0);
-    var hard = type === 'quality' || type === 'race';
-    var longish = dur >= 75 || type === 'long' || type === 'race';
-    var early = start < 7 * 60 + 30;
-
-    $('p-dur-o').textContent = fmtDur(dur);
-
-    // During-run carbohydrate target (g/h)
-    var perHour, duringText;
-    if (dur < 45) { perHour = [0, 0]; }
-    else if (dur < 75) { perHour = hard ? [15, 30] : [0, 0]; }
-    else if (dur <= 150) { perHour = [30, 60]; }
-    else { perHour = gut ? [60, 90] : [45, 60]; }
-    var hours = dur / 60;
-    var fuelStart = dur >= 75 ? 30 : 20;
-    var totalCarb = [r5(perHour[0] * Math.max(0, hours - fuelStart / 60 + 0.25)), r5(perHour[1] * Math.max(0, hours - fuelStart / 60 + 0.25))];
-    var fluidH = heat ? [500, 800] : [400, 600];
-    var sodiumH = heat ? [500, 1000] : [300, 600];
-
-    var html = '';
-
-    // 3-4h meal
-    var mealG = [r5(1 * w), r5((longish ? 2 : 1.5) * w)];
-    if (early && !longish) {
-      html += item('🍽️', 'ערב קודם', '', 'ארוחת ערב רגילה ועשירה בפחמימות', 'לריצה מוקדמת וקצרה אין צורך לקום ב-3 לפנות בוקר. ארוחת ערב טובה ממלאה את המאגרים.', ['אורז / פסטה / תפו״א', 'חלבון רזה', 'ירקות מבושלים'], false);
-    } else {
-      html += item('🍽️', '3-4 שעות לפני', clock(start, -210), 'ארוחה מלאה ומאוזנת',
-        '<b>' + mealG[0] + '-' + mealG[1] + ' גר׳ פחמימה</b> (1-' + (longish ? 2 : 1.5) + ' גר׳/ק״ג), אינדקס גליקמי נמוך-בינוני, חלבון מתון, מעט שומן וסיבים.' +
-        (early ? ' לריצה ארוכה מוקדמת: אפשר להפוך את ארוחת הערב לעשירה בפחמימות ולקום לחטיף בלבד.' : ''),
-        ['שיבולת שועל עם בננה ודבש', 'אורז / פסטה עם עוף', '2 פרוסות עם ריבה + יוגורט'], false);
-    }
-
-    // 60-90 min snack
-    var snackG = [r5(0.5 * w), r5(1 * w)];
-    html += item('🍌', '60-90 דק׳ לפני', clock(start, -75), 'חטיף קטן',
-      (dur < 45 && type === 'easy') ? 'לריצה קלה וקצרה – אופציונלי. אם רעב: פרי או פרוסה קטנה.' :
-      '<b>' + snackG[0] + '-' + snackG[1] + ' גר׳ פחמימה</b> (עד 1 גר׳/ק״ג), קל לעיכול, דל שומן. + 300-500 מ״ל מים.',
-      ['בננה', 'פרוסה עם דבש / סילאן', 'תמרים', 'חטיף אנרגיה', 'בייגלה'], dur < 45 && type === 'easy');
-
-    // caffeine
-    if (caf) {
-      var cafMg = type === 'race' || (hard && dur >= 45) ? [r5(3 * w), r5(5 * w)] : [r5(2 * w), r5(3 * w)];
-      var ultra = dur > 240;
-      html += item('☕', ultra ? 'לפני + בחצי השני' : '~60 דק׳ לפני', ultra ? '' : clock(start, -60), 'קפאין',
-        ultra ? '<b>' + r5(1 * w) + '-' + r5(2 * w) + ' מ״ג</b> כל 2-3 שעות, עם דגש על החלק המאוחר של הריצה.' :
-        '<b>' + cafMg[0] + '-' + cafMg[1] + ' מ״ג</b> (' + (cafMg[0] / w).toFixed(0) + '-' + (cafMg[1] / w).toFixed(0) + ' מ״ג/ק״ג). רק אם נוסה קודם באימון.',
-        ['אספרסו כפול ≈ 130 מ״ג', 'קפה נמס ≈ 80 מ״ג', 'ג׳ל קפאין ≈ 25-100 מ״ג'], false);
-    }
-
-    // 0-10 min
-    var topG = [r0(0.3 * w), r0(0.5 * w)];
-    html += item('⚡', '0-10 דק׳ לפני', clock(start, -10), 'בוסט אחרון',
-      longish ? '<b>' + topG[0] + '-' + topG[1] + ' גר׳ פחמימה פשוטה</b> (0.3-0.5 גר׳/ק״ג). בדיוק לפני היציאה – כך תחילת המאמץ "תופסת" את הסוכר לפני שהאינסולין מוריד אותו.' :
-      'לא הכרחי בריצה הזו.',
-      longish ? ['ג׳ל', '2 תמרים', 'חצי כוס מיץ', 'סוכריות גומי'] : [], !longish);
-
-    // during
-    if (perHour[1] > 0) {
-      var gels = [Math.ceil(totalCarb[0] / 25), Math.ceil(totalCarb[1] / 25)];
-      var dText = '<b>' + perHour[0] + '-' + perHour[1] + ' גר׳ פחמימה לשעה</b>, מנה כל 20-30 דק׳ מדקה ' + fuelStart + '. סה״כ בריצה: <b>~' + totalCarb[0] + '-' + totalCarb[1] + ' גר׳</b> (≈ ' + gels[0] + '-' + gels[1] + ' ג׳לים של 25 גר׳).';
-      if (perHour[1] > 60) dText += ' מעל 60 גר׳/ש׳ – רק מוצרים עם גלוקוז + פרוקטוז.';
-      if (dur > 150 && !gut) dText += ' <b>לא אימנת קיבה?</b> התחל מ-45-60 גר׳/ש׳ והעלה בהדרגה בריצות הארוכות הבאות.';
-      html += item('🏃', 'במהלך הריצה', clock(start, 0) + '-' + clock(start, dur), 'תדלוק שוטף', dText,
-        ['<b>' + fluidH[0] + '-' + fluidH[1] + '</b> מ״ל נוזלים/ש׳', '<b>' + sodiumH[0] + '-' + sodiumH[1] + '</b> מ״ג נתרן/ש׳', 'משקה 6-8%', 'ג׳לים', 'תמרים'], false);
-    } else {
-      html += item('🏃', 'במהלך הריצה', clock(start, 0) + '-' + clock(start, dur), 'מים לפי צמא',
-        dur < 45 ? 'בריצה של פחות מ-45 דק׳ אין צורך בפחמימות. מים לפי הצורך.' :
-        'אין צורך בפחמימות. אפשר מים לפי צמא' + (heat ? ', ובחום – משקה עם מלח.' : '.'), [], false);
-    }
-
-    // after
-    var postC = b2b ? [r5(1 * w), r5(1.2 * w)] : (longish || hard ? [r5(1 * w), r5(1.2 * w)] : [r5(0.5 * w), r5(0.8 * w)]);
-    var postP = [r5(0.25 * w), r5(0.4 * w)];
-    html += item('🥛', 'תוך 30 דק׳ אחרי', clock(start, dur + 30), 'חלון ההתאוששות',
-      '<b>' + postC[0] + '-' + postC[1] + ' גר׳ פחמימה + ' + postP[0] + '-' + postP[1] + ' גר׳ חלבון</b>. יחס של כ-3:1 פחמימה לחלבון. + נוזלים: 1.25-1.5 ליטר לכל ק״ג שירד במשקל.',
-      ['שוקו + בננה', 'יוגורט + גרנולה + פרי', 'לחם + קוטג׳ + דבש', 'שייק חלבון + פרי'], false);
-
-    if (b2b) {
-      html += item('🔁', '4-6 השעות הבאות', clock(start, dur + 90) + '-' + clock(start, dur + 360), 'מילוי מהיר (Back to Back)',
-        'להמשיך <b>' + postC[0] + '-' + postC[1] + ' גר׳ פחמימה בכל שעה-שעתיים</b> – זה ההבדל בין אימון בוקר טוב לאימון על אדים.',
-        ['ארוחה עשירה בפחמימה', 'חטיפי פחמימה ביניים', 'מעט חלבון בכל פעם'], false);
-    }
-
-    html += item('🍛', 'עד שעתיים אחרי', clock(start, dur + 120), 'ארוחה מלאה',
-      'שלושת אבות המזון – פחמימה, חלבון (' + postP[0] + '-' + postP[1] + ' גר׳) ושומן, + ירקות. וזה הזמן להשלים נוזלים ומלח.',
-      ['אורז / תפו״א + עוף / דג + סלט', 'פסטה + טונה', 'שקשוקה + לחם'], false);
-
-    $('planOut').innerHTML = html;
-
-    $('planSummary').innerHTML =
-      '<div class="res carb"><div class="k">פחמימות במהלך</div><div class="v">' + (perHour[1] ? range(perHour[0], perHour[1], 'גר׳/ש׳') : '0') + '</div><div class="d">' + (perHour[1] ? 'סה״כ ~' + totalCarb[0] + '-' + totalCarb[1] + ' גר׳' : 'לא נדרש') + '</div></div>' +
-      '<div class="res fluid"><div class="k">נוזלים במהלך</div><div class="v">' + (dur >= 45 ? range(fluidH[0], fluidH[1], 'מ״ל/ש׳') : 'לפי צמא') + '</div><div class="d">נתרן ' + sodiumH[0] + '-' + sodiumH[1] + ' מ״ג/ש׳' + (dur < 60 ? ' (לרוב לא נדרש)' : '') + '</div></div>';
-
-    store.set('plan', { w: w, dur: dur, type: type, gut: gut, b2b: b2b, heat: heat, caf: caf, start: $('p-start').value });
-  }
-
-  /* ---------- INIT ---------- */
-  function restore() {
-    var c = store.get('calc');
-    if (c) {
-      $('c-weight').value = c.w; $('c-weight-r').value = clamp(c.w, 40, 120); $('c-weight-o').textContent = r0(c.w) + ' ק״ג';
-      if (LEVELS[c.lvl]) $('c-level').value = c.lvl;
-      if (c.goal && $('g-' + c.goal)) $('g-' + c.goal).checked = true;
-      if (isFinite(c.train)) $('c-train').value = c.train;
-    }
-    var p = store.get('plan');
-    if (p) {
-      $('p-weight').value = p.w; $('p-weight').dataset.touched = '1';
-      $('p-dur-r').value = p.dur;
-      if (p.type && $('t-' + p.type)) $('t-' + p.type).checked = true;
-      $('p-gut').checked = !!p.gut; $('p-b2b').checked = !!p.b2b; $('p-heat').checked = !!p.heat; $('p-caf').checked = !!p.caf;
-      if (p.start) $('p-start').value = p.start;
-    }
-  }
-
-  restore();
-  $('c-weight-r').addEventListener('input', function () { syncWeight(this); });
-  $('c-weight').addEventListener('input', function () { syncWeight(this); });
-  $('calcForm').addEventListener('change', calc);
-  $('c-train').addEventListener('input', calc);
-  $('p-weight').addEventListener('input', function () { this.dataset.touched = '1'; plan(); });
-  $('planForm').addEventListener('input', plan);
-  $('planForm').addEventListener('change', plan);
-  $('printPlan').addEventListener('click', function () { window.print(); });
-  calc();
-  plan();
+  // "what's better" filter tabs
+  var tabs = [].slice.call(document.querySelectorAll('.tab'));
+  var cards = [].slice.call(document.querySelectorAll('.vs'));
+  tabs.forEach(function (t) {
+    t.addEventListener('click', function () {
+      var f = t.dataset.filter;
+      tabs.forEach(function (x) { var on = x === t; x.classList.toggle('active', on); x.setAttribute('aria-selected', on); });
+      cards.forEach(function (c) { c.hidden = f !== 'all' && c.dataset.phase !== f; });
+    });
+  });
 
   // active nav link
   var links = [].slice.call(document.querySelectorAll('.nav-links a'));
