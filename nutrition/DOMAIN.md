@@ -1,15 +1,11 @@
 # העלאת האתר לאוויר וחיבור דומיין
 
-## שלב 1 – הפעלה חד-פעמית של GitHub Pages
+## איך האתר עולה לאוויר
 
-1. ב-GitHub: **Settings ← Pages**.
-2. תחת **Build and deployment ← Source** לבחור **GitHub Actions**.
-3. למזג את הענף `claude/nutrition-runners-site-pn4cd3` ל-`main`.
+האתר מוגש מהענף `gh-pages` בכתובת **https://harel05333-oss.github.io/-/**
 
-מעכשיו, כל שינוי בתיקייה `nutrition/` שנכנס ל-`main` מעלה את האתר אוטומטית (תוך 1-2 דקות).
-הכתובת החינמית: **https://harel05333-oss.github.io/-/**
-
-אפשר לראות את מצב ההעלאה בלשונית **Actions** ← "Deploy site".
+כל שינוי בתיקייה `nutrition/` שנכנס ל-`main` מעדכן את `gh-pages` אוטומטית (ה-workflow "Deploy site"), והאתר מתעדכן תוך 1-2 דקות.
+אפשר לראות את מצב ההעלאה בלשונית **Actions**.
 
 ## שלב 2 – דומיין משלך (כשיהיה)
 
@@ -32,7 +28,7 @@
 
 2. **ב-GitHub: Settings ← Pages ← Custom domain** – להזין את הדומיין (למשל `harelrun.co.il`) ולשמור.
 3. לחכות שהבדיקה תעבור (דקות עד כמה שעות), ואז לסמן **Enforce HTTPS**.
-4. לעדכן באתר את הכתובת הישנה `https://harel05333-oss.github.io/-/` בכתובת החדשה בקבצים:
+4. להוסיף קובץ `nutrition/CNAME` שמכיל רק את הדומיין (אחרת ההעלאה הבאה תמחק את ההגדרה), ולעדכן באתר את הכתובת הישנה `https://harel05333-oss.github.io/-/` בכתובת החדשה בקבצים:
    - `index.html` – התגיות `canonical`, `og:url`, `og:image`
    - `robots.txt`, `sitemap.xml`
    - `404.html` – הקישורים `/-/` הופכים ל-`/`
