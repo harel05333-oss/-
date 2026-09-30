@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://harel05333-oss.github.io/-/sitemap.xml
