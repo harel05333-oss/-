@@ -17,7 +17,9 @@ export default function SplashRedirect() {
   useEffect(() => {
     let cancelled = false;
     (async () => {
-      const token = await getToken();
+      // getToken() never throws, but guard anyway: if this check fails the
+      // app would sit on the spinner forever with no way in.
+      const token = await getToken().catch(() => null);
       if (cancelled) return;
       router.replace(token ? '/lobby' : '/sign-in');
     })();

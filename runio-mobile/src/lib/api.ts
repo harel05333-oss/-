@@ -21,21 +21,37 @@ const TOKEN_KEY = 'raceon-auth-token';
 // hitting the native module each time; setToken/clearToken keep it in sync.
 let cachedToken: string | null | undefined;
 
+// SecureStore can throw in Expo Go (its bundled native module can lag the
+// npm package — see README "Auth model"). A storage failure must never block
+// signing in or launching the app, so every call falls back to the
+// in-memory token: worst case the user signs in again after a restart.
 export async function getToken(): Promise<string | null> {
   if (cachedToken !== undefined) return cachedToken;
-  const stored = await SecureStore.getItemAsync(TOKEN_KEY);
-  cachedToken = stored;
-  return stored;
+  try {
+    cachedToken = await SecureStore.getItemAsync(TOKEN_KEY);
+  } catch (err) {
+    console.warn('[auth] could not read stored token, starting signed out', err);
+    cachedToken = null;
+  }
+  return cachedToken;
 }
 
 export async function setToken(token: string): Promise<void> {
   cachedToken = token;
-  await SecureStore.setItemAsync(TOKEN_KEY, token);
+  try {
+    await SecureStore.setItemAsync(TOKEN_KEY, token);
+  } catch (err) {
+    console.warn('[auth] could not persist token, keeping it in memory only', err);
+  }
 }
 
 export async function clearToken(): Promise<void> {
   cachedToken = null;
-  await SecureStore.deleteItemAsync(TOKEN_KEY);
+  try {
+    await SecureStore.deleteItemAsync(TOKEN_KEY);
+  } catch (err) {
+    console.warn('[auth] could not delete stored token', err);
+  }
 }
 
 export type CurrentUser = {
