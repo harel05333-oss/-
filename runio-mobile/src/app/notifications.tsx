@@ -193,9 +193,9 @@ export default function NotificationsScreen() {
                   </View>
                 )}
                 <View style={styles.body}>
-                  <Text style={[styles.message, { color: colors.text }]}>{messageFor(n)}</Text>
+                  <Text style={[styles.message, { color: colors.text }]}>{messageFor(n, locale)}</Text>
                   <Text style={[styles.time, { color: colors.textSecondary }]}>
-                    {timeAgo(n.createdAt)}
+                    {timeAgo(n.createdAt, locale)}
                   </Text>
                 </View>
                 {!n.read && <View style={[styles.unreadDot, { backgroundColor: colors.primary }]} />}

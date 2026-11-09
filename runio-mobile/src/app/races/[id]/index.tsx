@@ -113,6 +113,9 @@ export default function RaceDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const colors = useThemeColors();
+  const { locale } = useLocale();
+  const t = useT(strings);
+  const priceLabel = (priceUsd: number | null) => (priceUsd == null ? t.free : `$${priceUsd}`);
   const [race, setRace] = useState<RaceDetail | null>(null);
   const [error, setError] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -143,15 +146,11 @@ export default function RaceDetailScreen() {
     setUploading(true);
     try {
       const uploaded = await uploadRaceResult(race.id, asset.uri, asset.name);
-      Alert.alert(
-        'התוצאה נקלטה!',
-        `${uploaded.distanceKm.toFixed(2)} ק"מ ב-${Math.floor(uploaded.finishTimeS / 60)}:${String(
-          uploaded.finishTimeS % 60
-        ).padStart(2, '0')}`
-      );
+      const time = `${Math.floor(uploaded.finishTimeS / 60)}:${String(uploaded.finishTimeS % 60).padStart(2, '0')}`;
+      Alert.alert(t.resultRecorded, t.resultSummary(uploaded.distanceKm.toFixed(2), time));
     } catch (err) {
       const key = err instanceof ApiError ? err.message : '';
-      Alert.alert('ההעלאה נכשלה', UPLOAD_ERROR_MESSAGES[key] ?? 'לא הצלחנו לעבד את הקובץ. נסה שוב.');
+      Alert.alert(t.uploadFailed, t.uploadErrors[key] ?? t.uploadFailedFallback);
     } finally {
       setUploading(false);
     }
@@ -167,10 +166,10 @@ export default function RaceDetailScreen() {
       {error ? (
         <View style={styles.center}>
           <Text style={[styles.helperText, { color: colors.textSecondary }]}>
-            לא ניתן לטעון את המירוץ.
+            {t.loadError}
           </Text>
           <Pressable onPress={load}>
-            <Text style={[Typography.label, { color: colors.primary }]}>נסה שוב</Text>
+            <Text style={[Typography.label, { color: colors.primary }]}>{t.retry}</Text>
           </Pressable>
         </View>
       ) : !race ? (
@@ -191,7 +190,7 @@ export default function RaceDetailScreen() {
 
           <View style={styles.titleRow}>
             <Text style={[Typography.headlineLg, styles.title, { color: colors.text }]}>
-              {race.title.he}
+              {race.title[locale]}
             </Text>
             <MaterialIcons
               name={race.isRegistered ? 'verified' : 'schedule'}
@@ -199,47 +198,46 @@ export default function RaceDetailScreen() {
               color={colors.primary}
             />
           </View>
-          <Text style={[styles.date, { color: colors.textSecondary }]}>{formatDate(race.startsAt)}</Text>
+          <Text style={[styles.date, { color: colors.textSecondary }]}>{formatDate(race.startsAt, locale)}</Text>
           <View style={styles.windowRow}>
             <MaterialIcons name="schedule" size={14} color={colors.primary} />
             <Text style={[styles.windowText, { color: colors.primary }]}>
-              מתחיל ב-{formatWindow(race.startsAt, race.windowEndsAt)}
+              {t.startsAt(formatWindow(race.startsAt, race.windowEndsAt))}
             </Text>
           </View>
 
           <StarkCard style={styles.statsRow}>
             <View style={styles.stat}>
-              <Text style={[Typography.eyebrow, { color: colors.textSecondary }]}>מרחק</Text>
-              <Text style={[styles.statValue, { color: colors.text }]}>{race.distanceKm} ק"מ</Text>
+              <Text style={[Typography.eyebrow, { color: colors.textSecondary }]}>{t.distance}</Text>
+              <Text style={[styles.statValue, { color: colors.text }]}>{race.distanceKm} {locale === 'he' ? 'ק"מ' : 'km'}</Text>
             </View>
             <View style={[styles.stat, styles.statDivider, { borderColor: colors.border }]}>
-              <Text style={[Typography.eyebrow, { color: colors.textSecondary }]}>חלון זמן</Text>
+              <Text style={[Typography.eyebrow, { color: colors.textSecondary }]}>{t.timeWindow}</Text>
               <Text style={[styles.statValue, { color: colors.text }]}>
                 {formatWindow(race.startsAt, race.windowEndsAt)}
               </Text>
             </View>
             <View style={styles.stat}>
-              <Text style={[Typography.eyebrow, { color: colors.textSecondary }]}>מחיר</Text>
+              <Text style={[Typography.eyebrow, { color: colors.textSecondary }]}>{t.price}</Text>
               <Text style={[styles.statValue, { color: colors.text }]}>{priceLabel(race.priceUsd)}</Text>
             </View>
           </StarkCard>
 
           {race.windowEndsAt && (
             <Text style={[styles.windowHint, { color: colors.textSecondary }]}>
-              אפשר להתחיל בכל רגע בתוך החלון הזה, לפי השעון האישי שלך — התוצאות נשארות מוסתרות עד
-              שהחלון נסגר, כדי שלכולם יהיה סיכוי הוגן.
+              {t.windowHint}
             </Text>
           )}
 
           {race.participantsCount != null && (
             <Text style={[styles.participants, { color: colors.textSecondary }]}>
-              {race.participantsCount} רצים רשומים
+              {t.participants(race.participantsCount)}
             </Text>
           )}
 
           {race.description && (
             <StarkCard style={styles.descriptionCard}>
-              <Text style={[Typography.label, { color: colors.primary }]}>על המירוץ</Text>
+              <Text style={[Typography.label, { color: colors.primary }]}>{t.about}</Text>
               <Text style={[styles.descriptionBody, { color: colors.textSecondary }]}>
                 {race.description}
               </Text>
@@ -251,20 +249,17 @@ export default function RaceDetailScreen() {
               <StarkCard emphasized style={styles.registeredBadge}>
                 <MaterialIcons name="verified" size={18} color={colors.text} />
                 <Text style={[Typography.label, { color: colors.text }]}>
-                  נרשמת למירוץ הזה
+                  {t.registered}
                 </Text>
               </StarkCard>
 
               <StarkCard style={styles.howItWorksCard}>
                 <View style={styles.howItWorksHeader}>
                   <MaterialIcons name="watch" size={18} color={colors.primary} />
-                  <Text style={[Typography.label, { color: colors.primary }]}>איך התוצאות נרשמות</Text>
+                  <Text style={[Typography.label, { color: colors.primary }]}>{t.howItWorks}</Text>
                 </View>
                 <Text style={[styles.howItWorksBody, { color: colors.textSecondary }]}>
-                  פשוט לרוץ — בלי צורך בטלפון. אם השעון שלך מסתנכרן עם סטראבה, אנחנו נזהה את הריצה
-                  אוטומטית ברגע שהיא עולה לשם במהלך חלון המירוץ, ונקליט את הזמן הרשמי שלך. אין
-                  סטראבה? אפשר לייצא את קובץ ה-GPX או ה-TCX מהאפליקציה של השעון ולהעלות אותו למטה
-                  במקום.
+                  {t.howItWorksBody}
                 </Text>
                 <Pressable
                   onPress={handleUploadTrack}
@@ -277,14 +272,14 @@ export default function RaceDetailScreen() {
                     <MaterialIcons name="upload" size={16} color={colors.primary} />
                   )}
                   <Text style={[Typography.label, { color: colors.primary }]}>
-                    {uploading ? 'מעלה…' : 'אין סטראבה? אפשר להעלות קובץ GPX / TCX במקום'}
+                    {uploading ? t.uploading : t.uploadPrompt}
                   </Text>
                 </Pressable>
               </StarkCard>
             </>
           ) : (
             <Button
-              label="הרשמה למירוץ"
+              label={t.joinRace}
               icon="arrow-forward"
               style={styles.joinButton}
               onPress={() =>
