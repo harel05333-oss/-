@@ -301,7 +301,7 @@ export default function RecordRunScreen() {
             <Text style={[styles.summaryValue, { color: colors.text }]}>
               {distanceKm.toFixed(2)}
             </Text>
-            <Text style={[styles.summaryLabel, { color: colors.textSecondary }]}>ק"מ</Text>
+            <Text style={[styles.summaryLabel, { color: colors.textSecondary }]}>ק״מ</Text>
           </View>
           <View style={styles.summaryStat}>
             <Text style={[styles.summaryValue, { color: colors.text }]}>
@@ -313,7 +313,7 @@ export default function RecordRunScreen() {
             <Text style={[styles.summaryValue, { color: colors.text }]}>
               {formatLivePace(distanceKm, elapsedS)}
             </Text>
-            <Text style={[styles.summaryLabel, { color: colors.textSecondary }]}>/ק"מ</Text>
+            <Text style={[styles.summaryLabel, { color: colors.textSecondary }]}>/ק״מ</Text>
           </View>
         </View>
         <Pressable onPress={() => router.back()} style={[styles.doneButton, { backgroundColor: colors.primary }]}>
@@ -375,7 +375,7 @@ export default function RecordRunScreen() {
           <BlurView intensity={60} tint="dark" style={[styles.sheet, { borderColor: colors.glassBorder }]}>
             <View style={styles.heroRow}>
               <Text style={[styles.heroValue, { color: colors.text }]}>{distanceKm.toFixed(2)}</Text>
-              <Text style={[styles.heroUnit, { color: colors.textSecondary }]}>ק"מ</Text>
+              <Text style={[styles.heroUnit, { color: colors.textSecondary }]}>ק״מ</Text>
             </View>
 
             {phase === 'running' && (
@@ -393,7 +393,7 @@ export default function RecordRunScreen() {
                     {startLabel}
                   </Text>
                   <Text style={[styles.progressLabelSmall, { color: `${colors.textSecondary}99` }]}>
-                    הבא: {kmFloor + 1} ק"מ
+                    הבא: {kmFloor + 1} ק״מ
                   </Text>
                 </View>
 
@@ -406,7 +406,7 @@ export default function RecordRunScreen() {
                   </View>
                   <View style={[styles.statDivider, { backgroundColor: colors.border }]} />
                   <View style={styles.statCol}>
-                    <Text style={[styles.statLabel, { color: colors.textSecondary }]}>קצב /ק"מ</Text>
+                    <Text style={[styles.statLabel, { color: colors.textSecondary }]}>קצב /ק״מ</Text>
                     <Text style={[styles.statValue, { color: colors.text }]}>{currentPaceLabel}</Text>
                   </View>
                   <View style={[styles.statDivider, { backgroundColor: colors.border }]} />

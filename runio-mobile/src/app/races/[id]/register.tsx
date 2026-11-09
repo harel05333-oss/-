@@ -122,7 +122,7 @@ export default function RaceRegisterScreen() {
           </View>
           <View style={styles.heroStatsRow}>
             <View style={styles.heroStat}>
-              <Text style={[styles.heroStatValue, { color: colors.onSurface }]}>{race.distanceKm} ק"מ</Text>
+              <Text style={[styles.heroStatValue, { color: colors.onSurface }]}>{race.distanceKm} ק״מ</Text>
               <Text style={[Typography.eyebrow, { color: colors.onSurfaceVariant }]}>מרחק</Text>
             </View>
             <View style={styles.heroStat}>

@@ -143,7 +143,7 @@ export default function RacesScreen() {
                           {item.title.he}
                         </Text>
                         <Text style={[styles.recentCardDate, { color: colors.textSecondary }]}>
-                          {formatDate(item.startsAt)} · {item.distanceKm} ק"מ
+                          {formatDate(item.startsAt)} · {item.distanceKm} ק״מ
                         </Text>
                       </View>
                     </Pressable>
@@ -178,7 +178,7 @@ export default function RacesScreen() {
                       <Text style={[Typography.eyebrow, styles.statLabel, { color: colors.textSecondary }]}>
                         מרחק
                       </Text>
-                      <Text style={[styles.statValue, { color: colors.primary }]}>{item.distanceKm} ק"מ</Text>
+                      <Text style={[styles.statValue, { color: colors.primary }]}>{item.distanceKm} ק״מ</Text>
                     </View>
                     <View style={styles.stat}>
                       <Text style={[Typography.eyebrow, styles.statLabel, { color: colors.textSecondary }]}>

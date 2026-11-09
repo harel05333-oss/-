@@ -8,7 +8,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { Avatar } from '@/components/ui/Avatar';
 import { Button } from '@/components/ui/Button';
 import { ScreenHeader } from '@/components/ui/ScreenHeader';
-import { Fonts, Radius, Spacing, Typography } from '@/constants/theme';
+import { Fonts, Radius, Spacing } from '@/constants/theme';
 import { useThemeColors } from '@/contexts/ThemeContext';
 import { ApiError, fetchCurrentUser, updateProfile, uploadAvatar, type CurrentUser } from '@/lib/api';
 

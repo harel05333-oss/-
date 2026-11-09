@@ -61,6 +61,7 @@ export default function FriendsScreen() {
   useEffect(() => {
     const trimmed = query.trim();
     if (trimmed.length < 2) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- clears results when the query gets too short to search
       setResults([]);
       setSearching(false);
       return;

@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { ActivityIndicator, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { MaterialIcons } from '@expo/vector-icons';
 import MapView, { Polyline, type LatLng } from '@/lib/mapKit';
 
 import { ScreenHeader } from '@/components/ui/ScreenHeader';
@@ -158,7 +157,7 @@ export default function RunDetailScreen() {
           <StarkCard style={styles.statCard}>
             <Text style={[Typography.eyebrow, { color: colors.textSecondary }]}>מרחק</Text>
             <Text style={[Typography.statValue, { color: colors.primary }]}>
-              {run.distanceKm.toFixed(2)} ק"מ
+              {run.distanceKm.toFixed(2)} ק״מ
             </Text>
           </StarkCard>
           <StarkCard style={styles.statCard}>
@@ -187,7 +186,7 @@ export default function RunDetailScreen() {
             <StarkCard style={styles.splitsCard}>
               <View style={[styles.splitsHeaderRow, { borderBottomColor: colors.border }]}>
                 <Text style={[styles.splitsHeaderCell, styles.kmCol, { color: colors.textSecondary }]}>
-                  ק"מ
+                  ק״מ
                 </Text>
                 <Text style={[styles.splitsHeaderCell, styles.paceCol, { color: colors.textSecondary }]}>
                   קצב
@@ -205,7 +204,7 @@ export default function RunDetailScreen() {
                 <View key={s.km} style={styles.splitRow}>
                   <Text style={[styles.splitCell, styles.kmCol, { color: colors.text }]}>{s.km}</Text>
                   <Text style={[styles.splitCell, styles.paceCol, { color: colors.text }]}>
-                    {s.paceLabel}/ק"מ
+                    {s.paceLabel}/ק״מ
                   </Text>
                   <Text style={[styles.splitCell, styles.elevCol, { color: colors.textSecondary }]}>
                     {s.elevationDifferenceM !== null

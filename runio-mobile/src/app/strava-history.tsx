@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { ActivityIndicator, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { Pressable } from 'react-native';
+import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -42,9 +41,11 @@ export default function StravaHistoryScreen() {
   const [error, setError] = useState(false);
 
   const load = useCallback(() => {
-    setError(false);
     return fetchStravaRuns()
-      .then(setRuns)
+      .then((data) => {
+        setError(false);
+        setRuns(data);
+      })
       .catch(() => setError(true));
   }, []);
 
@@ -101,7 +102,7 @@ export default function StravaHistoryScreen() {
                   </View>
                   <View style={styles.stats}>
                     <Text style={[styles.distance, { color: colors.text }]}>
-                      {run.distanceKm.toFixed(2)} ק"מ
+                      {run.distanceKm.toFixed(2)} ק״מ
                     </Text>
                     <Text style={[styles.subStat, { color: colors.textSecondary }]}>
                       {formatDuration(run.movingTimeS)} · {formatPace(run.distanceKm, run.movingTimeS)}

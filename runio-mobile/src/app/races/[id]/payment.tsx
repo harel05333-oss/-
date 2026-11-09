@@ -206,7 +206,7 @@ export default function PaymentScreen() {
                 </View>
               </View>
               <Text style={[styles.cardDescription, { color: colors.textSecondary }]}>
-                {race.distanceKm} ק"מ · {new Date(race.startsAt).toLocaleDateString(undefined, {
+                {race.distanceKm} ק״מ · {new Date(race.startsAt).toLocaleDateString(undefined, {
                   month: 'long',
                   day: 'numeric',
                   year: 'numeric',

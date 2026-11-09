@@ -75,18 +75,6 @@ export default function ProfileScreen() {
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
 
-  const load = useCallback(() => {
-    return Promise.all([fetchCurrentUser(), fetchMyWorldRank(), fetchMyRaces(), fetchDevices()])
-      .then(([u, rank, races, devices]) => {
-        setError(false);
-        setUser(u);
-        setMyRank(rank);
-        setMyRaces(races);
-        return loadActivity(races, devices);
-      })
-      .catch(() => setError(true));
-  }, []);
-
   function loadActivity(races: MyRaceRegistration[], devices: ConnectedDevice[]) {
     const stravaConnected = devices.find((d) => d.provider === 'strava')?.connected ?? false;
     return Promise.all([
@@ -131,6 +119,18 @@ export default function ProfileScreen() {
       setActivity(rows.slice(0, 6));
     });
   }
+
+  const load = useCallback(() => {
+    return Promise.all([fetchCurrentUser(), fetchMyWorldRank(), fetchMyRaces(), fetchDevices()])
+      .then(([u, rank, races, devices]) => {
+        setError(false);
+        setUser(u);
+        setMyRank(rank);
+        setMyRaces(races);
+        return loadActivity(races, devices);
+      })
+      .catch(() => setError(true));
+  }, []);
 
   useEffect(() => {
     load();
@@ -291,7 +291,7 @@ export default function ProfileScreen() {
                       {a.name}
                     </Text>
                     <Text style={[styles.activityMeta, { color: colors.textSecondary }]}>
-                      {timeAgo(a.date)} · {a.distanceKm.toFixed(2)} ק"מ
+                      {timeAgo(a.date)} · {a.distanceKm.toFixed(2)} ק״מ
                       {a.durationS !== null ? ` · ${formatDuration(a.durationS)}` : ''}
                     </Text>
                   </View>

@@ -56,7 +56,7 @@ export default function RankingsScreen() {
   }, []);
 
   useEffect(() => {
-    setVisibleCount(PAGE_SIZE);
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- load() clears the old list on purpose so a scope switch shows the spinner
     load();
   }, [load]);
 
@@ -99,7 +99,10 @@ export default function RankingsScreen() {
             return (
               <Pressable
                 key={s.id}
-                onPress={() => setScope(s.id)}
+                onPress={() => {
+                  setScope(s.id);
+                  setVisibleCount(PAGE_SIZE);
+                }}
                 style={[
                   styles.scopeTab,
                   { backgroundColor: colors.surfaceContainer, borderColor: colors.surfaceContainerHighest },
@@ -225,7 +228,7 @@ function PodiumAvatar({
       >
         {entry.name.he}
       </Text>
-      <Text style={[styles.podiumPoints, { color: medalColor }]}>{entry.points.toLocaleString()} נק'</Text>
+      <Text style={[styles.podiumPoints, { color: medalColor }]}>{entry.points.toLocaleString()} נק׳</Text>
     </View>
   );
 }
@@ -326,7 +329,7 @@ function RunnerRow({ entry }: { entry: WorldRankEntry }) {
         <Text style={[styles.rowPoints, { color: entry.isYou ? colors.primaryContainer : colors.onSurface }]}>
           {entry.points.toLocaleString()}
         </Text>
-        <Text style={[styles.ptsLabel, { color: colors.outline }]}>נק'</Text>
+        <Text style={[styles.ptsLabel, { color: colors.outline }]}>נק׳</Text>
       </View>
     </View>
   );

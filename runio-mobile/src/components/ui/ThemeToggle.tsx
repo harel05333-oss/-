@@ -42,7 +42,7 @@ export function ThemeToggle() {
       onPress={() => setMode(isDark ? 'light' : 'dark')}
       hitSlop={12}
       accessibilityRole="switch"
-      accessibilityLabel="Dark mode"
+      accessibilityLabel={t.darkMode}
       accessibilityState={{ checked: isDark }}
     >
       <Animated.View

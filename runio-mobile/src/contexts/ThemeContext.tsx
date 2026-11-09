@@ -69,7 +69,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
           setModeState(stored);
           // Cold-boot restore snaps instantly — no 300ms flash from the
           // dark default to whatever the user actually saved.
-          progress.value = stored === 'light' ? 1 : 0;
+          progress.set(stored === 'light' ? 1 : 0);
         }
         hasLoadedPref.current = true;
       })
@@ -80,10 +80,10 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
   function setMode(next: ThemeMode) {
     setModeState(next);
-    progress.value = withTiming(next === 'light' ? 1 : 0, {
+    progress.set(withTiming(next === 'light' ? 1 : 0, {
       duration: TRANSITION_MS,
       easing: TRANSITION_EASING,
-    });
+    }));
     SecureStore.setItemAsync(STORAGE_KEY, next).catch(() => {});
   }
 

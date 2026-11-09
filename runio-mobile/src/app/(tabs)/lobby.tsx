@@ -507,7 +507,7 @@ export default function LobbyScreen() {
                   </Text>
                 </View>
                 <Text style={[styles.raceStatus, { color: colors.textSecondary }]}>
-                  {REGISTRATION_STATUS_LABEL_HE[reg.status]}
+                  {locale === 'he' ? REGISTRATION_STATUS_LABEL_HE[reg.status] : REGISTRATION_STATUS_LABEL_EN[reg.status]}
                 </Text>
               </StarkCard>
             </Pressable>
@@ -545,7 +545,7 @@ export default function LobbyScreen() {
                       )}
                     </View>
                     <Text style={[styles.sessionMeta, { color: colors.textSecondary }]}>
-                      {session.distanceKm} ק"מ · {formatDate(session.startsAt)} · מקום #{session.place} מתוך{' '}
+                      {session.distanceKm} ק״מ · {formatDate(session.startsAt)} · מקום #{session.place} מתוך{' '}
                       {session.total}
                     </Text>
                   </View>
@@ -617,7 +617,7 @@ export default function LobbyScreen() {
             </View>
             <View style={{ gap: Spacing.three }}>
               {newRaces.map((race, index) => {
-                const tier = raceLevelLabelHe(race.distanceKm);
+                const tier = locale === 'he' ? raceLevelLabelHe(race.distanceKm) : raceLevelLabelEn(race.distanceKm);
                 return (
                   <Pressable
                     key={race.id}
@@ -658,7 +658,7 @@ export default function LobbyScreen() {
                     <View style={[styles.upcomingTierBox, { backgroundColor: colors.surfaceSelected }]}>
                       <Text style={[styles.upcomingTierLabel, { color: colors.primary }]}>{tier}</Text>
                       <Text style={[styles.upcomingTierValue, { color: colors.text }]}>
-                        {race.distanceKm} ק"מ
+                        {race.distanceKm} ק״מ
                       </Text>
                     </View>
 

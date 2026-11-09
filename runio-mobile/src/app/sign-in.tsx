@@ -163,6 +163,7 @@ export default function SignInScreen() {
     const code = response.params.code;
     const codeVerifier = request?.codeVerifier;
     if (!codeVerifier) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- reacting to the OAuth redirect result is what this effect is for
       setError(t.errorGoogleFailed);
       return;
     }
