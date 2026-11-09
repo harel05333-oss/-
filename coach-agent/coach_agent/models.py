@@ -4,6 +4,8 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from datetime import date
 
+from .rpe import RpeScale
+
 # Day names a coach may use for the start of an athlete's week (English or Hebrew).
 WEEKDAYS = {
     "monday": 0, "mon": 0, "שני": 0,
@@ -46,6 +48,8 @@ class Workout:
     tss: float | None = None
     coach_comments: str = ""
     athlete_comments: str = ""
+    # (seconds, metres, smoothed m/s) from the activity file, used for RPE-by-pace analysis.
+    segments: list[tuple[float, float, float]] = field(default_factory=list, repr=False)
 
     @property
     def is_run(self) -> bool:
@@ -76,6 +80,10 @@ class Athlete:
     easy_tolerance_min: float = 5.0  # minutes above easy allowed in a planned easy run
     tp_athlete_id: str | None = None
     csv: str | None = None
+    files_dir: str | None = None  # folder with the athlete's .fit/.tcx files
+    timezone: str = "Asia/Jerusalem"
+    easy_max_rpe: int = 4  # RPE 1..easy_max_rpe counts as easy
+    rpe: RpeScale | None = None  # pace per RPE level, set by the coach
 
     @classmethod
     def from_dict(cls, d: dict) -> "Athlete":
@@ -90,6 +98,10 @@ class Athlete:
             easy_tolerance_min=float(d.get("easy_tolerance_min", 5)),
             tp_athlete_id=(str(d["tp_athlete_id"]) if d.get("tp_athlete_id") else None),
             csv=d.get("csv"),
+            files_dir=d.get("files_dir"),
+            timezone=d.get("timezone", "Asia/Jerusalem"),
+            easy_max_rpe=int(d.get("easy_max_rpe", 4)),
+            rpe=RpeScale.from_config(d.get("rpe_paces") or {}, int(d.get("easy_max_rpe", 4))),
         )
 
 

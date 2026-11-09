@@ -26,6 +26,8 @@
       "unplanned": 0,
       "km_vs_target_pct": 104.1,
       "zone_data_missing": 0,
+      "rpe": null,
+      "rpe_runs": 0,
       "in_progress": false,
       "notes": [
         "⚠️ רק 74% מהזמן היה קל (יעד 80%) – יותר מדי עצימות",
@@ -48,7 +50,10 @@
           "easy_km": 8.07,
           "hard_km": 0.43,
           "compliance_pct": 106.1,
-          "flags": []
+          "flags": [],
+          "method": "zones",
+          "rpe": null,
+          "rpe_blocks": []
         },
         {
           "day": "2026-09-29",
@@ -64,7 +69,10 @@
           "easy_km": 6.87,
           "hard_km": 4.57,
           "compliance_pct": 104.0,
-          "flags": []
+          "flags": [],
+          "method": "zones",
+          "rpe": null,
+          "rpe_blocks": []
         },
         {
           "day": "2026-09-30",
@@ -82,7 +90,10 @@
           "compliance_pct": 104.6,
           "flags": [
             "ריצה קלה שנעשתה חזק מדי: 17 דק' מעל אזור 2"
-          ]
+          ],
+          "method": "zones",
+          "rpe": null,
+          "rpe_blocks": []
         },
         {
           "day": "2026-10-01",
@@ -98,7 +109,10 @@
           "easy_km": 5.21,
           "hard_km": 4.26,
           "compliance_pct": 94.7,
-          "flags": []
+          "flags": [],
+          "method": "zones",
+          "rpe": null,
+          "rpe_blocks": []
         },
         {
           "day": "2026-10-03",
@@ -114,7 +128,10 @@
           "easy_km": 13.78,
           "hard_km": 1.53,
           "compliance_pct": 85.1,
-          "flags": []
+          "flags": [],
+          "method": "zones",
+          "rpe": null,
+          "rpe_blocks": []
         }
       ]
     },
@@ -139,6 +156,8 @@
       "unplanned": 0,
       "km_vs_target_pct": 102.8,
       "zone_data_missing": 0,
+      "rpe": null,
+      "rpe_runs": 0,
       "in_progress": false,
       "notes": [
         "✅ חלוקת עצימות טובה: 79% קל / 21% עצים",
@@ -160,7 +179,10 @@
           "easy_km": 7.98,
           "hard_km": 0.43,
           "compliance_pct": 105.1,
-          "flags": []
+          "flags": [],
+          "method": "zones",
+          "rpe": null,
+          "rpe_blocks": []
         },
         {
           "day": "2026-10-06",
@@ -176,7 +198,10 @@
           "easy_km": 5.67,
           "hard_km": 3.76,
           "compliance_pct": 85.8,
-          "flags": []
+          "flags": [],
+          "method": "zones",
+          "rpe": null,
+          "rpe_blocks": []
         },
         {
           "day": "2026-10-07",
@@ -192,7 +217,10 @@
           "easy_km": 5.67,
           "hard_km": 0.3,
           "compliance_pct": 85.2,
-          "flags": []
+          "flags": [],
+          "method": "zones",
+          "rpe": null,
+          "rpe_blocks": []
         },
         {
           "day": "2026-10-08",
@@ -208,7 +236,10 @@
           "easy_km": 5.67,
           "hard_km": 4.65,
           "compliance_pct": 103.2,
-          "flags": []
+          "flags": [],
+          "method": "zones",
+          "rpe": null,
+          "rpe_blocks": []
         },
         {
           "day": "2026-10-10",
@@ -224,7 +255,10 @@
           "easy_km": 15.54,
           "hard_km": 1.73,
           "compliance_pct": 95.9,
-          "flags": []
+          "flags": [],
+          "method": "zones",
+          "rpe": null,
+          "rpe_blocks": []
         }
       ]
     },
@@ -249,6 +283,8 @@
       "unplanned": 0,
       "km_vs_target_pct": 106.8,
       "zone_data_missing": 0,
+      "rpe": null,
+      "rpe_runs": 0,
       "in_progress": false,
       "notes": [
         "✅ חלוקת עצימות טובה: 78% קל / 22% עצים",
@@ -270,7 +306,10 @@
           "easy_km": 7.12,
           "hard_km": 0.37,
           "compliance_pct": 93.6,
-          "flags": []
+          "flags": [],
+          "method": "zones",
+          "rpe": null,
+          "rpe_blocks": []
         },
         {
           "day": "2026-10-13",
@@ -286,7 +325,10 @@
           "easy_km": 7.13,
           "hard_km": 4.77,
           "compliance_pct": 108.2,
-          "flags": []
+          "flags": [],
+          "method": "zones",
+          "rpe": null,
+          "rpe_blocks": []
         },
         {
           "day": "2026-10-14",
@@ -302,7 +344,10 @@
           "easy_km": 6.57,
           "hard_km": 0.35,
           "compliance_pct": 98.8,
-          "flags": []
+          "flags": [],
+          "method": "zones",
+          "rpe": null,
+          "rpe_blocks": []
         },
         {
           "day": "2026-10-15",
@@ -318,7 +363,10 @@
           "easy_km": 5.66,
           "hard_km": 4.64,
           "compliance_pct": 103.1,
-          "flags": []
+          "flags": [],
+          "method": "zones",
+          "rpe": null,
+          "rpe_blocks": []
         },
         {
           "day": "2026-10-17",
@@ -334,7 +382,10 @@
           "easy_km": 15.12,
           "hard_km": 1.67,
           "compliance_pct": 93.3,
-          "flags": []
+          "flags": [],
+          "method": "zones",
+          "rpe": null,
+          "rpe_blocks": []
         }
       ]
     },
@@ -359,6 +410,8 @@
       "unplanned": 0,
       "km_vs_target_pct": 103.8,
       "zone_data_missing": 0,
+      "rpe": null,
+      "rpe_runs": 0,
       "in_progress": false,
       "notes": [
         "✅ חלוקת עצימות טובה: 78% קל / 22% עצים",
@@ -380,7 +433,10 @@
           "easy_km": 7.27,
           "hard_km": 0.37,
           "compliance_pct": 95.6,
-          "flags": []
+          "flags": [],
+          "method": "zones",
+          "rpe": null,
+          "rpe_blocks": []
         },
         {
           "day": "2026-10-20",
@@ -396,7 +452,10 @@
           "easy_km": 6.57,
           "hard_km": 4.39,
           "compliance_pct": 99.7,
-          "flags": []
+          "flags": [],
+          "method": "zones",
+          "rpe": null,
+          "rpe_blocks": []
         },
         {
           "day": "2026-10-21",
@@ -412,7 +471,10 @@
           "easy_km": 6.48,
           "hard_km": 0.35,
           "compliance_pct": 97.6,
-          "flags": []
+          "flags": [],
+          "method": "zones",
+          "rpe": null,
+          "rpe_blocks": []
         },
         {
           "day": "2026-10-22",
@@ -428,7 +490,10 @@
           "easy_km": 5.7,
           "hard_km": 4.66,
           "compliance_pct": 103.6,
-          "flags": []
+          "flags": [],
+          "method": "zones",
+          "rpe": null,
+          "rpe_blocks": []
         },
         {
           "day": "2026-10-24",
@@ -444,7 +509,10 @@
           "easy_km": 14.48,
           "hard_km": 1.6,
           "compliance_pct": 89.3,
-          "flags": []
+          "flags": [],
+          "method": "zones",
+          "rpe": null,
+          "rpe_blocks": []
         }
       ]
     },
@@ -469,6 +537,8 @@
       "unplanned": 0,
       "km_vs_target_pct": 104.2,
       "zone_data_missing": 0,
+      "rpe": null,
+      "rpe_runs": 0,
       "in_progress": false,
       "notes": [
         "✅ חלוקת עצימות טובה: 79% קל / 21% עצים",
@@ -491,7 +561,10 @@
           "easy_km": 7.94,
           "hard_km": 0.41,
           "compliance_pct": 104.4,
-          "flags": []
+          "flags": [],
+          "method": "zones",
+          "rpe": null,
+          "rpe_blocks": []
         },
         {
           "day": "2026-10-27",
@@ -507,7 +580,10 @@
           "easy_km": 6.45,
           "hard_km": 4.3,
           "compliance_pct": 97.7,
-          "flags": []
+          "flags": [],
+          "method": "zones",
+          "rpe": null,
+          "rpe_blocks": []
         },
         {
           "day": "2026-10-28",
@@ -523,7 +599,10 @@
           "easy_km": 6.31,
           "hard_km": 0.33,
           "compliance_pct": 94.8,
-          "flags": []
+          "flags": [],
+          "method": "zones",
+          "rpe": null,
+          "rpe_blocks": []
         },
         {
           "day": "2026-10-29",
@@ -539,7 +618,10 @@
           "easy_km": 5.1,
           "hard_km": 4.17,
           "compliance_pct": 92.7,
-          "flags": []
+          "flags": [],
+          "method": "zones",
+          "rpe": null,
+          "rpe_blocks": []
         },
         {
           "day": "2026-10-31",
@@ -557,7 +639,10 @@
           "compliance_pct": 94.8,
           "flags": [
             "ריצה קלה שנעשתה חזק מדי: 10 דק' מעל אזור 2"
-          ]
+          ],
+          "method": "zones",
+          "rpe": null,
+          "rpe_blocks": []
         }
       ]
     },
@@ -582,6 +667,8 @@
       "unplanned": 1,
       "km_vs_target_pct": 119.5,
       "zone_data_missing": 0,
+      "rpe": null,
+      "rpe_runs": 0,
       "in_progress": false,
       "notes": [
         "✅ חלוקת עצימות טובה: 75% קל / 25% עצים",
@@ -606,7 +693,10 @@
           "compliance_pct": 90.7,
           "flags": [
             "ריצה קלה שנעשתה חזק מדי: 16 דק' מעל אזור 2"
-          ]
+          ],
+          "method": "zones",
+          "rpe": null,
+          "rpe_blocks": []
         },
         {
           "day": "2026-11-03",
@@ -622,7 +712,10 @@
           "easy_km": 7.03,
           "hard_km": 4.69,
           "compliance_pct": 106.5,
-          "flags": []
+          "flags": [],
+          "method": "zones",
+          "rpe": null,
+          "rpe_blocks": []
         },
         {
           "day": "2026-11-04",
@@ -638,7 +731,10 @@
           "easy_km": 6.22,
           "hard_km": 0.33,
           "compliance_pct": 93.6,
-          "flags": []
+          "flags": [],
+          "method": "zones",
+          "rpe": null,
+          "rpe_blocks": []
         },
         {
           "day": "2026-11-05",
@@ -654,7 +750,10 @@
           "easy_km": 5.05,
           "hard_km": 4.12,
           "compliance_pct": 91.7,
-          "flags": []
+          "flags": [],
+          "method": "zones",
+          "rpe": null,
+          "rpe_blocks": []
         },
         {
           "day": "2026-11-05",
@@ -670,7 +769,10 @@
           "easy_km": 5.42,
           "hard_km": 1.08,
           "compliance_pct": null,
-          "flags": []
+          "flags": [],
+          "method": "zones",
+          "rpe": null,
+          "rpe_blocks": []
         },
         {
           "day": "2026-11-07",
@@ -686,7 +788,10 @@
           "easy_km": 16.73,
           "hard_km": 1.85,
           "compliance_pct": 103.2,
-          "flags": []
+          "flags": [],
+          "method": "zones",
+          "rpe": null,
+          "rpe_blocks": []
         }
       ]
     },
@@ -711,6 +816,8 @@
       "unplanned": 0,
       "km_vs_target_pct": 16.9,
       "zone_data_missing": 0,
+      "rpe": null,
+      "rpe_runs": 0,
       "in_progress": true,
       "notes": [
         "⏳ שבוע בתהליך – הנתונים חלקיים",
@@ -731,7 +838,10 @@
           "easy_km": 8.01,
           "hard_km": 0.43,
           "compliance_pct": 105.5,
-          "flags": []
+          "flags": [],
+          "method": "zones",
+          "rpe": null,
+          "rpe_blocks": []
         }
       ]
     }

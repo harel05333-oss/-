@@ -4,12 +4,44 @@
       "id": "harel",
       "name": "הראל בן עזרא",
       "athletes": [
-        {"id": "dana", "name": "דנה", "csv": "data/dana.csv", "tp_athlete_id": null,
-         "week_start": "ראשון", "easy_max_zone": 2, "target_easy_pct": 80, "weekly_km_target": 50},
-        {"id": "yossi", "name": "יוסי", "csv": "data/yossi.csv",
-         "week_start": "שבת", "easy_max_zone": 2, "target_easy_pct": 80, "weekly_km_target": 50},
-        {"id": "noa", "name": "נועה", "csv": "data/noa.csv",
-         "week_start": "שלישי", "easy_max_zone": 2, "target_easy_pct": 75, "weekly_km_target": 45}
+        {
+          "id": "dana",
+          "name": "דנה",
+          "csv": "data/dana.csv",
+          "tp_athlete_id": null,
+          "week_start": "ראשון",
+          "easy_max_zone": 2,
+          "target_easy_pct": 80,
+          "weekly_km_target": 50
+        },
+        {
+          "id": "yossi",
+          "name": "יוסי",
+          "csv": "data/yossi.csv",
+          "week_start": "שבת",
+          "easy_max_zone": 2,
+          "target_easy_pct": 80,
+          "weekly_km_target": 50
+        },
+        {
+          "id": "noa",
+          "name": "נועה",
+          "csv": "data/noa.csv",
+          "week_start": "שלישי",
+          "easy_max_zone": 2,
+          "target_easy_pct": 75,
+          "weekly_km_target": 45,
+          "files_dir": "data/noa_files",
+          "easy_max_rpe": 4,
+          "rpe_paces": {
+            "4": "5:30",
+            "5": "4:50",
+            "6": "4:20",
+            "7": "4:10",
+            "8": "4:00",
+            "9": "3:45"
+          }
+        }
       ]
     }
   ]

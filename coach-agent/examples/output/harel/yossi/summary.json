@@ -26,6 +26,8 @@
       "unplanned": 0,
       "km_vs_target_pct": 58.7,
       "zone_data_missing": 0,
+      "rpe": null,
+      "rpe_runs": 0,
       "in_progress": false,
       "notes": [
         "⚠️ רק 58% מהזמן היה קל (יעד 80%) – יותר מדי עצימות",
@@ -50,7 +52,10 @@
           "compliance_pct": 108.7,
           "flags": [
             "ריצה קלה שנעשתה חזק מדי: 20 דק' מעל אזור 2"
-          ]
+          ],
+          "method": "zones",
+          "rpe": null,
+          "rpe_blocks": []
         },
         {
           "day": "2026-09-29",
@@ -68,7 +73,10 @@
           "compliance_pct": 58.4,
           "flags": [
             "בוצע חלקית (58% מהמתוכנן)"
-          ]
+          ],
+          "method": "zones",
+          "rpe": null,
+          "rpe_blocks": []
         },
         {
           "day": "2026-09-30",
@@ -87,7 +95,10 @@
           "flags": [
             "ריצה קלה שנעשתה חזק מדי: 10 דק' מעל אזור 2",
             "בוצע חלקית (59% מהמתוכנן)"
-          ]
+          ],
+          "method": "zones",
+          "rpe": null,
+          "rpe_blocks": []
         },
         {
           "day": "2026-10-01",
@@ -103,7 +114,10 @@
           "easy_km": 5.55,
           "hard_km": 4.55,
           "compliance_pct": 100.9,
-          "flags": []
+          "flags": [],
+          "method": "zones",
+          "rpe": null,
+          "rpe_blocks": []
         }
       ]
     },
@@ -128,6 +142,8 @@
       "unplanned": 0,
       "km_vs_target_pct": 99.3,
       "zone_data_missing": 0,
+      "rpe": null,
+      "rpe_runs": 0,
       "in_progress": false,
       "notes": [
         "✅ חלוקת עצימות טובה: 76% קל / 24% עצים",
@@ -152,7 +168,10 @@
           "compliance_pct": 98.6,
           "flags": [
             "ריצה קלה שנעשתה חזק מדי: 10 דק' מעל אזור 2"
-          ]
+          ],
+          "method": "zones",
+          "rpe": null,
+          "rpe_blocks": []
         },
         {
           "day": "2026-10-04",
@@ -168,7 +187,10 @@
           "easy_km": 8.18,
           "hard_km": 0.43,
           "compliance_pct": 107.5,
-          "flags": []
+          "flags": [],
+          "method": "zones",
+          "rpe": null,
+          "rpe_blocks": []
         },
         {
           "day": "2026-10-06",
@@ -184,7 +206,10 @@
           "easy_km": 6.12,
           "hard_km": 4.11,
           "compliance_pct": 93.0,
-          "flags": []
+          "flags": [],
+          "method": "zones",
+          "rpe": null,
+          "rpe_blocks": []
         },
         {
           "day": "2026-10-07",
@@ -202,7 +227,10 @@
           "compliance_pct": 107.0,
           "flags": [
             "ריצה קלה שנעשתה חזק מדי: 17 דק' מעל אזור 2"
-          ]
+          ],
+          "method": "zones",
+          "rpe": null,
+          "rpe_blocks": []
         },
         {
           "day": "2026-10-08",
@@ -220,7 +248,10 @@
           "compliance_pct": 55.5,
           "flags": [
             "בוצע חלקית (56% מהמתוכנן)"
-          ]
+          ],
+          "method": "zones",
+          "rpe": null,
+          "rpe_blocks": []
         }
       ]
     },
@@ -245,6 +276,8 @@
       "unplanned": 0,
       "km_vs_target_pct": 89.7,
       "zone_data_missing": 0,
+      "rpe": null,
+      "rpe_runs": 0,
       "in_progress": false,
       "notes": [
         "⚠️ רק 72% מהזמן היה קל (יעד 80%) – יותר מדי עצימות",
@@ -269,7 +302,10 @@
           "compliance_pct": 65.2,
           "flags": [
             "בוצע חלקית (65% מהמתוכנן)"
-          ]
+          ],
+          "method": "zones",
+          "rpe": null,
+          "rpe_blocks": []
         },
         {
           "day": "2026-10-11",
@@ -287,7 +323,10 @@
           "compliance_pct": 101.9,
           "flags": [
             "ריצה קלה שנעשתה חזק מדי: 18 דק' מעל אזור 2"
-          ]
+          ],
+          "method": "zones",
+          "rpe": null,
+          "rpe_blocks": []
         },
         {
           "day": "2026-10-13",
@@ -303,7 +342,10 @@
           "easy_km": 6.82,
           "hard_km": 4.55,
           "compliance_pct": 103.4,
-          "flags": []
+          "flags": [],
+          "method": "zones",
+          "rpe": null,
+          "rpe_blocks": []
         },
         {
           "day": "2026-10-14",
@@ -319,7 +361,10 @@
           "easy_km": 6.24,
           "hard_km": 0.33,
           "compliance_pct": 93.9,
-          "flags": []
+          "flags": [],
+          "method": "zones",
+          "rpe": null,
+          "rpe_blocks": []
         },
         {
           "day": "2026-10-15",
@@ -337,7 +382,10 @@
           "compliance_pct": 70.0,
           "flags": [
             "בוצע חלקית (70% מהמתוכנן)"
-          ]
+          ],
+          "method": "zones",
+          "rpe": null,
+          "rpe_blocks": []
         }
       ]
     },
@@ -362,6 +410,8 @@
       "unplanned": 0,
       "km_vs_target_pct": 97.5,
       "zone_data_missing": 0,
+      "rpe": null,
+      "rpe_runs": 0,
       "in_progress": false,
       "notes": [
         "⚠️ רק 75% מהזמן היה קל (יעד 80%) – יותר מדי עצימות",
@@ -384,7 +434,10 @@
           "easy_km": 14.79,
           "hard_km": 1.64,
           "compliance_pct": 91.2,
-          "flags": []
+          "flags": [],
+          "method": "zones",
+          "rpe": null,
+          "rpe_blocks": []
         },
         {
           "day": "2026-10-18",
@@ -400,7 +453,10 @@
           "easy_km": 7.41,
           "hard_km": 0.39,
           "compliance_pct": 97.5,
-          "flags": []
+          "flags": [],
+          "method": "zones",
+          "rpe": null,
+          "rpe_blocks": []
         },
         {
           "day": "2026-10-20",
@@ -416,7 +472,10 @@
           "easy_km": 6.35,
           "hard_km": 4.25,
           "compliance_pct": 96.4,
-          "flags": []
+          "flags": [],
+          "method": "zones",
+          "rpe": null,
+          "rpe_blocks": []
         },
         {
           "day": "2026-10-21",
@@ -435,7 +494,10 @@
           "flags": [
             "ריצה קלה שנעשתה חזק מדי: 11 דק' מעל אזור 2",
             "בוצע חלקית (69% מהמתוכנן)"
-          ]
+          ],
+          "method": "zones",
+          "rpe": null,
+          "rpe_blocks": []
         },
         {
           "day": "2026-10-22",
@@ -451,7 +513,10 @@
           "easy_km": 4.98,
           "hard_km": 4.07,
           "compliance_pct": 90.5,
-          "flags": []
+          "flags": [],
+          "method": "zones",
+          "rpe": null,
+          "rpe_blocks": []
         }
       ]
     },
@@ -476,6 +541,8 @@
       "unplanned": 0,
       "km_vs_target_pct": 98.1,
       "zone_data_missing": 0,
+      "rpe": null,
+      "rpe_runs": 0,
       "in_progress": false,
       "notes": [
         "⚠️ רק 71% מהזמן היה קל (יעד 80%) – יותר מדי עצימות",
@@ -500,7 +567,10 @@
           "compliance_pct": 105.9,
           "flags": [
             "ריצה קלה שנעשתה חזק מדי: 11 דק' מעל אזור 2"
-          ]
+          ],
+          "method": "zones",
+          "rpe": null,
+          "rpe_blocks": []
         },
         {
           "day": "2026-10-25",
@@ -519,7 +589,10 @@
           "flags": [
             "ריצה קלה שנעשתה חזק מדי: 13 דק' מעל אזור 2",
             "בוצע חלקית (73% מהמתוכנן)"
-          ]
+          ],
+          "method": "zones",
+          "rpe": null,
+          "rpe_blocks": []
         },
         {
           "day": "2026-10-27",
@@ -535,7 +608,10 @@
           "easy_km": 6.44,
           "hard_km": 4.3,
           "compliance_pct": 97.7,
-          "flags": []
+          "flags": [],
+          "method": "zones",
+          "rpe": null,
+          "rpe_blocks": []
         },
         {
           "day": "2026-10-28",
@@ -553,7 +629,10 @@
           "compliance_pct": 92.8,
           "flags": [
             "ריצה קלה שנעשתה חזק מדי: 15 דק' מעל אזור 2"
-          ]
+          ],
+          "method": "zones",
+          "rpe": null,
+          "rpe_blocks": []
         },
         {
           "day": "2026-10-29",
@@ -571,7 +650,10 @@
           "compliance_pct": 68.7,
           "flags": [
             "בוצע חלקית (69% מהמתוכנן)"
-          ]
+          ],
+          "method": "zones",
+          "rpe": null,
+          "rpe_blocks": []
         }
       ]
     },
@@ -596,6 +678,8 @@
       "unplanned": 1,
       "km_vs_target_pct": 90.2,
       "zone_data_missing": 0,
+      "rpe": null,
+      "rpe_runs": 0,
       "in_progress": false,
       "notes": [
         "✅ חלוקת עצימות טובה: 80% קל / 20% עצים",
@@ -621,7 +705,10 @@
           "compliance_pct": 93.5,
           "flags": [
             "ריצה קלה שנעשתה חזק מדי: 9 דק' מעל אזור 2"
-          ]
+          ],
+          "method": "zones",
+          "rpe": null,
+          "rpe_blocks": []
         },
         {
           "day": "2026-11-01",
@@ -637,7 +724,10 @@
           "easy_km": 6.83,
           "hard_km": 0.36,
           "compliance_pct": 89.7,
-          "flags": []
+          "flags": [],
+          "method": "zones",
+          "rpe": null,
+          "rpe_blocks": []
         },
         {
           "day": "2026-11-03",
@@ -653,7 +743,10 @@
           "easy_km": 5.69,
           "hard_km": 3.8,
           "compliance_pct": 86.2,
-          "flags": []
+          "flags": [],
+          "method": "zones",
+          "rpe": null,
+          "rpe_blocks": []
         },
         {
           "day": "2026-11-04",
@@ -672,7 +765,10 @@
           "flags": [
             "ריצה קלה שנעשתה חזק מדי: 12 דק' מעל אזור 2",
             "בוצע חלקית (72% מהמתוכנן)"
-          ]
+          ],
+          "method": "zones",
+          "rpe": null,
+          "rpe_blocks": []
         },
         {
           "day": "2026-11-05",
@@ -690,7 +786,10 @@
           "compliance_pct": null,
           "flags": [
             "אימון מתוכנן שלא בוצע"
-          ]
+          ],
+          "method": "title",
+          "rpe": null,
+          "rpe_blocks": []
         },
         {
           "day": "2026-11-05",
@@ -706,7 +805,10 @@
           "easy_km": 5.42,
           "hard_km": 1.08,
           "compliance_pct": null,
-          "flags": []
+          "flags": [],
+          "method": "zones",
+          "rpe": null,
+          "rpe_blocks": []
         }
       ]
     },
@@ -731,6 +833,8 @@
       "unplanned": 0,
       "km_vs_target_pct": 42.2,
       "zone_data_missing": 0,
+      "rpe": null,
+      "rpe_runs": 0,
       "in_progress": true,
       "notes": [
         "⏳ שבוע בתהליך – הנתונים חלקיים",
@@ -754,7 +858,10 @@
           "compliance_pct": 71.5,
           "flags": [
             "בוצע חלקית (72% מהמתוכנן)"
-          ]
+          ],
+          "method": "zones",
+          "rpe": null,
+          "rpe_blocks": []
         },
         {
           "day": "2026-11-08",
@@ -772,7 +879,10 @@
           "compliance_pct": 102.9,
           "flags": [
             "ריצה קלה שנעשתה חזק מדי: 19 דק' מעל אזור 2"
-          ]
+          ],
+          "method": "zones",
+          "rpe": null,
+          "rpe_blocks": []
         }
       ]
     }

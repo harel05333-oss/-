@@ -8,6 +8,7 @@ from pathlib import Path
 
 from .analysis import WeekReport
 from .models import WEEKDAY_HE, Athlete, Coach
+from .rpe import fmt_pace
 
 STATUS_HE = {
     "ok": "✅ בוצע", "partial": "🟡 חלקי", "over": "🟠 מעל המתוכנן", "off": "🔴 רחוק מהתוכנית",
@@ -43,20 +44,23 @@ def write_athlete_folder(out_dir: Path, coach: Coach, a: Athlete, weeks: list[We
 
     with open(folder / "weekly_summary.csv", "w", newline="", encoding="utf-8-sig") as fh:
         wr = csv.writer(fh)
-        wr.writerow(WEEK_COLUMNS)
+        labels = a.rpe.labels() if a.rpe else []
+        wr.writerow(WEEK_COLUMNS + [f"rpe_{l}_{u}" for l in labels for u in ("min", "km")])
         for wk in weeks:
             d = wk.to_dict()
-            wr.writerow([d[c] for c in WEEK_COLUMNS])
+            wr.writerow([d[c] for c in WEEK_COLUMNS] + _rpe_cells(wk.rpe, labels))
 
     with open(folder / "workouts.csv", "w", newline="", encoding="utf-8-sig") as fh:
         wr = csv.writer(fh)
         wr.writerow(["week_start", "day", "title", "kind", "status", "planned_min", "planned_km",
-                     "done_min", "done_km", "easy_min", "hard_min", "compliance_pct", "flags"])
+                     "done_min", "done_km", "easy_min", "hard_min", "compliance_pct", "measured_by",
+                     "rpe_blocks", "flags"] + [f"rpe_{l}_{u}" for l in labels for u in ("min", "km")])
         for wk in weeks:
             for w in wk.workouts:
                 wr.writerow([wk.week_start.isoformat(), w.day.isoformat(), w.title, w.kind, w.status,
                              w.planned_min, w.planned_km, w.done_min, w.done_km, w.easy_min,
-                             w.hard_min, w.compliance_pct, " | ".join(w.flags)])
+                             w.hard_min, w.compliance_pct, w.method, _blocks_text(w.rpe_blocks),
+                             " | ".join(w.flags)] + _rpe_cells(w.rpe, labels))
 
     (folder / "summary.json").write_text(json.dumps({
         "coach": coach.name, "athlete": a.name, "week_starts_on": WEEKDAY_HE[a.week_start],
@@ -70,12 +74,32 @@ def write_athlete_folder(out_dir: Path, coach: Coach, a: Athlete, weeks: list[We
     return folder
 
 
+def _rpe_cells(rpe: dict | None, labels: list[str]) -> list:
+    if not rpe:
+        return ["" for _ in labels for _u in (0, 1)]
+    return [rpe.get(l, {}).get(u, 0) for l in labels for u in ("min", "km")]
+
+
+def _blocks_text(blocks: list[dict]) -> str:
+    return "; ".join(f"מאמץ {b['rpe']}: {b['actual_min']:.0f}/{b['planned_min']:.0f} דק'" for b in blocks)
+
+
+def _rpe_text(rpe: dict | None) -> str:
+    if not rpe:
+        return "—"
+    return " · ".join(f"{k}: {v['min']:.0f}'" for k, v in rpe.items() if v["min"] >= 0.5)
+
+
 def render_markdown(coach: Coach, a: Athlete, weeks: list[WeekReport], coach_notes: str | None) -> str:
     L = [f"# {a.name} – דוח אימונים",
          "",
          f"מאמן: {coach.name} · השבוע של המתאמן מתחיל ביום **{WEEKDAY_HE[a.week_start]}** · "
-         f"יעד קל: {a.target_easy_pct:.0f}%" + (f" · יעד נפח: {a.weekly_km_target} ק\"מ" if a.weekly_km_target else ""),
+         f"יעד קל: {a.target_easy_pct:.0f}%"
+         + (f" · קל = אזורים 1–{a.easy_max_zone} או תחושת מאמץ 1–{a.easy_max_rpe}" if a.rpe else f" · קל = אזורים 1–{a.easy_max_zone}") + (f" · יעד נפח: {a.weekly_km_target} ק\"מ" if a.weekly_km_target else ""),
          ""]
+    if a.rpe:
+        L += ["**קצבים לפי תחושת מאמץ:** " + " · ".join(
+            f"{lvl} = {fmt_pace(p)}" for lvl, p in sorted(a.rpe.anchors.items())), ""]
     if coach_notes:
         L += ["## הערות לסוכן המאמן", "", coach_notes.strip(), ""]
 
@@ -88,6 +112,17 @@ def render_markdown(coach: Coach, a: Athlete, weeks: list[WeekReport], coach_not
                  f"{_n(wk.completion_pct, 0, '%')} | {wk.missed} |")
     L.append("")
 
+    if a.rpe and any(wk.rpe for wk in weeks):
+        labels = a.rpe.labels()
+        L += ["## דקות לפי תחושת מאמץ", "",
+              "| שבוע | " + " | ".join(f"מאמץ {l}" for l in labels) + " |",
+              "|---|" + "---|" * len(labels)]
+        for wk in weeks:
+            cells = [(f"{wk.rpe[l]['min']:.0f}' ({wk.rpe[l]['km']:.1f} ק\"מ)" if wk.rpe and l in wk.rpe else "—")
+                     for l in labels]
+            L.append(f"| {_d(wk.week_start)}–{_d(wk.week_end)} | " + " | ".join(cells) + " |")
+        L.append("")
+
     for wk in reversed(weeks):
         L += [f"## שבוע {_d(wk.week_start)} – {_d(wk.week_end)}" + (" (בתהליך)" if wk.in_progress else ""), ""]
         L += [f"- {n}" for n in wk.notes]
@@ -95,8 +130,8 @@ def render_markdown(coach: Coach, a: Athlete, weeks: list[WeekReport], coach_not
                   f"**קל:** {wk.easy_km:.1f} ק\"מ ({wk.easy_min:.0f} דק') · "
                   f"**עצים:** {wk.hard_km:.1f} ק\"מ ({wk.hard_min:.0f} דק')", ""]
         if wk.workouts:
-            L += ["| תאריך | אימון | סוג | סטטוס | מתוכנן | בוצע | קל/עצים (דק') | הערות |",
-                  "|---|---|---|---|---|---|---|---|"]
+            L += ["| תאריך | אימון | סוג | סטטוס | מתוכנן | בוצע | קל/עצים (דק') | לפי מאמץ | קטעים: בוצע/תוכנן | הערות |",
+                  "|---|---|---|---|---|---|---|---|---|---|"]
             for w in wk.workouts:
                 planned = " / ".join(x for x in [
                     f"{w.planned_min:.0f} דק'" if w.planned_min else "",
@@ -104,7 +139,7 @@ def render_markdown(coach: Coach, a: Athlete, weeks: list[WeekReport], coach_not
                 done = (f"{w.done_min:.0f} דק' / {w.done_km:.1f} ק\"מ") if (w.done_min or w.done_km) else "—"
                 L.append(f"| {WEEKDAY_HE[w.day.weekday()]} {_d(w.day)} | {w.title} | {KIND_HE[w.kind]} | "
                          f"{STATUS_HE[w.status]} | {planned} | {done} | {w.easy_min:.0f}/{w.hard_min:.0f} | "
-                         f"{'; '.join(w.flags)} |")
+                         f"{_rpe_text(w.rpe)} | {_blocks_text(w.rpe_blocks) or '—'} | {'; '.join(w.flags)} |")
             L.append("")
     return "\n".join(L) + "\n"
 

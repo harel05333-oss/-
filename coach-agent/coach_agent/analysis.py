@@ -6,6 +6,7 @@ from dataclasses import asdict, dataclass, field
 from datetime import date, timedelta
 
 from .models import Athlete, Workout
+from .rpe import by_label, minutes_in_range, parse_planned_blocks, time_at_levels
 from .weeks import group_by_week, week_start_for
 
 QUALITY_WORDS = re.compile(
@@ -32,6 +33,9 @@ class WorkoutReport:
     hard_km: float
     compliance_pct: float | None
     flags: list[str] = field(default_factory=list)
+    method: str = "zones"  # how easy/hard was measured: rpe (pace per RPE) | zones | title
+    rpe: dict | None = None  # RPE bucket -> {"min", "km"}
+    rpe_blocks: list[dict] = field(default_factory=list)  # planned RPE blocks vs. actual
 
 
 @dataclass
@@ -56,6 +60,8 @@ class WeekReport:
     unplanned: int
     km_vs_target_pct: float | None
     zone_data_missing: int
+    rpe: dict | None = None  # RPE bucket -> {"min", "km"} over runs with pace data
+    rpe_runs: int = 0
     in_progress: bool = False  # the week has not ended yet
     notes: list[str] = field(default_factory=list)
     workouts: list[WorkoutReport] = field(default_factory=list)
@@ -69,8 +75,11 @@ class WeekReport:
         return d
 
 
-def _planned_kind(w: Workout) -> str | None:
+def _planned_kind(w: Workout, a: Athlete | None = None) -> str | None:
     text = f"{w.title} {w.description}"
+    blocks = parse_planned_blocks(text)
+    if blocks and a is not None:
+        return "quality" if any(b.hi > a.easy_max_rpe for b in blocks) else "easy"
     if QUALITY_WORDS.search(text):
         return "quality"
     if EASY_WORDS.search(text):
@@ -88,10 +97,40 @@ def analyze_workout(w: Workout, a: Athlete, today: date) -> WorkoutReport:
     flags: list[str] = []
     done_min = w.duration_min or 0.0
     done_km = w.distance_km or 0.0
-    planned_kind = _planned_kind(w)
+    planned_kind = _planned_kind(w, a)
+    method = "zones"
+    rpe = None
+    rpe_blocks: list[dict] = []
 
-    # Easy vs. hard minutes. Without zone data fall back to the workout's label.
-    if w.has_zone_data:
+    # Easy vs. hard. Preferred: pace per RPE level from the activity file; then HR/pace zones;
+    # without either, fall back to the workout's title.
+    if a.rpe and w.segments:
+        method = "rpe"
+        raw = time_at_levels(w.segments, a.rpe)
+        seg_min = sum(m for m, _ in raw.values())
+        seg_km = sum(k for _, k in raw.values())
+        # Scale to the workout totals recorded in TrainingPeaks.
+        fm = done_min / seg_min if (done_min and seg_min) else 1.0
+        fk = done_km / seg_km if (done_km and seg_km) else 1.0
+        levels = {l: (m * fm, k * fk) for l, (m, k) in raw.items()}
+        done_min = done_min or seg_min
+        done_km = done_km or seg_km
+        easy_min = sum(m for l, (m, _) in levels.items() if a.rpe.is_easy(l))
+        hard_min = sum(m for l, (m, _) in levels.items() if not a.rpe.is_easy(l))
+        rpe = by_label(levels, a.rpe)
+        kind = "quality" if hard_min >= a.quality_min_minutes else "easy"
+        for b in parse_planned_blocks(f"{w.title} {w.description}"):
+            actual = minutes_in_range(levels, b.lo, b.hi)
+            pct = 100 * actual / b.minutes if b.minutes else None
+            rpe_blocks.append({"rpe": b.label, "planned_min": round(b.minutes, 1),
+                               "actual_min": round(actual, 1), "pct": None if pct is None else round(pct)})
+            # Easy blocks run too fast are reported by the "too hard" check below.
+            if pct is not None and pct < 80 and b.hi > a.easy_max_rpe:
+                flags.append(f"תוכנן {b.minutes:.0f} דק' במאמץ {b.label}, בוצעו {actual:.0f} דק'")
+            faster = minutes_in_range(levels, b.hi + 1, 99)
+            if b.hi > a.easy_max_rpe and faster >= 3:
+                flags.append(f"{faster:.0f} דק' מהר יותר ממאמץ {b.hi}")
+    elif w.has_zone_data:
         easy_min, hard_min = split_zones(w, a.easy_max_zone)
         zone_total = easy_min + hard_min
         # Scale to the recorded duration (zones may not cover pauses exactly).
@@ -99,13 +138,17 @@ def analyze_workout(w: Workout, a: Athlete, today: date) -> WorkoutReport:
             easy_min, hard_min = done_min * easy_min / zone_total, done_min * hard_min / zone_total
         kind = "quality" if hard_min >= a.quality_min_minutes else "easy"
     else:
+        method = "title"
         kind = planned_kind or "easy"
         easy_min, hard_min = (0.0, done_min) if kind == "quality" else (done_min, 0.0)
         if w.is_completed:
             flags.append("אין נתוני אזורים – הסיווג לפי כותרת האימון")
 
     total_min = easy_min + hard_min
-    if total_min and done_km:
+    if rpe is not None:
+        easy_km = sum(v["km"] for k, v in rpe.items() if k == a.rpe.label(1))
+        hard_km = done_km - easy_km
+    elif total_min and done_km:
         easy_km, hard_km = done_km * easy_min / total_min, done_km * hard_min / total_min
     else:
         easy_km, hard_km = (done_km, 0.0) if kind == "easy" else (0.0, done_km)
@@ -135,12 +178,13 @@ def analyze_workout(w: Workout, a: Athlete, today: date) -> WorkoutReport:
             status = "off"
 
     # Intensity adherence: was the session run in the zones the coach intended?
-    if w.is_completed and w.has_zone_data:
+    if w.is_completed and method != "title":
+        above = f"מאמץ {a.easy_max_rpe}" if method == "rpe" else f"אזור {a.easy_max_zone}"
         tolerance = max(a.easy_tolerance_min, 0.10 * done_min)
         if planned_kind == "easy" and hard_min > tolerance:
-            flags.append(f"ריצה קלה שנעשתה חזק מדי: {hard_min:.0f} דק' מעל אזור {a.easy_max_zone}")
-        if planned_kind == "quality" and hard_min < a.quality_min_minutes:
-            flags.append(f"אימון איכות בלי מספיק עצימות: רק {hard_min:.0f} דק' מעל אזור {a.easy_max_zone}")
+            flags.append(f"ריצה קלה שנעשתה חזק מדי: {hard_min:.0f} דק' מעל {above}")
+        if planned_kind == "quality" and hard_min < a.quality_min_minutes and not rpe_blocks:
+            flags.append(f"אימון איכות בלי מספיק עצימות: רק {hard_min:.0f} דק' מעל {above}")
     if status == "missed":
         flags.append("אימון מתוכנן שלא בוצע")
     elif status == "partial":
@@ -157,6 +201,7 @@ def analyze_workout(w: Workout, a: Athlete, today: date) -> WorkoutReport:
         easy_min=round(easy_min, 1), hard_min=round(hard_min, 1),
         easy_km=round(easy_km, 2), hard_km=round(hard_km, 2),
         compliance_pct=None if compliance is None else round(compliance, 1), flags=flags,
+        method=method, rpe=rpe, rpe_blocks=rpe_blocks,
     )
 
 
@@ -193,10 +238,20 @@ def analyze_week(ws: date, workouts: list[Workout], a: Athlete, today: date) -> 
         missed=sum(1 for r in reports if r.status == "missed"),
         unplanned=sum(1 for r in reports if r.status == "unplanned"),
         km_vs_target_pct=(round(100 * km / a.weekly_km_target, 1) if a.weekly_km_target else None),
-        zone_data_missing=sum(1 for w in workouts if w.is_completed and not w.has_zone_data),
+        zone_data_missing=sum(1 for r in reports if (r.done_min or r.done_km) and r.method == "title"),
         in_progress=ws + timedelta(days=6) >= today,
         workouts=reports,
     )
+    with_rpe = [r for r in done if r.rpe]
+    if with_rpe:
+        totals = {k: {"min": 0.0, "km": 0.0} for k in with_rpe[0].rpe}
+        for r in with_rpe:
+            for k, v in r.rpe.items():
+                t = totals.setdefault(k, {"min": 0.0, "km": 0.0})
+                t["min"] += v["min"]
+                t["km"] += v["km"]
+        wk.rpe = {k: {"min": round(v["min"], 1), "km": round(v["km"], 2)} for k, v in totals.items()}
+        wk.rpe_runs = len(with_rpe)
     wk.notes = week_notes(wk, a)
     return wk
 
@@ -234,7 +289,13 @@ def week_notes(wk: WeekReport, a: Athlete) -> list[str]:
     if hard_easy:
         notes.append(f"⚠️ {hard_easy} ריצות קלות נעשו חזק מדי")
     if wk.zone_data_missing:
-        notes.append(f"ℹ️ ל-{wk.zone_data_missing} ריצות אין נתוני דופק/אזורים")
+        notes.append(f"ℹ️ ל-{wk.zone_data_missing} ריצות אין נתוני דופק/אזורים/קצב")
+    if wk.rpe:
+        parts = [f"{k}: {v['min']:.0f} דק' ({v['km']:.1f} ק\"מ)" for k, v in wk.rpe.items() if v["min"] >= 0.5]
+        notes.append("📊 זמן לפי תחושת מאמץ – " + " · ".join(parts))
+    short = sum(1 for w in wk.workouts for f in w.flags if f.startswith("תוכנן "))
+    if short:
+        notes.append(f"⚠️ {short} קטעים לא הגיעו לזמן המתוכנן בתחושת המאמץ שנקבעה")
     return notes
 
 

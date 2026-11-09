@@ -52,6 +52,11 @@ def main(argv: list[str] | None = None) -> int:
                     continue
                 from .sources.tp_csv import load_csv
                 workouts = load_csv((cfg_path.parent / a.csv), args.zones)
+            if a.files_dir:
+                from .sources.activity_files import attach_activity_files
+                unmatched = attach_activity_files(workouts, cfg_path.parent / a.files_dir, a.timezone)
+                if unmatched:
+                    print(f"{a.name}: {len(unmatched)} activity files matched no workout", file=sys.stderr)
             weeks = analyze_athlete(workouts, a, args.today, start, end)
             notes = None
             if args.ai:
