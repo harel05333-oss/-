@@ -1,0 +1,895 @@
+<title>RACEON Visual Direction</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Heebo:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap');
+  /* Inter = Strava's actual real interface font (confirmed by research, not
+     their marketing typeface). Used ONLY for pure-English screens below —
+     Inter has no Hebrew glyphs, so the bilingual screens correctly stay on
+     Heebo (see the typography section further down for the full reasoning). */
+  .en-screen, .en-screen .greet, .en-screen .sub, .en-screen .hero-name,
+  .en-screen .hero-tier, .en-screen .t, .en-screen .d, .en-screen .rt,
+  .en-screen .rm, .en-screen .rp, .en-screen .nl, .en-screen .l, .en-screen .v,
+  .en-screen .p-name, .en-screen .p-pts, .en-screen .you-t, .en-screen .you-d,
+  .en-screen .r-name, .en-screen .r-pts, .en-screen .section-label,
+  .en-screen .eyebrow2, .en-screen .brand span{
+    font-family:'Inter',sans-serif !important;
+  }
+  /* Space Grotesk has no Hebrew glyphs — every declaration below chains
+     'Heebo' as the fallback so a browser resolves Hebrew characters to it
+     automatically per-glyph (this is how CSS font stacks actually work).
+     NOTE for the real React Native implementation: RN's `fontFamily` is a
+     single value, not a fallback chain — there's no equivalent trick there,
+     so each Hebrew-bearing label must explicitly be set to Heebo rather
+     than Space Grotesk, while pure-numeric readouts (which need no Hebrew
+     glyphs at all) can stay on Space Grotesk as-is. */
+
+  :root{
+    --page-bg:#f5f4f1; --page-ink:#1a1c1a; --page-ink-dim:#63685f;
+    --page-card:#ffffff; --page-border:#e4e1da; --page-accent:#049966;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --page-bg:#111310; --page-ink:#ecefe9; --page-ink-dim:#9aa196;
+      --page-card:#181b17; --page-border:#2a2e28; --page-accent:#2FB37A;
+    }
+  }
+  :root[data-theme="dark"]{
+    --page-bg:#111310; --page-ink:#ecefe9; --page-ink-dim:#9aa196;
+    --page-card:#181b17; --page-border:#2a2e28; --page-accent:#2FB37A;
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--page-bg); color:var(--page-ink);
+    font-family:'Heebo',system-ui,sans-serif;
+    padding:40px 20px 80px; padding-inline:max(20px, calc((100% - 1180px)/2));
+  }
+  h1,h2,h3{font-family:'Heebo',sans-serif; text-wrap:balance;}
+
+  /* ---------- intro / research rationale ---------- */
+  .intro{max-width:760px; margin-bottom:56px;}
+  .eyebrow{
+    font-family:'Space Grotesk','Heebo',monospace; font-size:11px; letter-spacing:1.5px;
+    text-transform:uppercase; color:var(--page-accent); font-weight:600; margin:0 0 10px;
+  }
+  .intro h1{font-size:clamp(28px,4vw,40px); line-height:1.1; margin:0 0 14px; letter-spacing:-0.5px;}
+  .intro p{font-size:15px; line-height:1.65; color:var(--page-ink-dim); margin:0 0 12px; max-width:65ch;}
+
+  .research-grid{
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:14px;
+    margin-top:28px;
+  }
+  .research-card{
+    background:var(--page-card); border:1px solid var(--page-border); border-radius:14px;
+    padding:16px 18px;
+  }
+  .research-card .k{font-family:'Space Grotesk','Heebo',monospace; font-size:10px; letter-spacing:1px; text-transform:uppercase; color:var(--page-accent); font-weight:600;}
+  .research-card p{font-size:13px; color:var(--page-ink-dim); margin:8px 0 0; line-height:1.55;}
+
+  /* ---------- token legend ---------- */
+  .section-title{
+    font-family:'Space Grotesk','Heebo',monospace; font-size:12px; letter-spacing:1.5px;
+    text-transform:uppercase; color:var(--page-ink-dim); font-weight:600;
+    margin:0 0 18px; padding-bottom:10px; border-bottom:1px solid var(--page-border);
+  }
+  .tokens{
+    display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:14px;
+    margin-bottom:60px;
+  }
+  .swatch{border-radius:14px; overflow:hidden; border:1px solid var(--page-border);}
+  .swatch .chip{height:64px;}
+  .swatch .label{background:var(--page-card); padding:10px 12px;}
+  .swatch .label .name{font-size:12.5px; font-weight:700;}
+  .swatch .label .hex{font-family:'Space Grotesk','Heebo',monospace; font-size:11px; color:var(--page-ink-dim); margin-top:2px;}
+
+  /* ---------- phones ---------- */
+  .phones-wrap{
+    display:flex; gap:40px; flex-wrap:wrap; align-items:flex-start; justify-content:center;
+    margin-bottom:56px;
+  }
+  .phone-block{display:flex; flex-direction:column; align-items:center; gap:16px;}
+  .phone-caption{font-family:'Space Grotesk','Heebo',monospace; font-size:11px; letter-spacing:1px; text-transform:uppercase; color:var(--page-ink-dim); text-align:center;}
+  .phone{
+    width:336px; max-width:88vw; aspect-ratio:336/728; border-radius:42px;
+    background:linear-gradient(160deg,#2a2c29,#000 40%);
+    padding:12px;
+    box-shadow:
+      0 40px 70px -24px rgba(0,0,0,0.55),
+      0 2px 0 rgba(255,255,255,0.06) inset,
+      0 0 0 1px rgba(255,255,255,0.04);
+    position:relative; flex-shrink:0;
+  }
+  .screen{
+    width:100%; height:100%; border-radius:32px; overflow:hidden; position:relative;
+    background:#0b0d0a; color:#eef1ec; font-family:'Heebo',sans-serif;
+    display:flex; flex-direction:column;
+    box-shadow:0 0 0 1px rgba(255,255,255,0.05) inset;
+  }
+  .status-bar{
+    display:flex; justify-content:space-between; align-items:center;
+    padding:8px 18px 0; font-family:'Space Grotesk','Heebo',monospace; font-size:12px;
+    font-weight:600; color:#eef1ec; position:relative; z-index:1; flex-shrink:0;
+  }
+  .status-bar .icons{display:flex; align-items:center; gap:5px; opacity:0.85; font-size:11px;}
+  /* Calmed down twice now: first pass had two hues (green+blue) at high
+     opacity; this pass drops to ONE hue only, much fainter, single soft
+     patch instead of three overlapping ones — matching Strava's actual
+     restraint (one flat accent, no competing color, no glow) rather than a
+     "tech HUD" gradient wash. */
+  .aurora{
+    position:absolute; inset:0; z-index:0; opacity:0.5;
+    background: radial-gradient(90% 60% at 20% -10%, rgba(47,179,122,0.16), transparent 65%);
+    filter:blur(2px);
+  }
+  .hicon{width:19px; height:19px; display:block;}
+  .screen-content{position:relative; z-index:1; display:flex; flex-direction:column; height:100%; padding:10px 18px 16px; overflow:hidden;}
+
+  .s-top{display:flex; justify-content:space-between; align-items:center; margin-bottom:22px;}
+  .brand{display:flex; align-items:center; gap:8px;}
+  .brand .dot{width:22px; height:22px; border-radius:7px; background:#2FB37A;}
+  .brand span{font-family:'Space Grotesk','Heebo',monospace; font-weight:700; font-size:13px; letter-spacing:1px;}
+  .s-icons{display:flex; gap:16px; align-items:center; color:#c7cdc2;}
+  .s-icons svg{width:19px; height:19px; display:block;}
+
+  .eyebrow2{font-family:'Space Grotesk','Heebo',monospace; font-size:9.5px; letter-spacing:1.4px; color:#2FB37A; font-weight:700; text-transform:uppercase;}
+  .greet{font-size:23px; font-weight:800; letter-spacing:-0.4px; margin:5px 0 2px;}
+  .sub{font-size:12.5px; color:#a7ada2;}
+
+  .glass-card{
+    background:rgba(255,255,255,0.045);
+    border:1px solid rgba(255,255,255,0.09);
+    border-radius:20px; padding:16px;
+    backdrop-filter:blur(2px);
+    box-shadow:0 12px 24px -12px rgba(0,0,0,0.5), 0 1px 0 rgba(255,255,255,0.06) inset;
+  }
+  .hero-card{margin-top:16px; display:flex; align-items:center; gap:14px;}
+  .avatar-ring{width:52px; height:52px; border-radius:50%; padding:2px; background:#2FB37A; flex-shrink:0; box-shadow:0 4px 10px -4px rgba(0,0,0,0.4);}
+  .avatar-ring .a{width:100%; height:100%; border-radius:50%; background:radial-gradient(120% 120% at 30% 20%,#2b2f27,#181a15); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:16px;}
+  .hero-name{font-size:15.5px; font-weight:700;}
+  .hero-tier{font-family:'Space Grotesk','Heebo',monospace; font-size:10.5px; color:#9be8c4; margin-top:2px;}
+
+  .stat-row{display:flex; margin-top:16px; padding-top:14px; border-top:1px solid rgba(255,255,255,0.08);}
+  .stat{flex:1; text-align:center;}
+  .stat .l{font-family:'Space Grotesk','Heebo',monospace; font-size:9px; letter-spacing:1px; text-transform:uppercase; color:#828a7d;}
+  .stat .v{font-family:'Space Grotesk','Heebo',monospace; font-size:17px; font-weight:700; margin-top:4px; font-variant-numeric:tabular-nums;}
+  .stat.mid{border-inline:1px solid rgba(255,255,255,0.08);}
+
+  .cta-strip{
+    margin-top:16px; border-radius:18px; padding:15px 16px;
+    background:rgba(47,179,122,0.10);
+    border:1px solid rgba(47,179,122,0.28);
+    box-shadow:0 8px 16px -12px rgba(0,0,0,0.5);
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .cta-strip .t{font-size:13px; font-weight:700;}
+  .cta-strip .d{font-family:'Space Grotesk','Heebo',monospace; font-size:11px; color:#9be8c4; margin-top:2px;}
+  .go-badge{width:30px; height:30px; border-radius:50%; background:#2FB37A; color:#04150d; display:flex; align-items:center; justify-content:center; font-weight:800; flex-shrink:0; box-shadow:0 2px 6px -2px rgba(0,0,0,0.35);}
+
+  .section-label{font-family:'Space Grotesk','Heebo',monospace; font-size:10px; letter-spacing:1.2px; text-transform:uppercase; color:#828a7d; margin:20px 0 10px;}
+
+  .race-row{display:flex; align-items:center; gap:11px; padding:11px 12px; border-radius:14px; background:rgba(255,255,255,0.035); margin-bottom:8px; border:1px solid rgba(255,255,255,0.07); box-shadow:0 8px 16px -12px rgba(0,0,0,0.6);}
+  .race-thumb{width:38px; height:38px; border-radius:10px; background:linear-gradient(135deg,rgba(47,179,122,0.22),transparent),radial-gradient(120% 120% at 20% 15%,#22261f,#14160f); flex-shrink:0;}
+  .race-row .rt{font-size:12.5px; font-weight:700;}
+  .race-row .rm{font-family:'Space Grotesk','Heebo',monospace; font-size:10.5px; color:#828a7d; margin-top:2px;}
+  .race-row .rp{margin-inline-start:auto; font-family:'Space Grotesk','Heebo',monospace; font-size:10.5px; color:#2FB37A; font-weight:700;}
+
+  .nav{margin-top:auto; display:flex; justify-content:space-around; padding-top:10px; border-top:1px solid rgba(255,255,255,0.07);}
+  /* Same rule as the icon-system section above: the glyph is always neutral
+     (currentColor); only the capsule behind it carries the gradient. */
+  .nav-item{display:flex; flex-direction:column; align-items:center; gap:4px; color:#828a7d;}
+  .nav-item svg{width:19px; height:19px; display:block;}
+  /* No capsule, no gradient, no glow behind the icon — Strava's own tab
+     icons carry zero background decoration; the ONLY signal for "active" is
+     a flat color change on the glyph itself, plus a light fill added to the
+     otherwise-outline icon (see the inline SVG fill-opacity). */
+  .nav-item .cap{display:flex; align-items:center; justify-content:center;}
+  .nav-item.on{color:#2FB37A;}
+  .nav-item.on .nl{color:#2FB37A;}
+  .nav-item.on svg{fill:currentColor; fill-opacity:0.18;}
+  .nav-item .nl{font-family:'Heebo',sans-serif; font-weight:600; font-size:8.5px; letter-spacing:0.2px; color:#828a7d;}
+
+  /* rankings screen bits */
+  .podium{display:flex; align-items:flex-end; justify-content:center; gap:14px; margin:18px 0 4px;}
+  .p-item{display:flex; flex-direction:column; align-items:center; gap:6px;}
+  .p-ring{border-radius:50%; padding:2.5px; position:relative;}
+  .p-ring .a{border-radius:50%; background:radial-gradient(120% 120% at 30% 20%,#2b2f27,#181a15); display:flex; align-items:center; justify-content:center; font-weight:700;}
+  .p-name{font-size:10.5px; font-weight:700; max-width:64px; text-align:center; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .p-pts{font-family:'Space Grotesk','Heebo',monospace; font-size:10px; font-weight:700;}
+  .p-crown{margin-bottom:2px; color:#ffd700;}
+  .p-crown svg{width:16px; height:16px; display:block;}
+
+  .you-card{
+    margin-top:14px; border-radius:16px; padding:13px 14px; display:flex; align-items:center; gap:12px;
+    background:rgba(47,179,122,0.09);
+    border:1px solid rgba(47,179,122,0.3);
+    box-shadow:0 8px 16px -12px rgba(0,0,0,0.5);
+  }
+  .you-rank{width:36px; height:36px; border-radius:50%; background:rgba(47,179,122,0.16); color:#2FB37A; display:flex; align-items:center; justify-content:center; font-family:'Space Grotesk','Heebo',monospace; font-weight:800; font-size:13px; flex-shrink:0;}
+  .you-t{font-size:12.5px; font-weight:700;}
+  .you-d{font-family:'Space Grotesk','Heebo',monospace; font-size:10.5px; color:#9be8c4; margin-top:2px;}
+
+  .runner-row{display:flex; align-items:center; gap:10px; padding:9px 10px; border-radius:13px; background:rgba(255,255,255,0.035); margin-bottom:7px; border:1px solid rgba(255,255,255,0.065); box-shadow:0 6px 14px -12px rgba(0,0,0,0.6);}
+  .r-rank{width:22px; height:22px; border-radius:7px; background:rgba(255,255,255,0.06); display:flex; align-items:center; justify-content:center; font-family:'Space Grotesk','Heebo',monospace; font-size:10.5px; font-weight:700; color:#a7ada2; flex-shrink:0;}
+  .r-av{width:28px; height:28px; border-radius:50%; background:radial-gradient(120% 120% at 30% 20%,#2b2f27,#181a15); flex-shrink:0;}
+  .r-name{font-size:11.5px; font-weight:600; flex:1;}
+  .r-pts{font-family:'Space Grotesk','Heebo',monospace; font-size:11px; font-weight:700; color:#eef1ec;}
+
+  /* ---------- before/after ---------- */
+  .compare{display:flex; gap:22px; flex-wrap:wrap; margin-bottom:20px;}
+  .compare-col{flex:1; min-width:260px;}
+  .compare-tag{font-family:'Space Grotesk','Heebo',monospace; font-size:10px; letter-spacing:1px; text-transform:uppercase; margin-bottom:10px; font-weight:700;}
+  .compare-tag.before{color:#b5583f;}
+  .compare-tag.after{color:var(--page-accent);}
+  /* Fixed dark mockup surface — color is set here explicitly (not inherited
+     from body/:root) precisely because those tokens flip with the viewer's
+     OWN page theme; without this, a light-mode viewer would see near-black
+     ink (inherited from --page-ink) on this hardcoded-dark card = invisible
+     text. Every mockup "screen" surface in this file follows the same rule. */
+  .mini-card{border-radius:16px; padding:15px; background:#14160f; border:1px solid #2a2e28; color:#ecefe9;}
+  .mini-card.before{background:#111310;}
+  .mini-badges{display:flex; gap:6px; flex-wrap:wrap; margin-top:10px;}
+  .mini-badge{font-family:'Space Grotesk','Heebo',monospace; font-size:9px; font-weight:700; padding:4px 8px; border-radius:999px; letter-spacing:0.4px;}
+
+  footer{max-width:760px; margin-top:20px; padding-top:24px; border-top:1px solid var(--page-border);}
+  footer p{font-size:13px; color:var(--page-ink-dim); line-height:1.6;}
+
+  /* ---------- accessible gradient section ---------- */
+  .grad-note{max-width:760px; font-size:14px; line-height:1.65; color:var(--page-ink-dim); margin:-8px 0 28px;}
+  .grad-pair{display:flex; gap:22px; flex-wrap:wrap; margin-bottom:56px;}
+  .grad-col{flex:1; min-width:280px; max-width:420px;}
+  .grad-tag{display:flex; align-items:center; gap:8px; margin-bottom:12px;}
+  .grad-tag .dot2{width:9px; height:9px; border-radius:50%;}
+  .grad-tag .t{font-family:'Space Grotesk','Heebo',monospace; font-size:11px; letter-spacing:1px; text-transform:uppercase; font-weight:700;}
+  .grad-tag .aa{margin-inline-start:auto; font-family:'Space Grotesk','Heebo',monospace; font-size:9.5px; font-weight:700; padding:3px 8px; border-radius:999px;}
+
+  .grad-panel{border-radius:20px; height:150px; position:relative; overflow:hidden; margin-bottom:12px;}
+  .grad-panel.dark{background:#0b0d0a;}
+  .grad-panel.dark .mesh{position:absolute; inset:0; background:
+      radial-gradient(90% 60% at 20% -10%, rgba(47,179,122,0.22), transparent 65%);}
+  .grad-panel.light{background:#f6f8f4;}
+  .grad-panel.light .mesh{position:absolute; inset:0; background:
+      radial-gradient(90% 60% at 20% -10%, rgba(4,153,102,0.11), transparent 65%);}
+
+  .grad-code{
+    font-family:'Space Grotesk','Heebo',monospace; font-size:10.5px; line-height:1.7;
+    background:var(--page-card); border:1px solid var(--page-border); border-radius:12px;
+    padding:12px 14px; color:var(--page-ink-dim); margin-bottom:14px; overflow-x:auto; white-space:pre;
+  }
+
+  .proof-card{
+    border-radius:16px; padding:16px; position:relative; overflow:hidden;
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+  }
+  .proof-card.dark{background:#0b0d0a;}
+  .proof-card.light{background:#f6f8f4;}
+  .proof-card .mesh2{position:absolute; inset:0;}
+  .proof-card.dark .mesh2{background:radial-gradient(90% 100% at 0% 100%, rgba(47,179,122,0.16), transparent 65%);}
+  .proof-card.light .mesh2{background:radial-gradient(90% 100% at 0% 100%, rgba(4,153,102,0.09), transparent 65%);}
+  .proof-glass{position:relative; z-index:1; border-radius:12px; padding:11px 13px; flex:1;}
+  .proof-card.dark .proof-glass{background:rgba(255,255,255,0.055); border:1px solid rgba(255,255,255,0.09);}
+  .proof-card.light .proof-glass{background:#ffffff; border:1px solid #e4e1da;}
+  .proof-card.dark .proof-glass .pt{color:#ecefe9; font-size:13px; font-weight:700;}
+  .proof-card.dark .proof-glass .ps{color:#2FB37A; font-family:'Space Grotesk','Heebo',monospace; font-size:10.5px; margin-top:3px;}
+  .proof-card.light .proof-glass .pt{color:#171d19; font-size:13px; font-weight:700;}
+  .proof-card.light .proof-glass .ps{color:#049966; font-family:'Space Grotesk','Heebo',monospace; font-size:10.5px; margin-top:3px;}
+  .proof-ratio{position:relative; z-index:1; font-family:'Space Grotesk','Heebo',monospace; font-size:9px; font-weight:700; text-align:center; padding:6px 9px; border-radius:10px; flex-shrink:0; line-height:1.5;}
+  .proof-card.dark .proof-ratio{background:rgba(47,179,122,0.15); color:#2FB37A;}
+  .proof-card.light .proof-ratio{background:rgba(0,153,102,0.12); color:#049966;}
+
+  .badge-row{display:flex; gap:10px; margin-top:12px;}
+  .badge-solid{flex:1; border-radius:12px; padding:10px 12px; text-align:center; font-size:11.5px; font-weight:700;}
+  .badge-solid.dark{background:#2FB37A; color:#04150d;}
+  .badge-solid.light{background:#049966; color:#ffffff;}
+
+  /* ---------- icon system: before / after ---------- */
+  .icon-compare{display:flex; gap:22px; flex-wrap:wrap; margin-bottom:24px;}
+  .icon-panel{flex:1; min-width:280px; border-radius:20px; padding:22px; background:#0b0d0a;}
+  .icon-panel-tag{font-family:'Space Grotesk','Heebo',monospace; font-size:10.5px; letter-spacing:1px; text-transform:uppercase; font-weight:700; margin-bottom:16px;}
+  .icon-panel-tag.before{color:#c9714f;}
+  .icon-panel-tag.after{color:#2FB37A;}
+  .icon-nav-row{display:flex; justify-content:space-around; align-items:flex-end;}
+  .icon-item{display:flex; flex-direction:column; align-items:center; gap:6px;}
+  .icon-item .lbl{font-family:'Space Grotesk','Heebo',monospace; font-size:8.5px; color:#828a7d; letter-spacing:0.3px;}
+  /* OLD pattern: flat colored fill glyphs, no shared container language */
+  .icon-old{width:24px; height:24px;}
+  .icon-old.on{color:#00ff87;}
+  .icon-old.off{color:#5c6259;}
+  /* NEW pattern: icon glyph is ALWAYS neutral (currentColor); state/emphasis
+     lives entirely in the capsule behind it, never in the glyph color */
+  .icon-cap{width:40px; height:32px; display:flex; align-items:center; justify-content:center;}
+  .icon-cap.off svg{color:#828a7d;}
+  .icon-cap.on svg{color:#2FB37A; fill:currentColor; fill-opacity:0.18;}
+
+  .icon-rule{
+    background:var(--page-card); border:1px solid var(--page-border); border-radius:14px;
+    padding:16px 18px; margin-bottom:56px; font-size:13.5px; line-height:1.6; color:var(--page-ink-dim);
+  }
+  .icon-rule strong{color:var(--page-ink);}
+
+  /* ---------- signature moment animation ---------- */
+  .moment-wrap{display:flex; justify-content:center; margin-bottom:20px;}
+  .moment-stage{
+    width:100%; max-width:380px; border-radius:24px; padding:32px 24px; text-align:center;
+    background:#0b0d0a; position:relative; overflow:hidden; isolation:isolate;
+  }
+  .moment-ring{
+    position:absolute; inset:0; margin:auto; width:140px; height:140px; border-radius:50%;
+    border:2px solid rgba(47,179,122,0.55); z-index:0;
+  }
+  @media (prefers-reduced-motion: no-preference){
+    .moment-ring{ animation:shockwave 2.6s cubic-bezier(.2,.7,.3,1) infinite; }
+    .moment-badge{ animation:pop-in 2.6s cubic-bezier(.34,1.56,.64,1) infinite; }
+    .moment-particle{ animation:drift 2.6s ease-out infinite; }
+    .moment-glow{ animation:breathe 2.6s ease-in-out infinite; }
+  }
+  @keyframes shockwave{
+    0%{ transform:scale(0.6); opacity:0.9; border-width:3px; }
+    70%{ transform:scale(1.9); opacity:0; border-width:1px; }
+    100%{ transform:scale(1.9); opacity:0; }
+  }
+  @keyframes pop-in{
+    0%,55%{ transform:scale(0.94); }
+    68%{ transform:scale(1.06); }
+    80%,100%{ transform:scale(1); }
+  }
+  @keyframes drift{
+    0%{ transform:translateY(0) scale(1); opacity:0; }
+    15%{ opacity:1; }
+    100%{ transform:translateY(-90px) scale(0.4); opacity:0; }
+  }
+  @keyframes breathe{
+    0%,100%{ opacity:0.55; transform:scale(1); }
+    50%{ opacity:1; transform:scale(1.06); }
+  }
+  .moment-glow{
+    position:absolute; inset:0; z-index:0;
+    background:radial-gradient(60% 60% at 50% 40%, rgba(47,179,122,0.18), transparent 70%);
+  }
+  .moment-particle{
+    position:absolute; bottom:38%; width:6px; height:6px; border-radius:50%; z-index:1;
+  }
+  .moment-badge{
+    position:relative; z-index:2; width:88px; height:88px; margin:0 auto 16px; border-radius:50%;
+    background:#2FB37A; display:flex; align-items:center; justify-content:center;
+    box-shadow:0 8px 18px -6px rgba(0,0,0,0.5);
+  }
+  .moment-title{position:relative; z-index:2; font-size:19px; font-weight:800; color:#ecefe9; margin-bottom:4px;}
+  .moment-sub{position:relative; z-index:2; font-family:'Space Grotesk','Heebo',monospace; font-size:12px; color:#9be8c4;}
+  .moment-note{max-width:760px; font-size:13.5px; color:var(--page-ink-dim); line-height:1.6; margin:0 auto 56px; text-align:center;}
+
+  /* ---------- typography ---------- */
+  .type-compare{display:flex; gap:22px; flex-wrap:wrap; margin-bottom:20px;}
+  .type-col{flex:1; min-width:280px; border-radius:20px; padding:22px; background:#0b0d0a; color:#ecefe9;}
+  .type-tag{font-family:'Space Grotesk','Heebo',monospace; font-size:10.5px; letter-spacing:1px; text-transform:uppercase; font-weight:700; margin-bottom:16px;}
+  .type-tag.before{color:#c9714f;}
+  .type-tag.after{color:#2FB37A;}
+  .type-sample-he{font-size:26px; font-weight:800; margin-bottom:4px;}
+  .type-sample-en{font-family:'Space Grotesk','Heebo',monospace; font-size:12px; letter-spacing:2px; color:#828a7d; text-transform:uppercase; margin-bottom:18px;}
+  .type-label-row{display:flex; align-items:baseline; gap:8px; padding-top:14px; border-top:1px solid rgba(255,255,255,0.08);}
+  .type-label-row .lbl{font-size:11px; letter-spacing:0.6px; text-transform:uppercase; color:#828a7d;}
+  .type-fallback-warn{font-size:10.5px; color:#c9714f; margin-top:8px;}
+
+  .type-roles{
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:14px; margin-bottom:56px;
+  }
+  .type-role-card{background:var(--page-card); border:1px solid var(--page-border); border-radius:14px; padding:16px 18px;}
+  .type-role-card .rk{font-family:'Space Grotesk','Heebo',monospace; font-size:9.5px; letter-spacing:1px; text-transform:uppercase; color:var(--page-accent); font-weight:700;}
+  .type-role-card .rs{font-size:13px; color:var(--page-ink); margin-top:8px; font-weight:600;}
+  .type-role-card .rd{font-size:12px; color:var(--page-ink-dim); margin-top:4px; line-height:1.5;}
+
+  @media (max-width:480px){
+    .phones-wrap{gap:28px;}
+  }
+</style>
+
+<div class="intro">
+  <p class="eyebrow">RACEON · כיוון עיצובי חדש</p>
+  <h1>מ"מסך טלמטריה עמוס" ל-Premium Athletic</h1>
+  <p>
+    בדקתי איך אפליקציות ריצה מובילות בונות תחושת פרימיום: Nike Run Club שומר על ניגודיות חדה וירוק ניאון בודד על שטח נקי;
+    Strava מוביל עם כתום אחד וגרפים מינימליסטיים; Whoop בונה רצינות דרך כמעט-שחור עשיר וצבע חתימה יחיד.
+    המגמה הטכנית של 2026: עיצוב Dark-first, "מש-גרדיאנטים" רכים (ערפילי צבע אמביינטיים מאחורי כרטיסים) וזכוכית מטושטשת עדינה — לא הבלור הכבד של 2021.
+  </p>
+  <p>
+    <strong>המסקנה:</strong> הירוק של RACEON כבר במקום הנכון — זה בדיוק הצבע שאפליקציות ריצה מובילות משתמשות בו.
+    <strong>עדכון אחרי כמה סבבי משוב:</strong> הגרסה הראשונה של הכיוון הזה הייתה עמוסה מדי — ניאון בוהק, גרדיאנט דו-גוני
+    (ירוק+כחול) בכל מקום, זוהר (glow) סביב כל כפתור, ואמוג'י באזורים שהיו צריכים אייקונים אמיתיים. תיקנתי את כל
+    זה: <strong>צבע אחד שטוח בלבד</strong> (בלי גרדיאנט, בלי זוהר), שימוש בו במשורה בדיוק כמו שסטראבה עושה עם הכתום
+    שלה, ואייקוני קו אמיתיים בלי אמוג'י בשום מקום.
+  </p>
+
+  <div class="research-grid">
+    <div class="research-card">
+      <div class="k">Nike Run Club</div>
+      <p>ניגודיות חדה, ירוק ניאון בודד ל-CTA, טיפוגרפיה נועזת, המון שטח ריק.</p>
+    </div>
+    <div class="research-card">
+      <div class="k">Strava</div>
+      <p>צבע חתימה יחיד (כתום), ויזואליזציית נתונים נקייה, גיימיפיקציה מרוסנת.</p>
+    </div>
+    <div class="research-card">
+      <div class="k">Whoop</div>
+      <p>כמעט-שחור עשיר + לבן + צבע חתימה אחד. רצינות דרך צמצום, לא דרך אפקטים.</p>
+    </div>
+    <div class="research-card">
+      <div class="k">מגמת 2026</div>
+      <p>Dark-first, מש-גרדיאנטים אמביינטיים, זכוכית עדינה עם ניגודיות חזקה מאחוריה.</p>
+    </div>
+  </div>
+</div>
+
+<div class="section-title">מערכת הצבע המחודשת</div>
+<div class="tokens">
+  <div class="swatch"><div class="chip" style="background:#0b0d0a"></div><div class="label"><div class="name">Base</div><div class="hex">#0B0D0A</div></div></div>
+  <div class="swatch"><div class="chip" style="background:#181b17"></div><div class="label"><div class="name">Surface</div><div class="hex">#181B17</div></div></div>
+  <div class="swatch"><div class="chip" style="background:#2FB37A"></div><div class="label"><div class="name">Accent — יחיד, שטוח</div><div class="hex">#2FB37A</div></div></div>
+  <div class="swatch"><div class="chip" style="background:#ecefe9"></div><div class="label"><div class="name">Ink</div><div class="hex">#ECEFE9</div></div></div>
+  <div class="swatch"><div class="chip" style="background:#9aa196"></div><div class="label"><div class="name">Ink Dim</div><div class="hex">#9AA196</div></div></div>
+  <div class="swatch"><div class="chip" style="background:#ffd700"></div><div class="label"><div class="name">Gold</div><div class="hex">#FFD700</div></div></div>
+</div>
+
+<div class="section-title">צבע אחד, שטוח, נגיש — לייט מוד ודארק מוד</div>
+<p class="grad-note">
+  בדקתי את סטראבה ספציפית וזה בדיוק מה שהוביל לתיקון הזה: הזהות החזותית שלהם היא <strong>לא</strong> גרדיאנט או זוהר —
+  זו משמעת קיצונית סביב <strong>צבע שטוח אחד</strong> (הכתום שלהם), בלי גוון שני, בלי מעברי צבע, בלי אפקט זוהר סביב
+  אלמנטים. לקחתי מזה את הלקח האמיתי: לא גרדיאנט "מתוחכם" יותר, אלא <strong>פחות</strong> — צבע ירוק אחד שטוח, בשימוש
+  חסכוני, בניגודיות גבוהה. הרקע האמביינטי למטה נשאר עדין מאוד ובגוון אחד בלבד (לא שניים) — כדי שהעין תנוח עליו,
+  לא תרגיש "בוהק".
+</p>
+
+<div class="grad-pair">
+  <div class="grad-col">
+    <div class="grad-tag"><div class="dot2" style="background:#2FB37A;"></div><div class="t">Dark Mode</div><div class="aa" style="background:rgba(47,179,122,0.15); color:#049966;">AAA · 17.9:1</div></div>
+    <div class="grad-panel dark"><div class="mesh"></div></div>
+    <div class="grad-code">background: #0B0D0A;
+accent: #2FB37A (שטוח, ללא גרדיאנט)
+wash:  radial-gradient(120% 70% at 15% -10%,
+         #2FB37A 14%, transparent 60%);</div>
+    <div class="proof-card dark">
+      <div class="mesh2"></div>
+      <div class="proof-glass"><div class="pt">שלום, הראל</div><div class="ps">דרגת זהב · 2,840 נק'</div></div>
+      <div class="proof-ratio">טקסט על<br>כרטיס זכוכית<br>17.9:1</div>
+    </div>
+    <div class="badge-row">
+      <div class="badge-solid dark">הרשמה למירוץ</div>
+    </div>
+  </div>
+
+  <div class="grad-col">
+    <div class="grad-tag"><div class="dot2" style="background:#049966;"></div><div class="t">Light Mode</div><div class="aa" style="background:rgba(4,153,102,0.12); color:#049966;">AAA · 15.6:1</div></div>
+    <div class="grad-panel light"><div class="mesh"></div></div>
+    <div class="grad-code">background: #F6F8F4;
+accent: #049966 (שטוח, ללא גרדיאנט)
+wash:  radial-gradient(120% 70% at 15% -10%,
+         #049966 7%, transparent 60%);</div>
+    <div class="proof-card light">
+      <div class="mesh2"></div>
+      <div class="proof-glass"><div class="pt">שלום, הראל</div><div class="ps">דרגת זהב · 2,840 נק'</div></div>
+      <div class="proof-ratio">טקסט על<br>כרטיס לבן<br>15.6:1</div>
+    </div>
+    <div class="badge-row">
+      <div class="badge-solid light">הרשמה למירוץ</div>
+    </div>
+  </div>
+</div>
+
+<p class="grad-note" style="margin-top:-32px;">
+  שימו לב שבלייט מוד הרקע האמביינטי הרבה יותר עדין (7% שקיפות במקום 14%) — צבע רווי על רקע בהיר נראה זול ונכשל
+  בניגודיות כמעט בכל מקום שטקסט נוגע בו. גם צבע ה"אקסנט כטקסט" משתנה: בדארק מוד אפשר להשתמש בגוון הבהיר יותר (#2FB37A)
+  כי הוא ברור על שחור; בלייט מוד חובה גרסה כהה יותר (#049966) כי הגוון הבהיר נכשל על רקע לבן. הכפתורים המלאים
+  (למטה בכל כרטיס) הם מילוי שטוח של אותו צבע בדיוק — אין גרסה "רוויה יותר" נפרדת, כי אין יותר משני גוונים בכלל.
+  אף מקום באפליקציה לא מסתמך על צבע לבד להעברת משמעות (לדוגמה תגי הדרגה תמיד מלווים בטקסט) — חשוב במיוחד
+  ל-8% מהגברים שהם עיוורי צבעים.
+</p>
+
+<div class="section-title">שני מסכים לדוגמה — נתונים אמיתיים מהאפליקציה</div>
+<div class="phones-wrap">
+
+  <div class="phone-block">
+    <div class="phone-caption">בית (Lobby)</div>
+    <div class="phone"><div class="screen">
+      <div class="aurora"></div>
+      <div class="status-bar"><span>9:41</span><span class="icons"><svg viewBox="0 0 18 12" width="14" height="10"><rect x="0" y="7" width="3" height="5" rx="0.5" fill="currentColor"/><rect x="5" y="5" width="3" height="7" rx="0.5" fill="currentColor"/><rect x="10" y="3" width="3" height="9" rx="0.5" fill="currentColor"/><rect x="15" y="0" width="3" height="12" rx="0.5" fill="currentColor"/></svg><svg viewBox="0 0 24 12" width="20" height="10"><rect x="0.5" y="0.5" width="20" height="11" rx="2.5" fill="none" stroke="currentColor"/><rect x="2" y="2" width="15" height="8" rx="1" fill="currentColor"/><rect x="21.5" y="4" width="2" height="4" rx="1" fill="currentColor"/></svg></span></div>
+      <div class="screen-content">
+        <div class="s-top">
+          <div class="brand"><div class="dot"></div><span>RACEON</span></div>
+          <div class="s-icons">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 10a6 6 0 0 1 12 0c0 4 1.5 5.5 1.5 5.5H4.5S6 14 6 10Z"/><path d="M10 19a2 2 0 0 0 4 0"/></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z"/></svg>
+          </div>
+        </div>
+
+        <div class="greet">שלום, הראל</div>
+        <div class="sub">עונה 04 · המירוץ הבא שלך ב-2 באוק׳</div>
+
+        <div class="glass-card hero-card">
+          <div class="avatar-ring"><div class="a">ה</div></div>
+          <div>
+            <div class="hero-name">הראל בן עזרא</div>
+            <div class="hero-tier">דרגת זהב</div>
+          </div>
+        </div>
+
+        <div class="glass-card" style="margin-top:12px;">
+          <div class="stat-row" style="margin-top:0; padding-top:0; border-top:none;">
+            <div class="stat"><div class="l">דירוג</div><div class="v">#12</div></div>
+            <div class="stat mid"><div class="l">נקודות</div><div class="v">2,840</div></div>
+            <div class="stat"><div class="l">עד פלטינה</div><div class="v">360</div></div>
+          </div>
+        </div>
+
+        <div class="cta-strip">
+          <div><div class="t">בשידור חי · מירוץ 10 ק"מ תל אביב</div><div class="d">החלון נסגר בעוד 01:44:12</div></div>
+          <div class="go-badge">›</div>
+        </div>
+
+        <div class="section-label">מירוצים קרובים</div>
+        <div class="race-row"><div class="race-thumb"></div><div><div class="rt">חצי מרתון ירושלים</div><div class="rm">12 באוק׳ · 21 ק"מ</div></div><div class="rp">חינם</div></div>
+        <div class="race-row"><div class="race-thumb"></div><div><div class="rt">מירוץ לילה חיפה</div><div class="rm">19 באוק׳ · 5 ק"מ</div></div><div class="rp">$8</div></div>
+
+        <div class="nav">
+          <div class="nav-item on"><div class="cap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9h13v-9"/></svg></div><span class="nl">בית</span></div>
+          <div class="nav-item"><div class="cap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4h8v4a4 4 0 0 1-8 0V4Z"/><path d="M8 5H5a3 3 0 0 0 3 5"/><path d="M16 5h3a3 3 0 0 1-3 5"/><path d="M12 13v3M9 20h6M10 16h4v4h-4z"/></svg></div><span class="nl">מירוצים</span></div>
+          <div class="nav-item"><div class="cap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V13M11 20V8M18 20v-6"/></svg></div><span class="nl">דירוג</span></div>
+          <div class="nav-item"><div class="cap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.4"/><path d="M5 20c1.2-4 4-6 7-6s5.8 2 7 6"/></svg></div><span class="nl">פרופיל</span></div>
+        </div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="phone-block">
+    <div class="phone-caption">דירוג עולמי</div>
+    <div class="phone"><div class="screen">
+      <div class="aurora"></div>
+      <div class="status-bar"><span>9:41</span><span class="icons"><svg viewBox="0 0 18 12" width="14" height="10"><rect x="0" y="7" width="3" height="5" rx="0.5" fill="currentColor"/><rect x="5" y="5" width="3" height="7" rx="0.5" fill="currentColor"/><rect x="10" y="3" width="3" height="9" rx="0.5" fill="currentColor"/><rect x="15" y="0" width="3" height="12" rx="0.5" fill="currentColor"/></svg><svg viewBox="0 0 24 12" width="20" height="10"><rect x="0.5" y="0.5" width="20" height="11" rx="2.5" fill="none" stroke="currentColor"/><rect x="2" y="2" width="15" height="8" rx="1" fill="currentColor"/><rect x="21.5" y="4" width="2" height="4" rx="1" fill="currentColor"/></svg></span></div>
+      <div class="screen-content">
+        <div class="s-top">
+          <div class="brand"><div class="dot"></div><span>RACEON</span></div>
+          <div class="s-icons">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 10a6 6 0 0 1 12 0c0 4 1.5 5.5 1.5 5.5H4.5S6 14 6 10Z"/><path d="M10 19a2 2 0 0 0 4 0"/></svg>
+          </div>
+        </div>
+
+        <p class="eyebrow2">דירוג חי</p>
+        <div class="greet" style="font-size:20px;">דירוג עולמי</div>
+
+        <div class="podium">
+          <div class="p-item" style="margin-top:18px;">
+            <div class="p-ring" style="background:#c0c0c0;"><div class="a" style="width:52px;height:52px;font-size:14px;">מ</div></div>
+            <div class="p-name">מאיה כהן</div>
+            <div class="p-pts" style="color:#c0c0c0;">3,120 נק'</div>
+          </div>
+          <div class="p-item">
+            <div class="p-crown"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.6 6.2 6.7.5-5.1 4.4 1.6 6.5L12 16.8 6.2 19.6l1.6-6.5-5.1-4.4 6.7-.5L12 2z"/></svg></div>
+            <div class="p-ring" style="background:linear-gradient(135deg,#ffd700,#ffb300);"><div class="a" style="width:64px;height:64px;font-size:17px;">א</div></div>
+            <div class="p-name">אלון שדה</div>
+            <div class="p-pts" style="color:#ffd700;">3,450 נק'</div>
+          </div>
+          <div class="p-item" style="margin-top:26px;">
+            <div class="p-ring" style="background:#cd7f32;"><div class="a" style="width:52px;height:52px;font-size:14px;">ד</div></div>
+            <div class="p-name">דנה לוי</div>
+            <div class="p-pts" style="color:#cd7f32;">2,980 נק'</div>
+          </div>
+        </div>
+
+        <div class="you-card">
+          <div class="you-rank">#12</div>
+          <div><div class="you-t">המיקום שלך</div><div class="you-d">610 נק' מאחורי מקום #1 · 140 נק' עד מקום #11</div></div>
+        </div>
+
+        <div class="section-label">דירוג מלא · 248 רצים</div>
+        <div class="runner-row"><div class="r-rank">11</div><div class="r-av"></div><div class="r-name">יובל שגיא</div><div class="r-pts">2,980</div></div>
+        <div class="runner-row" style="border-color:rgba(47,179,122,0.35); background:rgba(47,179,122,0.06);"><div class="r-rank" style="background:rgba(47,179,122,0.18); color:#2FB37A;">12</div><div class="r-av"></div><div class="r-name">הראל בן עזרא · את/ה</div><div class="r-pts">2,840</div></div>
+        <div class="runner-row"><div class="r-rank">13</div><div class="r-av"></div><div class="r-name">נועה פרץ</div><div class="r-pts">2,790</div></div>
+
+        <div class="nav">
+          <div class="nav-item"><div class="cap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9h13v-9"/></svg></div><span class="nl">בית</span></div>
+          <div class="nav-item"><div class="cap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4h8v4a4 4 0 0 1-8 0V4Z"/><path d="M8 5H5a3 3 0 0 0 3 5"/><path d="M16 5h3a3 3 0 0 1-3 5"/><path d="M12 13v3M9 20h6M10 16h4v4h-4z"/></svg></div><span class="nl">מירוצים</span></div>
+          <div class="nav-item on"><div class="cap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V13M11 20V8M18 20v-6"/></svg></div><span class="nl">דירוג</span></div>
+          <div class="nav-item"><div class="cap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.4"/><path d="M5 20c1.2-4 4-6 7-6s5.8 2 7 6"/></svg></div><span class="nl">פרופיל</span></div>
+        </div>
+      </div>
+    </div></div>
+  </div>
+
+</div>
+
+<div class="section-title">לפני / אחרי — אותו כרטיס נתונים</div>
+<div class="compare">
+  <div class="compare-col">
+    <div class="compare-tag before">היום</div>
+    <div class="mini-card before">
+      <div style="font-family:'Space Grotesk','Heebo',monospace; font-size:11px; color:#00ff87; letter-spacing:1px;">RACEON SEASON 04</div>
+      <div style="font-weight:800; font-size:20px; margin-top:6px;">שלום, הראל</div>
+      <div class="mini-badges">
+        <div class="mini-badge" style="background:rgba(255,215,0,0.18); color:#ffd700;">GOLD TIER</div>
+        <div class="mini-badge" style="background:rgba(0,255,135,0.18); color:#00ff87;">STREAK 6</div>
+        <div class="mini-badge" style="background:rgba(70,250,157,0.18); color:#46fa9d;">ELO 1420</div>
+        <div class="mini-badge" style="background:rgba(255,255,255,0.1); color:#fff;">RANK #12</div>
+      </div>
+      <p style="font-size:11.5px; color:#8a9187; margin-top:10px;">רקע שטוח, ארבעה תגים צבעוניים מתחרים על תשומת הלב, בלי עומק.</p>
+    </div>
+  </div>
+  <div class="compare-col">
+    <div class="compare-tag after">כיוון חדש</div>
+    <div class="mini-card" style="position:relative; overflow:hidden;">
+      <div style="position:absolute; inset:0; background:radial-gradient(80% 100% at 0% 0%, rgba(47,179,122,0.22), transparent 60%);"></div>
+      <div style="position:relative;">
+        <div style="font-family:'Space Grotesk','Heebo',monospace; font-size:11px; color:#2FB37A; letter-spacing:1.2px;">עונה 04 · דרגת זהב</div>
+        <div style="font-weight:800; font-size:20px; margin-top:6px;">שלום, הראל</div>
+        <div class="stat-row" style="margin-top:12px; padding-top:12px;">
+          <div class="stat"><div class="l">רצף</div><div class="v">6</div></div>
+          <div class="stat mid"><div class="l">ELO</div><div class="v">1,420</div></div>
+          <div class="stat"><div class="l">דירוג</div><div class="v">#12</div></div>
+        </div>
+      </div>
+      <p style="font-size:11.5px; color:#8a9187; margin-top:10px; position:relative;">גרדיאנט אמביינטי יחיד, מספר עדיפויות אחד (הדרגה בכותרת העילית), נתונים בשורת סטטיסטיקה שקטה.</p>
+    </div>
+  </div>
+</div>
+
+<div class="section-title">אותה מערכת — עיצוב באנגלית</div>
+<p class="grad-note">
+  לגבי הפונט באנגלית — לפי בקשתך, במסכים האלה זה עכשיו <strong>Inter</strong> ממש, אותו פונט שסטראבה עצמה משתמשת
+  בו בממשק האמיתי שלה (לא Heebo). ל-Inter אין תמיכה בעברית בכלל, אז מסכי העברית ממשיכים על Heebo — אבל כל טקסט
+  אנגלי טהור, כמו כאן, מקבל את הפונט המדויק. שימו לב גם: כל אייקוני הניווט וההדר עברו מסמלי אמוג'י לאייקוני
+  קו אמיתיים בלי שום רקע/קפסולה — בדיוק כמו סטראבה: קו ניטרלי כשלא פעיל, ומילוי עדין באותו צבע כשכן פעיל. אין
+  יותר גרדיאנט דו-גוני בשום מקום, וגם הרקע האמביינטי חלש הרבה יותר — צבע אחד שקט, לא זוהר.
+</p>
+<div class="phones-wrap">
+
+  <div class="phone-block">
+    <div class="phone-caption">Home</div>
+    <div class="phone"><div class="screen en-screen">
+      <div class="aurora"></div>
+      <div class="status-bar"><span>9:41</span><span class="icons"><svg viewBox="0 0 18 12" width="14" height="10"><rect x="0" y="7" width="3" height="5" rx="0.5" fill="currentColor"/><rect x="5" y="5" width="3" height="7" rx="0.5" fill="currentColor"/><rect x="10" y="3" width="3" height="9" rx="0.5" fill="currentColor"/><rect x="15" y="0" width="3" height="12" rx="0.5" fill="currentColor"/></svg><svg viewBox="0 0 24 12" width="20" height="10"><rect x="0.5" y="0.5" width="20" height="11" rx="2.5" fill="none" stroke="currentColor"/><rect x="2" y="2" width="15" height="8" rx="1" fill="currentColor"/><rect x="21.5" y="4" width="2" height="4" rx="1" fill="currentColor"/></svg></span></div>
+      <div class="screen-content">
+        <div class="s-top">
+          <div class="brand"><div class="dot"></div><span>RACEON</span></div>
+          <div class="s-icons">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 10a6 6 0 0 1 12 0c0 4 1.5 5.5 1.5 5.5H4.5S6 14 6 10Z"/><path d="M10 19a2 2 0 0 0 4 0"/></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z"/></svg>
+          </div>
+        </div>
+
+        <div class="greet">Welcome, Harel</div>
+        <div class="sub">Season 04 · Your next race is Oct 2</div>
+
+        <div class="glass-card hero-card">
+          <div class="avatar-ring"><div class="a">H</div></div>
+          <div>
+            <div class="hero-name">Harel Ben Ezra</div>
+            <div class="hero-tier">Gold Tier</div>
+          </div>
+        </div>
+
+        <div class="glass-card" style="margin-top:12px;">
+          <div class="stat-row" style="margin-top:0; padding-top:0; border-top:none;">
+            <div class="stat"><div class="l">Rank</div><div class="v">#12</div></div>
+            <div class="stat mid"><div class="l">Points</div><div class="v">2,840</div></div>
+            <div class="stat"><div class="l">To Platinum</div><div class="v">360</div></div>
+          </div>
+        </div>
+
+        <div class="cta-strip">
+          <div><div class="t">Live · Tel Aviv 10K</div><div class="d">Window closes in 01:44:12</div></div>
+          <div class="go-badge">›</div>
+        </div>
+
+        <div class="section-label">Upcoming Races</div>
+        <div class="race-row"><div class="race-thumb"></div><div><div class="rt">Jerusalem Half Marathon</div><div class="rm">Oct 12 · 21 km</div></div><div class="rp">Free</div></div>
+        <div class="race-row"><div class="race-thumb"></div><div><div class="rt">Haifa Night Run</div><div class="rm">Oct 19 · 5 km</div></div><div class="rp">$8</div></div>
+
+        <div class="nav">
+          <div class="nav-item on"><div class="cap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9h13v-9"/></svg></div><span class="nl">Home</span></div>
+          <div class="nav-item"><div class="cap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4h8v4a4 4 0 0 1-8 0V4Z"/><path d="M8 5H5a3 3 0 0 0 3 5"/><path d="M16 5h3a3 3 0 0 1-3 5"/><path d="M12 13v3M9 20h6M10 16h4v4h-4z"/></svg></div><span class="nl">Races</span></div>
+          <div class="nav-item"><div class="cap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V13M11 20V8M18 20v-6"/></svg></div><span class="nl">Rankings</span></div>
+          <div class="nav-item"><div class="cap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.4"/><path d="M5 20c1.2-4 4-6 7-6s5.8 2 7 6"/></svg></div><span class="nl">Profile</span></div>
+        </div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="phone-block">
+    <div class="phone-caption">World Rankings</div>
+    <div class="phone"><div class="screen en-screen">
+      <div class="aurora"></div>
+      <div class="status-bar"><span>9:41</span><span class="icons"><svg viewBox="0 0 18 12" width="14" height="10"><rect x="0" y="7" width="3" height="5" rx="0.5" fill="currentColor"/><rect x="5" y="5" width="3" height="7" rx="0.5" fill="currentColor"/><rect x="10" y="3" width="3" height="9" rx="0.5" fill="currentColor"/><rect x="15" y="0" width="3" height="12" rx="0.5" fill="currentColor"/></svg><svg viewBox="0 0 24 12" width="20" height="10"><rect x="0.5" y="0.5" width="20" height="11" rx="2.5" fill="none" stroke="currentColor"/><rect x="2" y="2" width="15" height="8" rx="1" fill="currentColor"/><rect x="21.5" y="4" width="2" height="4" rx="1" fill="currentColor"/></svg></span></div>
+      <div class="screen-content">
+        <div class="s-top">
+          <div class="brand"><div class="dot"></div><span>RACEON</span></div>
+          <div class="s-icons">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 10a6 6 0 0 1 12 0c0 4 1.5 5.5 1.5 5.5H4.5S6 14 6 10Z"/><path d="M10 19a2 2 0 0 0 4 0"/></svg>
+          </div>
+        </div>
+
+        <p class="eyebrow2">Live Standings</p>
+        <div class="greet" style="font-size:20px;">World Rankings</div>
+
+        <div class="podium">
+          <div class="p-item" style="margin-top:18px;">
+            <div class="p-ring" style="background:#c0c0c0;"><div class="a" style="width:52px;height:52px;font-size:14px;">M</div></div>
+            <div class="p-name">Maya Cohen</div>
+            <div class="p-pts" style="color:#c0c0c0;">3,120 pts</div>
+          </div>
+          <div class="p-item">
+            <div class="p-crown"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.6 6.2 6.7.5-5.1 4.4 1.6 6.5L12 16.8 6.2 19.6l1.6-6.5-5.1-4.4 6.7-.5L12 2z"/></svg></div>
+            <div class="p-ring" style="background:linear-gradient(135deg,#ffd700,#ffb300);"><div class="a" style="width:64px;height:64px;font-size:17px;">A</div></div>
+            <div class="p-name">Alon Sadeh</div>
+            <div class="p-pts" style="color:#ffd700;">3,450 pts</div>
+          </div>
+          <div class="p-item" style="margin-top:26px;">
+            <div class="p-ring" style="background:#cd7f32;"><div class="a" style="width:52px;height:52px;font-size:14px;">D</div></div>
+            <div class="p-name">Dana Levy</div>
+            <div class="p-pts" style="color:#cd7f32;">2,980 pts</div>
+          </div>
+        </div>
+
+        <div class="you-card">
+          <div class="you-rank">#12</div>
+          <div><div class="you-t">Your Position</div><div class="you-d">610 pts behind #1 · 140 pts to #11</div></div>
+        </div>
+
+        <div class="section-label">Full Standings · 248 runners</div>
+        <div class="runner-row"><div class="r-rank">11</div><div class="r-av"></div><div class="r-name">Yuval Sagi</div><div class="r-pts">2,980</div></div>
+        <div class="runner-row" style="border-color:rgba(47,179,122,0.35); background:rgba(47,179,122,0.06);"><div class="r-rank" style="background:rgba(47,179,122,0.18); color:#2FB37A;">12</div><div class="r-av"></div><div class="r-name">Harel Ben Ezra · You</div><div class="r-pts">2,840</div></div>
+        <div class="runner-row"><div class="r-rank">13</div><div class="r-av"></div><div class="r-name">Noa Peretz</div><div class="r-pts">2,790</div></div>
+
+        <div class="nav">
+          <div class="nav-item"><div class="cap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9h13v-9"/></svg></div><span class="nl">Home</span></div>
+          <div class="nav-item"><div class="cap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4h8v4a4 4 0 0 1-8 0V4Z"/><path d="M8 5H5a3 3 0 0 0 3 5"/><path d="M16 5h3a3 3 0 0 1-3 5"/><path d="M12 13v3M9 20h6M10 16h4v4h-4z"/></svg></div><span class="nl">Races</span></div>
+          <div class="nav-item on"><div class="cap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V13M11 20V8M18 20v-6"/></svg></div><span class="nl">Rankings</span></div>
+          <div class="nav-item"><div class="cap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.4"/><path d="M5 20c1.2-4 4-6 7-6s5.8 2 7 6"/></svg></div><span class="nl">Profile</span></div>
+        </div>
+      </div>
+    </div></div>
+  </div>
+
+</div>
+
+<div class="section-title">מערכת אייקונים — פחות צבע, יותר עיצוב</div>
+<p class="grad-note">
+  זו הייתה הבעיה האמיתית מאחורי "נראה רגיל": כל אייקון צבוע בצבע אחר לפי מצב (ירוק לפעיל, אפור לכבוי, זהב/כסף/ארד
+  למדליות, כתום לסטראבה, אדום לשגיאה) — זה בדיוק ה"תגים המתחרים" שדיברתי עליהם, רק ברמת האייקונים. בסטראבה,
+  בנייק, ב-Whoop — האייקון עצמו כמעט תמיד <strong>ניטרלי לגמרי</strong> (שחור/לבן/אפור). כל המשמעות (מצב, עדיפות)
+  עוברת ל<strong>מיכל</strong> מאחורי האייקון, לא לצבע של הקו עצמו. זה גם עקרון נגישות: המשמעות לא תלויה בזיהוי גוון.
+</p>
+<div class="icon-compare">
+  <div class="icon-panel">
+    <div class="icon-panel-tag before">היום — אייקון = צבע המצב</div>
+    <div class="icon-nav-row">
+      <div class="icon-item">
+        <svg class="icon-old on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9h13v-9"/></svg>
+        <span class="lbl">בית</span>
+      </div>
+      <div class="icon-item">
+        <svg class="icon-old off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4h8v4a4 4 0 0 1-8 0V4Z"/><path d="M8 5H5a3 3 0 0 0 3 5"/><path d="M16 5h3a3 3 0 0 1-3 5"/><path d="M12 13v3M9 20h6M10 16h4v4h-4z"/></svg>
+        <span class="lbl">מירוצים</span>
+      </div>
+      <div class="icon-item">
+        <svg class="icon-old off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V13M11 20V8M18 20v-6"/></svg>
+        <span class="lbl">דירוג</span>
+      </div>
+      <div class="icon-item">
+        <svg class="icon-old off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.4"/><path d="M5 20c1.2-4 4-6 7-6s5.8 2 7 6"/></svg>
+        <span class="lbl">פרופיל</span>
+      </div>
+    </div>
+  </div>
+  <div class="icon-panel">
+    <div class="icon-panel-tag after">חדש — קו ניטרלי, מילוי עדין רק כשפעיל</div>
+    <div class="icon-nav-row">
+      <div class="icon-item">
+        <div class="icon-cap on"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9h13v-9"/></svg></div>
+        <span class="lbl">בית</span>
+      </div>
+      <div class="icon-item">
+        <div class="icon-cap off"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4h8v4a4 4 0 0 1-8 0V4Z"/><path d="M8 5H5a3 3 0 0 0 3 5"/><path d="M16 5h3a3 3 0 0 1-3 5"/><path d="M12 13v3M9 20h6M10 16h4v4h-4z"/></svg></div>
+        <span class="lbl">מירוצים</span>
+      </div>
+      <div class="icon-item">
+        <div class="icon-cap off"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V13M11 20V8M18 20v-6"/></svg></div>
+        <span class="lbl">דירוג</span>
+      </div>
+      <div class="icon-item">
+        <div class="icon-cap off"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.4"/><path d="M5 20c1.2-4 4-6 7-6s5.8 2 7 6"/></svg></div>
+        <span class="lbl">פרופיל</span>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="icon-rule">
+  <strong>הכלל, אחרי התיקון:</strong> בלי קפסולה, בלי מיכל, בלי גרדיאנט על האייקון בכלל — בדיוק כמו האייקונים
+  האמיתיים של סטראבה. קו האייקון תמיד <code>currentColor</code> ניטרלי (אפור) כשלא פעיל. כשהוא כן פעיל, שני שינויים
+  שטוחים בלבד: הקו עצמו עובר לצבע האקסנט האחד (#2FB37A/#049966), ומתווסף לו מילוי עדין (18% שקיפות) של אותו צבע
+  בדיוק — לא צבע שני, לא זוהר, לא רקע. מדליות (זהב/כסף/ארד) נשארות היוצא מהכלל המכוון: קוד צבע מוסכם בעולם
+  התחרות, לא "עוד צבע מקרי", ולכן תמיד מלוות בטקסט (#1/#2/#3) ולא רק בצבע.
+</div>
+
+<div class="section-title">הרגע החתום — אנימציה אחת שזוכרים</div>
+<p class="grad-note">
+  העיקרון: לא אנימציה בכל מקום — רגע אחד מכוון שמרגישים חזק יותר מהמון אפקטים מפוזרים. לריצה, הרגע הטבעי הוא
+  סיום מירוץ / שיא אישי / עלייה בדרגה. האנימציה כבויה אוטומטית למי שהגדיר "הפחת תנועה" במכשיר (prefers-reduced-motion).
+</p>
+<div class="moment-wrap">
+  <div class="moment-stage">
+    <div class="moment-glow"></div>
+    <div class="moment-ring"></div>
+    <div class="moment-particle" style="left:32%; background:#2FB37A; animation-delay:0.1s;"></div>
+    <div class="moment-particle" style="left:50%; background:#2FB37A; animation-delay:0.4s;"></div>
+    <div class="moment-particle" style="left:66%; background:#2FB37A; animation-delay:0.7s;"></div>
+    <div class="moment-badge"><svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#04150d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4h8v4a4 4 0 0 1-8 0V4Z"/><path d="M8 5H5a3 3 0 0 0 3 5"/><path d="M16 5h3a3 3 0 0 1-3 5"/><path d="M12 13v3M9 20h6M10 16h4v4h-4z"/></svg></div>
+    <div class="moment-title">שיא אישי חדש!</div>
+    <div class="moment-sub">10 ק"מ · 42:18 · שיפור של 1:04</div>
+  </div>
+</div>
+<p class="moment-note">
+  טבעת הלם (shockwave) מתרחבת מהמדליה, שלוש נקודות אור באותו צבע אחד צפות למעלה, וסימן ההישג "קופץ" פנימה עם spring
+  easing — כולן לולאה בת 2.6 שניות שרצה פעם אחת בפועל באפליקציה (לא בלולאה אינסופית כמו כאן, זה רק כדי שתראה את
+  התנועה בלי לרענן את הדף). ב-React Native זה נבנה עם <code>react-native-reanimated</code> בלבד (כבר מותקן בפרויקט —
+  אותה ספרייה שמפעילה את מתג הדארק/לייט מוד) — אין גרדיאנט בבניית הרגע הזה, רק מילוי שטוח וצבע אחד.
+</p>
+
+<div class="section-title">טיפוגרפיה — פונט אחד שעובד בעברית ובאנגלית</div>
+<p class="grad-note">
+  מצאתי משהו ממשי: הפונט שסטראבה בפועל משתמשת בו בממשק שלה (לא במיתוג/שיווק) הוא <strong>Inter</strong> — לא פונט
+  ראוותני, פונט גרוטסקי ניטרלי ברור וקריא ככל האפשר. זו בדיוק ההוכחה שרצינות בטיפוגרפיה של אפליקציית ריצה לא באה
+  מפונט "מיוחד", אלא מניטרליות וקריאות מושלמת. הבעיה: ל-Inter (וגם ל-Plus Jakarta Sans שהשתמשנו בו עד היום) <strong>אין
+  בכלל גופנים לעברית</strong> — כשטקסט עברי נתקל בפונט כזה, המכשיר בוחר פונט מערכת אקראי במקום, וזה בדיוק מה שקורה
+  היום באפליקציה.
+</p>
+<p class="grad-note">
+  הבחירה למסכים דו-לשוניים/עבריים: <strong>Heebo</strong> — פונט שנבנה במפורש כ"בן הזוג העברי" של Roboto (הפונט
+  הניטרלי המקביל ל-Inter בעולם האנדרואיד/גוגל). יש לו 9 משקלים (100–900) — מספיק כדי לכסות כותרות ענקיות ועד
+  תוויות קטנות באותה משפחה בדיוק.
+</p>
+<p class="grad-note">
+  <strong>עדכון לפי בקשה מפורשת:</strong> במסכים שהם אנגלית טהורה (כמו הגרסה האנגלית של המסכים כאן) — משתמשים
+  עכשיו ב-<strong>Inter עצמו</strong>, לא בגרסה הלטינית של Heebo. Inter לא תומך בעברית בכלל, אז זה עובד רק כשאין
+  בכלל טקסט עברי על המסך; ברגע שיש עברית (אפילו מילה אחת), חייבים לחזור ל-Heebo כדי שהיא לא תיפול לפונט מקרי.
+</p>
+
+<div class="type-compare">
+  <div class="type-col">
+    <div class="type-tag before">היום — Plus Jakarta Sans / Space Grotesk</div>
+    <div class="type-sample-he" style="font-family:'Plus Jakarta Sans',sans-serif;">שלום, הראל</div>
+    <div class="type-sample-en" style="font-family:'Plus Jakarta Sans',sans-serif; text-transform:none; letter-spacing:0;">RACEON · Welcome back</div>
+    <div class="type-fallback-warn">הטקסט העברי לא באמת מוצג ב-Plus Jakarta Sans — לפונט הזה אין גופנים עבריים בכלל,
+    אז הדפדפן/המכשיר בוחר פונט מערכת חלופי בלי שליטה על המשקל או האופי.</div>
+  </div>
+  <div class="type-col">
+    <div class="type-tag after">חדש — Heebo (עברית+אנגלית, אותה משפחה)</div>
+    <div class="type-sample-he" style="font-family:'Heebo',sans-serif;">שלום, הראל</div>
+    <div class="type-sample-en" style="font-family:'Heebo',sans-serif; text-transform:none; letter-spacing:0; font-weight:700;">RACEON · Welcome back</div>
+    <div class="type-label-row">
+      <span class="lbl" style="font-family:'Heebo',sans-serif; font-weight:800; letter-spacing:1px;">דרגת זהב</span>
+      <span class="lbl" style="font-family:'Space Grotesk','Heebo',monospace; font-weight:700; color:#2FB37A;">2,840 נק'</span>
+    </div>
+  </div>
+</div>
+
+<div class="type-roles">
+  <div class="type-role-card">
+    <div class="rk">כותרות + גוף הטקסט</div>
+    <div class="rs" style="font-family:'Heebo',sans-serif; font-weight:800;">Heebo</div>
+    <div class="rd">כל טקסט עברי ואנגלי בממשק — כותרות, תוויות, כפתורים, גוף טקסט. משקל 700–800 לכותרות, 400–500 לגוף.</div>
+  </div>
+  <div class="type-role-card">
+    <div class="rk">מספרי טלמטריה בלבד</div>
+    <div class="rs" style="font-family:'Space Grotesk','Heebo',monospace; font-weight:700;">Space Grotesk</div>
+    <div class="rd">קצב, זמן, מרחק, נקודות — כשזה באמת רק ספרות (0–9, נקודתיים). ספרות לא צריכות גופן עברי, אז אין בעיה להשאיר את האופי הטכני הזה.</div>
+  </div>
+  <div class="type-role-card">
+    <div class="rk">תוויות קטנות (ק"מ, נק', עדיין)</div>
+    <div class="rs" style="font-family:'Heebo',sans-serif; font-weight:800; letter-spacing:0.5px;">Heebo · 800</div>
+    <div class="rd">היום זה גם היה Space Grotesk (בלי כיסוי עברי) — עכשיו עובר ל-Heebo במשקל כבד + ריווח אותיות, כדי לשמור על התחושה ה"טכנית" בלי נפילה לפונט מקרי.</div>
+  </div>
+</div>
+
+<footer>
+  <p>
+    <strong>למה זה "יותר רציני" בלי לזרוק את הזהות הקיימת:</strong> לא שיניתי את הצבע המרכזי (ירוק) ולא הוספתי עוד צבעים — רק
+    עומק (גרדיאנט אמביינטי אחד למסך), משמעת טיפוגרפית (מונו-פונט רק למספרים אמיתיים, לא לכל תווית), וריסון בתגים
+    (עדיפות אחת ברורה במקום ארבע שמתחרות). זה בדיוק מה ש-Whoop ו-Nike Run Club עושים כדי להיראות יקרים בלי
+    להיות עמוסים.
+  </p>
+</footer>

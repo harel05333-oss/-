@@ -1,0 +1,264 @@
+<!-- Race Details (Terra Style) -->
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Neo-Tokyo 10K - RACEON</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Literata:ital,wght@0,400;0,700;0,900;1,400&amp;family=Nunito+Sans:wght@300;400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary-fixed-dim": "#d4ccbf",
+                    "on-primary-container": "#d8f0de",
+                    "error": "#b83230",
+                    "inverse-on-surface": "#f5f0e8",
+                    "surface-container-highest": "#e4e0d8",
+                    "on-tertiary": "#ffffff",
+                    "on-tertiary-fixed": "#221a05",
+                    "surface-container-low": "#f5f1ea",
+                    "on-surface": "#2e3230",
+                    "secondary-fixed": "#f0e8db",
+                    "secondary": "#6b6358",
+                    "on-background": "#2e3230",
+                    "surface-dim": "#dbd7cf",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-container-high": "#eae6de",
+                    "inverse-surface": "#2e3230",
+                    "on-secondary": "#ffffff",
+                    "on-error": "#ffffff",
+                    "tertiary-fixed-dim": "#dcc48e",
+                    "background": "#faf6f0",
+                    "tertiary-fixed": "#f8e0a8",
+                    "primary-container": "#78a886",
+                    "tertiary-container": "#c4a66a",
+                    "primary-fixed": "#c8e8d0",
+                    "primary": "#4a7c59",
+                    "outline-variant": "#c4c8bc",
+                    "on-primary": "#ffffff",
+                    "surface-bright": "#faf6f0",
+                    "surface-tint": "#4a7c59",
+                    "primary-fixed-dim": "#8ecf9e",
+                    "on-error-container": "#690005",
+                    "secondary-container": "#f0e8db",
+                    "on-tertiary-container": "#554020",
+                    "outline": "#74796e",
+                    "surface-variant": "#e4e0d8",
+                    "on-secondary-fixed": "#1e1a13",
+                    "on-secondary-fixed-variant": "#4a4538",
+                    "on-primary-fixed": "#002110",
+                    "surface": "#faf6f0",
+                    "on-surface-variant": "#4a4e4a",
+                    "tertiary": "#705c30",
+                    "on-tertiary-fixed-variant": "#554020",
+                    "error-container": "#ffdad8",
+                    "inverse-primary": "#8ecf9e",
+                    "on-secondary-container": "#5e5548",
+                    "on-primary-fixed-variant": "#2a6038",
+                    "surface-container": "#f0ece4"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.5rem",
+                    "lg": "1rem",
+                    "xl": "1.5rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Literata"],
+                    "display": ["Literata"],
+                    "body": ["Nunito Sans"],
+                    "label": ["Nunito Sans"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Nunito Sans', sans-serif; }
+        h1, h2, h3 { font-family: 'Literata', serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .terra-card {
+            background-color: #f0ece4;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .terra-card:hover {
+            box-shadow: 0 4px 20px rgba(46, 50, 48, 0.06);
+            transform: translateY(-2px);
+        }
+        /* Custom scrollbar for organic feel */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #faf6f0; }
+        ::-webkit-scrollbar-thumb { background: #d4ccbf; border-radius: 10px; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen pb-24">
+<!-- TopAppBar Section -->
+<nav class="w-full top-0 sticky bg-background z-50">
+<div class="flex items-center justify-between px-6 py-4 w-full">
+<div class="flex items-center gap-3">
+<button class="active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-primary text-2xl">arrow_back</span>
+</button>
+<span class="font-headline text-2xl font-black text-primary tracking-tight">RACEON</span>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant hover:opacity-80 transition-opacity cursor-pointer">settings</span>
+<div class="w-10 h-10 rounded-full border-2 border-primary-container overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A warm, professional profile portrait of a modern athlete in a natural setting. The person has a friendly expression and is wearing high-quality forest green running gear. The lighting is soft and golden, characteristic of a late afternoon sun, casting long shadows. The overall aesthetic is grounded, earthy, and human, following the Terra design system's organic warmth." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAHkizDPxuxOi89Y4N53KWZmwUu9uFJb0n5xdxzidOPKPTOKj4lD5jKGhs_gQZoDGY3LZTMzkui0YE_4XcSO8huJN_3_VAzChGNGHymH5Ii6ZMepFIIPW4K6jO23xSy4PmuzzwpVrn0u37OLSHKpuSnJGOtKu6nhXcEnSBhaAeJpoteIcRSQVWgBKvMIwWexSVtcv3ZV7DhquAj5MxuMpX6HZ8zAoS5Q_nJJOxri9U1BxuC_0viiEHwAR_14ylfzfb_T5oQEL-7rvz_"/>
+</div>
+</div>
+</div>
+</nav>
+<main class="max-w-3xl mx-auto px-6 py-4 space-y-8">
+<!-- Hero Section -->
+<header class="space-y-4">
+<div class="inline-flex items-center px-3 py-1 rounded-full bg-tertiary-fixed text-on-tertiary-fixed text-xs font-semibold tracking-wide uppercase">
+                Premium Event
+            </div>
+<h1 class="text-4xl md:text-5xl font-black text-on-surface leading-tight">Neo-Tokyo 10K</h1>
+<div class="flex flex-wrap gap-6 items-center text-on-surface-variant">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">calendar_today</span>
+<span class="font-label">Oct 24, 2024</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">schedule</span>
+<span class="font-label">06:00 AM JST</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">location_on</span>
+<span class="font-label">Shibuya Crossing Start</span>
+</div>
+</div>
+</header>
+<!-- Map Section (Bento Style) -->
+<section class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<div class="md:col-span-2 relative rounded-xl overflow-hidden aspect-video md:aspect-auto h-64 md:h-80 shadow-sm">
+<div class="absolute inset-0 bg-surface-container-high" data-location="Tokyo, Japan" style="">
+<img class="w-full h-full object-cover grayscale-[20%] opacity-90" data-alt="A highly detailed topographic race map of Tokyo's Shibuya and Shinjuku districts, rendered in a warm, organic cartographic style. The race route is highlighted with a bold forest green line. The map features earthy tones, soft cream backgrounds, and subtle green accents for parks. Minimalist icons mark water stations and the finish line, maintaining a clean, grounded aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDWjiXB9vL5s4u89g11Ix8792dcbMTnhOOY51rmEqCLImdJ7Y2v1_2Dw6-pmtHH-PGc_U0sJaPaxrfziq5PqLSRnc9BeB4rWcD-D5D9L3rmFfFdZL3QySeOhmuCuN7XlKgjV9BL0i9JCCjXb2fYd4RKY2tpPe-OfU8WtP0L-WrpuKSb-QNbDfkLW2LASyU3iTKojBm9hVaoKPamJgywkGEuTW5EmFTAw8t6OJ6IpwcjHLk9zQYyaEJI5XwEk1yXKL5-RbnZODfo3nMw"/>
+</div>
+<div class="absolute bottom-4 left-4 bg-white/90 backdrop-blur-md px-4 py-2 rounded-lg border border-outline-variant/30">
+<p class="text-xs font-bold text-primary uppercase">Route Length</p>
+<p class="text-lg font-black text-on-surface">10,000 Meters</p>
+</div>
+</div>
+<div class="terra-card p-6 rounded-xl flex flex-col justify-center space-y-4">
+<div class="w-12 h-12 rounded-full bg-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary-container">terrain</span>
+</div>
+<div>
+<h3 class="text-xl font-bold text-on-surface">Elevation</h3>
+<p class="text-on-surface-variant leading-relaxed">A challenging urban climb through the heart of Shinjuku with a +120m gain.</p>
+</div>
+</div>
+</section>
+<!-- Prize Pool & Protocol (Asymmetric Grid) -->
+<section class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div class="space-y-6">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-tertiary text-3xl">workspace_premium</span>
+<h2 class="text-2xl font-bold">Prize Pool Breakdown</h2>
+</div>
+<div class="space-y-3">
+<div class="flex items-center justify-between p-4 bg-white rounded-xl border border-outline-variant/20">
+<div class="flex items-center gap-3">
+<span class="w-8 h-8 flex items-center justify-center rounded-full bg-tertiary-fixed font-black text-on-tertiary-fixed">1</span>
+<span class="font-semibold">Grand Champion</span>
+</div>
+<span class="font-headline font-bold text-primary">$15,000</span>
+</div>
+<div class="flex items-center justify-between p-4 bg-white rounded-xl border border-outline-variant/20">
+<div class="flex items-center gap-3">
+<span class="w-8 h-8 flex items-center justify-center rounded-full bg-secondary-fixed font-black text-on-secondary-fixed">2</span>
+<span class="font-semibold">Runner Up</span>
+</div>
+<span class="font-headline font-bold text-primary">$7,500</span>
+</div>
+<div class="flex items-center justify-between p-4 bg-white rounded-xl border border-outline-variant/20">
+<div class="flex items-center gap-3">
+<span class="w-8 h-8 flex items-center justify-center rounded-full bg-surface-container-highest font-black text-on-surface">3</span>
+<span class="font-semibold">Third Place</span>
+</div>
+<span class="font-headline font-bold text-primary">$2,500</span>
+</div>
+</div>
+</div>
+<div class="terra-card p-8 rounded-xl space-y-4">
+<h2 class="text-2xl font-bold">Race Protocol</h2>
+<div class="space-y-4 text-on-surface-variant text-sm leading-relaxed">
+<p>All participants must check in at the Shibuya staging area at least 45 minutes prior to the start gun.</p>
+<ul class="space-y-2">
+<li class="flex gap-2">
+<span class="text-primary font-bold">•</span>
+<span>Mandatory biometric chip synchronization.</span>
+</li>
+<li class="flex gap-2">
+<span class="text-primary font-bold">•</span>
+<span>Standard gear check (Eco-compliant hydration only).</span>
+</li>
+<li class="flex gap-2">
+<span class="text-primary font-bold">•</span>
+<span>Strict 120-minute course completion window.</span>
+</li>
+</ul>
+<p class="pt-2 italic">Referees will be stationed every 2km to monitor compliance with international athletic standards.</p>
+</div>
+</div>
+</section>
+<!-- Atmosphere Image Card -->
+<section class="w-full h-48 rounded-xl overflow-hidden relative group cursor-pointer shadow-sm">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="A breathtaking, cinematic shot of several diverse runners at the start line in Tokyo at sunrise. The skyscrapers of Shibuya are softly blurred in the background. The lighting is warm, golden, and atmospheric, emphasizing the 'Rooted Warmth' of the Terra design system. Runners are captured in a moment of calm focus, wearing high-performance athletic wear in forest greens and warm ambers." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJXhQ8s2RgRMeBubMqGTBnnQz0-outRAt1Kg6bY0B4TX-48-TwyZ1KNfiJ6oax8UZoOTlTcjTcWZEmpVz5KF_lFVRd-FoqUDF3E64aP2rlbNqSHhQMAOoQ5e1T6V50ngMyNube2147Y6Oli2Xf6GJe32yzH4JB2H0d_PbFKANzwCuRm7TekTKFeVJ8wO9vGIym0gv1g57ghpgpY2oKrGwLjfaSqpcLS4IHHc8baHkaTC0XIlM5loUs980EK_0fSqo9Fix9i3ChBwxi"/>
+<div class="absolute inset-0 bg-gradient-to-t from-on-surface/60 to-transparent flex items-end p-6">
+<p class="text-white font-headline text-xl italic font-medium">"Join the heart of the city's pulse."</p>
+</div>
+</section>
+</main>
+<!-- Fixed Bottom Action Bar -->
+<div class="fixed bottom-0 left-0 w-full bg-white/80 backdrop-blur-xl border-t border-outline-variant/20 px-6 py-6 z-[60]">
+<div class="max-w-3xl mx-auto flex items-center justify-between">
+<div class="hidden md:block">
+<p class="text-xs text-on-surface-variant font-bold uppercase tracking-widest">Entry Fee</p>
+<p class="text-2xl font-black text-on-surface">$45.00 <span class="text-sm font-normal text-on-surface-variant">/ Athlete</span></p>
+</div>
+<button class="w-full md:w-auto bg-primary text-white px-12 py-4 rounded-xl font-bold text-lg hover:opacity-90 active:scale-95 transition-all shadow-lg flex items-center justify-center gap-3">
+                Register Now
+                <span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- Navigation Shell Placeholder (Suppressed for transactional focus but following layout logic if needed) -->
+<!-- Not rendered as per 'Linear/Transactional' suppression rule for Registration/Details focused flow -->
+<script>
+        // Micro-interaction for the prize items
+        document.querySelectorAll('.flex.items-center.justify-between.p-4').forEach(item => {
+            item.addEventListener('mouseenter', () => {
+                item.style.borderColor = '#4a7c59';
+            });
+            item.addEventListener('mouseleave', () => {
+                item.style.borderColor = 'rgba(196, 200, 188, 0.2)';
+            });
+        });
+
+        // Simple parallax effect on scroll for hero images if they were bigger
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const hero = document.querySelector('header');
+            if (hero) {
+                hero.style.transform = `translateY(${scrolled * 0.1}px)`;
+            }
+        });
+    </script>
+</body></html>

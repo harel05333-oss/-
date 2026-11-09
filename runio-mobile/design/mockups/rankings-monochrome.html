@@ -1,0 +1,339 @@
+<!-- Rankings (Monochrome) -->
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RACEON | Rankings</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            font-family: 'Rubik', sans-serif;
+            background-color: #000000;
+            color: #ffffff;
+            margin: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        /* Custom scrollbar for mechanical feel */
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #000000;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #444748;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #ffffff;
+        }
+        .podium-mask {
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 0 85%);
+        }
+        .rank-card-hover:hover {
+            background-color: #ffffff !important;
+            color: #000000 !important;
+        }
+        .rank-card-hover:hover .rank-number {
+            color: #000000 !important;
+        }
+        .rank-card-hover:hover .points {
+            color: #000000 !important;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-variant": "#353535",
+                      "primary-fixed": "#e2e2e2",
+                      "tertiary-fixed": "#e4e2e2",
+                      "surface-container-lowest": "#0e0e0e",
+                      "secondary-container": "#4a4949",
+                      "primary-fixed-dim": "#c6c6c7",
+                      "on-primary-fixed": "#1a1c1c",
+                      "surface-container": "#1f1f1f",
+                      "secondary-fixed-dim": "#c9c6c5",
+                      "outline": "#8e9192",
+                      "tertiary-container": "#e4e2e2",
+                      "primary-container": "#e2e2e2",
+                      "primary": "#ffffff",
+                      "error": "#ffb4ab",
+                      "outline-variant": "#444748",
+                      "surface-bright": "#393939",
+                      "on-tertiary-container": "#646464",
+                      "surface-container-highest": "#353535",
+                      "secondary-fixed": "#e5e2e1",
+                      "error-container": "#93000a",
+                      "secondary": "#c9c6c5",
+                      "inverse-on-surface": "#303030",
+                      "surface": "#131313",
+                      "on-secondary-container": "#bab8b7",
+                      "tertiary": "#ffffff",
+                      "on-surface-variant": "#c4c7c8",
+                      "on-secondary-fixed": "#1c1b1b",
+                      "surface-tint": "#c6c6c7",
+                      "surface-container-high": "#2a2a2a",
+                      "on-tertiary-fixed": "#1b1c1c",
+                      "tertiary-fixed-dim": "#c7c6c6",
+                      "on-primary-fixed-variant": "#454747",
+                      "inverse-primary": "#5d5f5f",
+                      "background": "#131313",
+                      "on-primary": "#2f3131",
+                      "on-background": "#e2e2e2",
+                      "on-primary-container": "#636565",
+                      "surface-container-low": "#1b1b1b",
+                      "on-surface": "#e2e2e2",
+                      "surface-dim": "#131313",
+                      "on-error": "#690005",
+                      "on-secondary-fixed-variant": "#474646",
+                      "on-tertiary-fixed-variant": "#464747",
+                      "on-tertiary": "#303031",
+                      "on-secondary": "#313030",
+                      "inverse-surface": "#e2e2e2",
+                      "on-error-container": "#ffdad6"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "margin-desktop": "48px",
+                      "margin-mobile": "16px",
+                      "base": "8px",
+                      "container-max": "1280px",
+                      "gutter": "24px"
+              },
+              "fontFamily": {
+                      "label-sm": ["Rubik"],
+                      "body-md": ["Rubik"],
+                      "display-xl": ["Rubik"],
+                      "headline-lg-mobile": ["Rubik"],
+                      "headline-md": ["Rubik"],
+                      "headline-lg": ["Rubik"],
+                      "body-lg": ["Rubik"]
+              },
+              "fontSize": {
+                      "label-sm": ["12px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                      "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                      "display-xl": ["72px", {"lineHeight": "1.1", "letterSpacing": "-0.04em", "fontWeight": "900"}],
+                      "headline-lg-mobile": ["32px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                      "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                      "headline-lg": ["40px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background selection:bg-primary selection:text-on-primary">
+<!-- Top Navigation Shell -->
+<header class="bg-surface border-b border-outline-variant flex justify-between items-center w-full px-margin-mobile py-base fixed top-0 z-50">
+<div class="flex items-center">
+<span class="material-symbols-outlined text-primary mr-4 cursor-pointer">menu</span>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile font-black uppercase tracking-tighter text-primary">RACEON</h1>
+</div>
+<div class="flex items-center space-x-6">
+<nav class="hidden md:flex space-x-8">
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary uppercase tracking-widest transition-colors" href="#">Lobby</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary uppercase tracking-widest transition-colors" href="#">Races</a>
+<a class="font-label-sm text-label-sm text-primary uppercase tracking-widest transition-colors" href="#">Rankings</a>
+</nav>
+<span class="material-symbols-outlined text-primary cursor-pointer" data-icon="account_circle">account_circle</span>
+</div>
+</header>
+<main class="pt-24 pb-32 max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+<!-- Viewport Header -->
+<div class="flex flex-col md:flex-row md:items-end justify-between mb-12 border-b-2 border-primary pb-4">
+<div>
+<span class="font-label-sm text-label-sm text-outline uppercase tracking-tighter">Season 04</span>
+<h2 class="font-display-xl text-headline-lg-mobile md:text-display-xl font-black uppercase italic tracking-tighter leading-none">LEADERBOARD</h2>
+</div>
+<!-- Category Tabs -->
+<div class="flex mt-8 md:mt-0 bg-surface-container border border-outline-variant p-1">
+<button class="px-6 py-2 font-label-sm text-label-sm uppercase tracking-widest bg-primary text-on-primary">Global</button>
+<button class="px-6 py-2 font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant hover:bg-surface-variant transition-colors">National</button>
+<button class="px-6 py-2 font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant hover:bg-surface-variant transition-colors">City</button>
+</div>
+</div>
+<!-- Podium Section -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16 items-end">
+<!-- Rank 2 -->
+<div class="order-2 md:order-1 h-full flex flex-col justify-end">
+<div class="relative group bg-surface-container-low border border-outline-variant p-4 transition-all duration-100 hover:border-primary">
+<div class="aspect-square grayscale contrast-125 mb-4 overflow-hidden bg-black">
+<img class="w-full h-full object-cover" data-alt="A gritty, high-contrast monochrome portrait of a professional cyclist looking intensely into the camera. Sharp lighting highlights the sweat and determination on their face. The background is pure black, emphasizing a neo-brutalistic sports aesthetic. High-performance racing gear is visible with subtle branding details." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBD-fixnEAUaX9i4ghrFzEiW1Dcb9WGMz1FmVp692aQdV7X41oRQeca_zO7R5QAmiyOrx0MFJbqP3ygxnfMIHHC0BpXEB-Oi0VG7iAIWCUK0U7tKJyG1OUgponXHes2eQCzYkIArTcKTS7LvkVjFotP045pN5SLWIlIhSvVEGrQ4f9Iv2TKCdVq3BdYRRHXQ6SERSmjXedXdW8I_nveGS0K2HNJnKsY_f0KHrOr4OR525v1K9K37IxbioSFBHWr2n4kbI5AdnCM5av7"/>
+</div>
+<div class="flex justify-between items-end">
+<div>
+<span class="font-display-xl text-4xl font-black italic text-outline leading-none">02</span>
+<h3 class="font-headline-md text-headline-md uppercase font-bold mt-2">MARCUS VANE</h3>
+</div>
+<div class="text-right">
+<span class="font-label-sm text-label-sm text-outline block">PTS</span>
+<span class="font-headline-md text-headline-md font-bold">14,202</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Rank 1 -->
+<div class="order-1 md:order-2 h-full flex flex-col justify-end">
+<div class="relative group bg-surface-container-highest border-2 border-primary p-6 transition-all duration-100">
+<div class="absolute -top-4 -right-4 bg-primary text-on-primary font-black px-4 py-1 text-2xl italic">CHAMPION</div>
+<div class="aspect-square grayscale contrast-150 mb-4 overflow-hidden bg-black">
+<img class="w-full h-full object-cover" data-alt="An ultra high-contrast black and white photograph of an elite athlete in mid-motion, focused and fierce. Intense dramatic lighting creates deep shadows and brilliant highlights, showcasing muscle definition and raw power. The style is stark, minimalist, and aggressively modern, fitting for a premium racing platform." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBV2CFeGJpD1jp9VeOJrenCDEVAuoYXC-oldioIdXfNBNzisHAQn4XoylttY1w6kcouM9r48x0Vm_s4xJbPsqqGF_PDLZkIvJDzC-CQBFUgLTzr9S3Vk_wVJZhWbw8pWVb-54nryNk52zAjYRCd91i5hujscxn1ugIPSb0YPMYhC6VsGygIPq6LsrSivb3k8ZIewxZyJnRI2vdQiG9DgH4OvTkWGg3jCUk6aUIY-eyDdjT71j13AWE3HA9EPX2LgAkpMab2uVSDD2aV"/>
+</div>
+<div class="flex justify-between items-end">
+<div>
+<span class="font-display-xl text-6xl font-black italic text-primary leading-none">01</span>
+<h3 class="font-headline-md text-headline-md uppercase font-black mt-2">ELARA KROSS</h3>
+</div>
+<div class="text-right">
+<span class="font-label-sm text-label-sm text-primary block">PTS</span>
+<span class="font-headline-md text-headline-md font-black">18,840</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Rank 3 -->
+<div class="order-3 md:order-3 h-full flex flex-col justify-end">
+<div class="relative group bg-surface-container-low border border-outline-variant p-4 transition-all duration-100 hover:border-primary">
+<div class="aspect-square grayscale contrast-125 mb-4 overflow-hidden bg-black">
+<img class="w-full h-full object-cover" data-alt="A powerful monochrome close-up portrait of a female runner with wet hair and a determined expression. Strong side lighting creates a sculptural effect on the face. The aesthetic is industrial and high-fashion sport, using deep blacks and stark whites to convey intensity and precision." src="https://lh3.googleusercontent.com/aida-public/AB6AXuARN_S2DvvsW-AZStKdjrrYQl2pHjXwXSlajmPd-8sMnyGRCURT_oPNzgOJCzM9Cb2OT1vjDlFoU2pvdzSC86CeIZ5Gs1jlBT5Pv627oYBhW5GbJQVmRbEDtyHwGxcNyGCo_1ThFh33_5iEhBawzjJVsrycmHaQG4igtG_ORVfFfjIC_QQLF8Lav3pLzXGQDc_oGsYE9U7KbH7qquy4Fkmd6ntOSs4jP-IdmX0LjG5LI0KrHFLnV6bASus64MNecAf8n-GlKhSsXixS"/>
+</div>
+<div class="flex justify-between items-end">
+<div>
+<span class="font-display-xl text-4xl font-black italic text-outline leading-none">03</span>
+<h3 class="font-headline-md text-headline-md uppercase font-bold mt-2">JAXON REED</h3>
+</div>
+<div class="text-right">
+<span class="font-label-sm text-label-sm text-outline block">PTS</span>
+<span class="font-headline-md text-headline-md font-bold">13,950</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Ranking List -->
+<div class="space-y-2 mb-16">
+<div class="hidden md:grid grid-cols-12 px-6 py-2 font-label-sm text-label-sm text-outline uppercase tracking-widest border-b border-outline-variant">
+<div class="col-span-1">Rank</div>
+<div class="col-span-8">Athlete</div>
+<div class="col-span-3 text-right">Performance Points</div>
+</div>
+<!-- Rank 4 -->
+<div class="grid grid-cols-12 items-center px-6 py-4 bg-surface-container-low border border-outline-variant rank-card-hover transition-colors duration-100 cursor-pointer">
+<div class="col-span-2 md:col-span-1 font-headline-md text-headline-md font-black italic rank-number">04</div>
+<div class="col-span-7 md:col-span-8 flex items-center space-x-4">
+<div class="w-10 h-10 bg-surface-variant flex items-center justify-center grayscale overflow-hidden border border-outline">
+<img class="w-full h-full object-cover" data-alt="Small monochrome avatar portrait of a focused athlete with intense eyes." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCl-_r9800ZZqGcqyqk7YpcAXjNO51PGRHhtuM8GsKA7vMLAIKaMJNaEt94tiAnw-qXtlOU0QFtTJBNg1Nx9vyOk_Q0qzIAhxX87hycptP4YxCA6_Zac3yVUCAGV7CgJ_vhYwUtAdZas1hbNTffjidgG67ZN-eRsPWgzfqCU5BWdrEBKN4aFbOhKkrANXkaf99U0CY3TqIVdOUJu79ZFck601haXF7m_chRIUrMBIHrFiBuxLHjEqzht1ob2Nr1BIMald-nsZeSNug3"/>
+</div>
+<span class="font-body-lg text-body-lg font-bold uppercase tracking-tight">KAI ZENITH</span>
+</div>
+<div class="col-span-3 text-right font-headline-md text-headline-md font-black points text-outline">12,440</div>
+</div>
+<!-- Rank 5 -->
+<div class="grid grid-cols-12 items-center px-6 py-4 bg-surface-container-low border border-outline-variant rank-card-hover transition-colors duration-100 cursor-pointer">
+<div class="col-span-2 md:col-span-1 font-headline-md text-headline-md font-black italic rank-number">05</div>
+<div class="col-span-7 md:col-span-8 flex items-center space-x-4">
+<div class="w-10 h-10 bg-surface-variant flex items-center justify-center grayscale overflow-hidden border border-outline">
+<img class="w-full h-full object-cover" data-alt="Small monochrome avatar portrait of a athlete in racing gear." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAPa1ZY4jopH5B2GQmxHGhTCqxHXNN-U8ZprOUrmra58bSDBDL8hU3CuTlckHgzlEyJirfs4MFdSzvec0HjL2bQQ71W4JQL5wdHXReTMAG99xMY9PZ0r0bwZXYyA9dIaU6giS8SF3GIgPO54HSrv3GygDYt4KXTsXaKBwWtbfrQTuVkr-r7bqAdHuE65nW19aEBmBfPxek2q7KDPIO8z1ZliSxB7iXs8uL9kK3EAAca4ROEavyOPf7A72eJ3vbnRLUPDgHRopKu-pFV"/>
+</div>
+<span class="font-body-lg text-body-lg font-bold uppercase tracking-tight">SARA MERRITT</span>
+</div>
+<div class="col-span-3 text-right font-headline-md text-headline-md font-black points text-outline">11,920</div>
+</div>
+<!-- Your Rank Highlight -->
+<div class="grid grid-cols-12 items-center px-6 py-6 bg-primary text-on-primary border-4 border-primary shadow-[8px_8px_0px_0px_rgba(255,255,255,0.2)] transform -translate-x-1">
+<div class="col-span-2 md:col-span-1 font-display-xl text-3xl md:text-4xl font-black italic">42</div>
+<div class="col-span-7 md:col-span-8 flex items-center space-x-4">
+<div class="w-12 h-12 bg-on-primary flex items-center justify-center grayscale overflow-hidden border-2 border-on-primary">
+<img class="w-full h-full object-cover" data-alt="A profile portrait of a user in black and white with high contrast, representing the player's personal profile." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAHAgnzXo9iZoeqlXGPprUguXA_qY36QTQL_am6hglINJFWZGCmpb2tS2TGqr1kz3eUglvsfffQKg5paQIyvkofcravN_Zl9dkVBLQ9Cc7HACLfDeLPG1-Bx57NlWZtUcQYbzFZ1pLt5mhoC0kDzUt2q-Q35hwY2PFG8qY_vIpZg0eLAnF2qkbupYRd0go57SOC8I2mX5JLOTVnyGatJLCgb23p4hRgIVUu6T8vMGQ7qedSmxlCqBuxr8Gzn8joZ7S2uspMSeg8vh4E"/>
+</div>
+<div>
+<span class="font-label-sm text-label-sm uppercase tracking-widest opacity-70 block">Your Current Position</span>
+<span class="font-headline-md text-headline-md font-black uppercase italic">YOU (T. STARK)</span>
+</div>
+</div>
+<div class="col-span-3 text-right">
+<span class="font-label-sm text-label-sm uppercase tracking-widest opacity-70 block">Total PTS</span>
+<span class="font-headline-md text-headline-md md:text-display-xl text-2xl font-black">4,822</span>
+</div>
+</div>
+<!-- Rank 43 -->
+<div class="grid grid-cols-12 items-center px-6 py-4 bg-surface-container-low border border-outline-variant rank-card-hover transition-colors duration-100 cursor-pointer">
+<div class="col-span-2 md:col-span-1 font-headline-md text-headline-md font-black italic rank-number">43</div>
+<div class="col-span-7 md:col-span-8 flex items-center space-x-4">
+<div class="w-10 h-10 bg-surface-variant flex items-center justify-center grayscale overflow-hidden border border-outline">
+<img class="w-full h-full object-cover" data-alt="Small monochrome avatar portrait of a male athlete with a headband." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC7KGOX4goPrUYEARsQoMsyA6Q-Yvj7Nl2oGmqYKci2UEQ_Yyv1nphAoOJfcvMTblfzuzStOqbIiWh40CuhT-WrVTwUuwDjy5J5-04hoFTAI1xv1apmzJ73nuAWNVl13Oz60Xj4AJ7O4Ofq33YmmGKbwizTMXZevZbDKSDH4GAWbwbAm0YEeuqW5Hkt58AITlqEE9afWTx16MelUESNxu-lUO6GbUVbNPogXYLIj0zZaYyjPssGPtANBznakTlqjMlO6uZZ_j-NDMWr"/>
+</div>
+<span class="font-body-lg text-body-lg font-bold uppercase tracking-tight">LEO DRAGO</span>
+</div>
+<div class="col-span-3 text-right font-headline-md text-headline-md font-black points text-outline">4,790</div>
+</div>
+<!-- More rows indicator -->
+<div class="flex flex-col items-center py-8 opacity-40">
+<div class="w-px h-12 bg-primary mb-4"></div>
+<button class="font-label-sm text-label-sm uppercase tracking-widest hover:opacity-100 transition-opacity">Load Next 50 Athletes</button>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Shell (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full flex justify-around items-center h-16 bg-surface border-t-2 border-primary z-50">
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 w-full h-full hover:bg-surface-variant transition-all" href="#">
+<span class="material-symbols-outlined mb-1">grid_view</span>
+<span class="font-label-sm text-[10px] uppercase font-bold">Lobby</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 w-full h-full hover:bg-surface-variant transition-all" href="#">
+<span class="material-symbols-outlined mb-1">speed</span>
+<span class="font-label-sm text-[10px] uppercase font-bold">Races</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary text-on-primary p-2 w-full h-full transition-all duration-75" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">leaderboard</span>
+<span class="font-label-sm text-[10px] uppercase font-bold">Rankings</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 w-full h-full hover:bg-surface-variant transition-all" href="#">
+<span class="material-symbols-outlined mb-1">person</span>
+<span class="font-label-sm text-[10px] uppercase font-bold">Profile</span>
+</a>
+</nav>
+<!-- Atmospheric Micro-interaction -->
+<script>
+        document.addEventListener('mousemove', (e) => {
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+
+            // Subtle mechanical parallax or lighting shift could go here
+            // For now, let's keep it clean as per the rigid fluidity mandate
+        });
+
+        // Tab selection logic
+        const tabs = document.querySelectorAll('button[class*="tracking-widest"]');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => {
+                    t.classList.remove('bg-primary', 'text-on-primary');
+                    t.classList.add('text-on-surface-variant');
+                });
+                tab.classList.add('bg-primary', 'text-on-primary');
+                tab.classList.remove('text-on-surface-variant');
+            });
+        });
+    </script>
+</body></html>

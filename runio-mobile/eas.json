@@ -1,0 +1,34 @@
+{
+  "cli": {
+    "version": ">= 21.2.0",
+    "appVersionSource": "remote"
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal"
+    },
+    "preview": {
+      "distribution": "internal",
+      "android": {
+        "buildType": "apk"
+      }
+    },
+    "production": {
+      "autoIncrement": true,
+      "env": {
+        "SENTRY_DISABLE_AUTO_UPLOAD": "true"
+      }
+    }
+  },
+  "submit": {
+    "production": {
+      "ios": {
+        "ascApiKeyPath": "C:/Users/liatd/AppData/Local/Temp/claude/c--Users-liatd-OneDrive-------------/9cdfbdd6-e6c2-4dc3-933d-d04a74d69d8b/scratchpad/AuthKey_6HS93S5T7M.p8",
+        "ascApiKeyId": "6HS93S5T7M",
+        "ascApiKeyIssuerId": "22d06339-4fed-4429-ac18-f4ac99e26e37",
+        "ascAppId": "6807461925"
+      }
+    }
+  }
+}

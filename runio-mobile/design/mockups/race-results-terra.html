@@ -1,0 +1,274 @@
+<!-- Race Results (Terra Style) -->
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RACEON - Finisher Summary</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,200..900;1,7..72,200..900&amp;family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-fixed-dim": "#d4ccbf",
+                        "on-primary-container": "#d8f0de",
+                        "error": "#b83230",
+                        "inverse-on-surface": "#f5f0e8",
+                        "surface-container-highest": "#e4e0d8",
+                        "on-tertiary": "#ffffff",
+                        "on-tertiary-fixed": "#221a05",
+                        "surface-container-low": "#f5f1ea",
+                        "on-surface": "#2e3230",
+                        "secondary-fixed": "#f0e8db",
+                        "secondary": "#6b6358",
+                        "on-background": "#2e3230",
+                        "surface-dim": "#dbd7cf",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-high": "#eae6de",
+                        "inverse-surface": "#2e3230",
+                        "on-secondary": "#ffffff",
+                        "on-error": "#ffffff",
+                        "tertiary-fixed-dim": "#dcc48e",
+                        "background": "#faf6f0",
+                        "tertiary-fixed": "#f8e0a8",
+                        "primary-container": "#78a886",
+                        "tertiary-container": "#c4a66a",
+                        "primary-fixed": "#c8e8d0",
+                        "primary": "#4a7c59",
+                        "outline-variant": "#c4c8bc",
+                        "on-primary": "#ffffff",
+                        "surface-bright": "#faf6f0",
+                        "surface-tint": "#4a7c59",
+                        "primary-fixed-dim": "#8ecf9e",
+                        "on-error-container": "#690005",
+                        "secondary-container": "#f0e8db",
+                        "on-tertiary-container": "#554020",
+                        "outline": "#74796e",
+                        "surface-variant": "#e4e0d8",
+                        "on-secondary-fixed": "#1e1a13",
+                        "on-secondary-fixed-variant": "#4a4538",
+                        "on-primary-fixed": "#002110",
+                        "surface": "#faf6f0",
+                        "on-surface-variant": "#4a4e4a",
+                        "tertiary": "#705c30",
+                        "on-tertiary-fixed-variant": "#554020",
+                        "error-container": "#ffdad8",
+                        "inverse-primary": "#8ecf9e",
+                        "on-secondary-container": "#5e5548",
+                        "on-primary-fixed-variant": "#2a6038",
+                        "surface-container": "#f0ece4"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Literata"],
+                        "display": ["Literata"],
+                        "body": ["Nunito Sans"],
+                        "label": ["Nunito Sans"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Nunito Sans', sans-serif; }
+        h1, h2, h3, .font-headline { font-family: 'Literata', serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .grainy-overlay {
+            background-image: url("https://www.transparenttextures.com/patterns/p6.png");
+            opacity: 0.03;
+            pointer-events: none;
+        }
+        .bento-card {
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .bento-card:hover {
+            transform: translateY(-4px);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen pb-28 relative">
+<div class="fixed inset-0 grainy-overlay z-0"></div>
+<!-- Top App Bar -->
+<header class="w-full top-0 sticky bg-background dark:bg-background flex items-center justify-between px-6 py-4 w-full z-40">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full overflow-hidden border-2 border-primary/20">
+<img class="w-full h-full object-cover" data-alt="A professional portrait of a marathon runner in soft natural outdoor lighting. The image has a warm, earthy tone with a blurred green park background, fitting the Terra design system's organic and grounded aesthetic. The lighting is golden hour, creating a calm and triumphant mood." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBtwaKD1z1DdTQF36qG4mNrP4kbGPBz7mKKy9O1OcUYDZ76aS1ffoKP7XFaGlln1aoQI1w46s6bsCWje6huB4XumRvDzPgJ1wHEYmWuEP9YAhSbEnoKgzrdUKG1SGip_tvE4Jn26F2XjOfMRM0z3Z7LlLPXof5m67iHhZGd5ZWggrmLWinaRzJn2G2HfHDCo0sbJWnj8dKAps7E5C29o_PkIwEey1f0LiSGWekuH9YgxpA20vct3xhGE_PE-iZ5IMJtS_PocPvnBoEk"/>
+</div>
+<span class="font-headline text-2xl font-black text-primary dark:text-primary-fixed-dim">RACEON</span>
+</div>
+<button class="text-on-surface-variant hover:opacity-80 transition-opacity active:scale-95 transition-transform">
+<span class="material-symbols-outlined">settings</span>
+</button>
+</header>
+<main class="relative z-10 px-6 pt-4 pb-8 max-w-4xl mx-auto">
+<!-- Hero Finisher Section -->
+<section class="mb-8 text-center">
+<div class="inline-flex items-center justify-center p-4 bg-tertiary-fixed rounded-full mb-6 shadow-sm">
+<span class="material-symbols-outlined text-tertiary text-4xl" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
+</div>
+<h1 class="text-4xl font-bold text-on-surface mb-2 tracking-tight">Finisher!</h1>
+<p class="text-secondary font-label text-lg">Morning Forest Trail Run</p>
+</section>
+<!-- Bento Grid Performance Summary -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+<!-- Main Rank Card -->
+<div class="md:col-span-2 bg-surface-container rounded-xl p-8 bento-card relative overflow-hidden flex flex-col justify-between min-h-[220px]">
+<div class="relative z-10">
+<p class="text-secondary font-label uppercase tracking-widest text-xs mb-1">Final Standing</p>
+<div class="flex items-baseline gap-2">
+<span class="text-6xl font-headline font-bold text-primary">#04</span>
+<span class="text-xl font-label text-on-surface-variant">/ 1,240 Participants</span>
+</div>
+</div>
+<div class="relative z-10 flex gap-6 mt-8">
+<div>
+<p class="text-secondary text-xs uppercase tracking-wider">Total Time</p>
+<p class="text-2xl font-headline font-bold text-on-surface">12:44.2</p>
+</div>
+<div class="h-12 w-px bg-outline-variant opacity-30"></div>
+<div>
+<p class="text-secondary text-xs uppercase tracking-wider">Pace</p>
+<p class="text-2xl font-headline font-bold text-on-surface">4:12/km</p>
+</div>
+</div>
+<!-- Abstract Organic Shape Background -->
+<div class="absolute -right-8 -bottom-8 w-48 h-48 bg-primary/5 rounded-full blur-3xl"></div>
+</div>
+<!-- Heart Rate Card -->
+<div class="bg-primary-container/20 rounded-xl p-6 bento-card flex flex-col justify-between border border-primary/10">
+<div class="flex justify-between items-start">
+<div class="p-2 bg-primary/10 rounded-lg">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">favorite</span>
+</div>
+<span class="text-xs font-bold text-primary px-2 py-1 bg-white/50 rounded-full">Optimal</span>
+</div>
+<div>
+<p class="text-4xl font-headline font-bold text-on-surface">164</p>
+<p class="text-secondary text-sm">Avg Heart Rate (BPM)</p>
+</div>
+<div class="mt-4 h-12 flex items-end gap-1">
+<div class="flex-1 bg-primary/20 rounded-t-sm h-[40%]"></div>
+<div class="flex-1 bg-primary/20 rounded-t-sm h-[60%]"></div>
+<div class="flex-1 bg-primary/40 rounded-t-sm h-[80%]"></div>
+<div class="flex-1 bg-primary rounded-t-sm h-[100%]"></div>
+<div class="flex-1 bg-primary/60 rounded-t-sm h-[70%]"></div>
+<div class="flex-1 bg-primary/30 rounded-t-sm h-[50%]"></div>
+</div>
+</div>
+<!-- Elevation Card -->
+<div class="bg-surface-container-high rounded-xl p-6 bento-card">
+<div class="flex items-center gap-3 mb-4">
+<span class="material-symbols-outlined text-secondary">terrain</span>
+<p class="text-secondary text-sm font-label">Elevation Gain</p>
+</div>
+<p class="text-3xl font-headline font-bold text-on-surface mb-1">342<span class="text-base font-normal ml-1">m</span></p>
+<div class="w-full h-1 bg-outline-variant rounded-full mt-4">
+<div class="h-full bg-tertiary rounded-full w-2/3"></div>
+</div>
+</div>
+<!-- Power Card -->
+<div class="bg-tertiary-container/10 rounded-xl p-6 bento-card border border-tertiary/10">
+<div class="flex items-center gap-3 mb-4">
+<span class="material-symbols-outlined text-tertiary">bolt</span>
+<p class="text-secondary text-sm font-label">Average Power</p>
+</div>
+<p class="text-3xl font-headline font-bold text-on-surface mb-1">285<span class="text-base font-normal ml-1">W</span></p>
+<p class="text-tertiary text-xs font-bold">+12% vs last race</p>
+</div>
+<!-- Distance Card -->
+<div class="bg-surface-container rounded-xl p-6 bento-card">
+<div class="flex items-center gap-3 mb-4">
+<span class="material-symbols-outlined text-secondary">route</span>
+<p class="text-secondary text-sm font-label">Distance</p>
+</div>
+<p class="text-3xl font-headline font-bold text-on-surface mb-1">5.02<span class="text-base font-normal ml-1">km</span></p>
+<p class="text-on-surface-variant/60 text-xs italic">Certified GPS Track</p>
+</div>
+</div>
+<!-- Export Certificate Button -->
+<div class="flex flex-col items-center gap-6 mt-12">
+<button class="group relative inline-flex items-center justify-center px-12 py-5 bg-primary text-on-primary font-headline text-lg font-bold rounded-xl shadow-lg hover:bg-primary/90 transition-all active:scale-95 w-full md:w-auto">
+<span class="material-symbols-outlined mr-3">card_membership</span>
+                Export Certificate
+                <div class="absolute -inset-1 bg-primary/20 rounded-2xl blur opacity-0 group-hover:opacity-100 transition-opacity"></div>
+</button>
+<button class="flex items-center gap-2 text-secondary hover:text-primary transition-colors text-sm font-medium">
+<span class="material-symbols-outlined text-xl">share</span>
+                Share to Feed
+            </button>
+</div>
+<!-- Course Map View (Minimalist) -->
+<div class="mt-12 rounded-xl overflow-hidden h-64 relative border border-outline-variant/30 shadow-sm">
+<div class="absolute inset-0 z-0 bg-surface-variant" data-alt="A minimalist, top-down view of a topographic map of a forest trail with a glowing green race path highlighted. The aesthetic is clean and organic, using earthy tones of cream, moss green, and slate. The lighting is even and soft, resembling a professional cartography interface." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDUukkhOgUFct2JgLdmg7uff7jSpEXfqDFn6fZ4qy3NmZ1CpEP6XXKcJ2BrLo_VWPJPmfx6trUPEGjTCOuB3CBPvDe6p5yRDJImvaAlWQAWtLhNZYq-T8nNvRhxPyv8DvvtKPXmpkshWE2_ajPcghr_GTZZJL5lfchCANqcTjWOv3QZsGwVQN-fUv8XIfzGPVPb6-y3yNQBcwncODLw-ewbRLohhoh5qa6YNgKdlC4NojdzQyli1gJ6oPz-OsgKnO7Pgu1mTfh8IR51')"></div>
+<div class="absolute top-4 left-4 bg-white/80 backdrop-blur-md px-3 py-1.5 rounded-lg text-xs font-bold text-on-surface shadow-sm z-10">
+                Greenwood Trail Circuit
+            </div>
+</div>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-3 bg-surface-container dark:bg-surface-dim shadow-[0_-4px_20px_rgba(46,50,48,0.06)] rounded-t-xl">
+<a class="flex flex-col items-center justify-center text-on-secondary-fixed-variant dark:text-secondary-fixed-dim px-5 py-1.5 hover:bg-secondary-container dark:hover:bg-secondary rounded-full transition-colors active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="font-label text-xs font-medium mt-1">Lobby</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container dark:bg-primary text-on-primary-container dark:text-on-primary rounded-full px-5 py-1.5 hover:bg-secondary-container dark:hover:bg-secondary transition-colors active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined">directions_run</span>
+<span class="font-label text-xs font-medium mt-1">Races</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-secondary-fixed-variant dark:text-secondary-fixed-dim px-5 py-1.5 hover:bg-secondary-container dark:hover:bg-secondary rounded-full transition-colors active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined">location_on</span>
+<span class="font-label text-xs font-medium mt-1">Live</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-secondary-fixed-variant dark:text-secondary-fixed-dim px-5 py-1.5 hover:bg-secondary-container dark:hover:bg-secondary rounded-full transition-colors active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined">leaderboard</span>
+<span class="font-label text-xs font-medium mt-1">Rankings</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-secondary-fixed-variant dark:text-secondary-fixed-dim px-5 py-1.5 hover:bg-secondary-container dark:hover:bg-secondary rounded-full transition-colors active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined">psychology</span>
+<span class="font-label text-xs font-medium mt-1">Insights</span>
+</a>
+</nav>
+<script>
+        // Micro-interaction for the certificate button
+        const exportBtn = document.querySelector('button.group');
+        if(exportBtn) {
+            exportBtn.addEventListener('click', () => {
+                const originalText = exportBtn.innerHTML;
+                exportBtn.innerHTML = `<span class="material-symbols-outlined animate-spin mr-3">progress_activity</span> Generating...`;
+                setTimeout(() => {
+                    exportBtn.innerHTML = `<span class="material-symbols-outlined mr-3 text-white">check_circle</span> Ready to Download`;
+                    exportBtn.classList.remove('bg-primary');
+                    exportBtn.classList.add('bg-tertiary');
+                }, 2000);
+            });
+        }
+
+        // Add subtle parallax to bento cards
+        document.addEventListener('mousemove', (e) => {
+            const cards = document.querySelectorAll('.bento-card');
+            const x = (window.innerWidth / 2 - e.pageX) / 50;
+            const y = (window.innerHeight / 2 - e.pageY) / 50;
+
+            cards.forEach(card => {
+                card.style.transform = `translate(${x}px, ${y}px)`;
+            });
+        });
+    </script>
+</body></html>
