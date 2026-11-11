@@ -38,6 +38,7 @@
     $("profileCard").hidden = false;
     $("pfNew").hidden = !!me;
     $("pfMine").hidden = !me;
+    $("moveBox").hidden = true;
     if (!me) return;
     $("pfHello").textContent = "שלום " + me.name + " מ" + me.city + ". המשתמש שלך מוכן.";
     $("pfNext").textContent = races.length
@@ -57,6 +58,52 @@
     forgetReset(); renderProfile();
     if (current) tick();
   });
+
+  /* ---------- moving my user to another device or browser ---------- */
+  $("moveBtn").addEventListener("click", () => {
+    const box = $("moveBox");
+    box.hidden = !box.hidden;
+    if (!box.hidden && me) { $("moveCode").value = me.id + "." + me.token; $("moveDone").hidden = true; }
+  });
+  $("moveCopy").addEventListener("click", async () => {
+    const input = $("moveCode");
+    try { await navigator.clipboard.writeText(input.value); $("moveDone").hidden = false; }
+    catch (e) { input.focus(); input.select(); }
+  });
+  $("haveBtn").addEventListener("click", () => {
+    $("haveForm").hidden = !$("haveForm").hidden;
+    if (!$("haveForm").hidden) $("haveCode").focus();
+  });
+  $("haveForm").addEventListener("submit", async ev => {
+    ev.preventDefault();
+    const err = $("haveErr"), btn = $("haveSend");
+    const m = $("haveCode").value.trim().match(/^([0-9a-f-]{36})\.([0-9a-f]{48})$/i);
+    if (!m) return showErr(err, "הקוד לא תקין. העתיקו אותו שוב במלואו מהמכשיר השני.");
+    showErr(err, ""); btn.disabled = true;
+    const { data, error } = await client.rpc("runner_me", { p_runner: m[1], p_token: m[2] });
+    btn.disabled = false;
+    if (error || !data) return showErr(err, errorText(error));
+    if (data.ok !== true) return showErr(err, "לא מצאנו משתמש עם הקוד הזה.");
+    me = { id: m[1], token: m[2], name: data.name, city: data.city };
+    store.set(ME_KEY, me);
+    $("haveForm").reset(); $("haveForm").hidden = true;
+    renderProfile();
+    if (current) loadMine(current);
+  });
+
+  /* ---------- add to home screen hint ---------- */
+  (function installHint() {
+    const standalone = window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
+    if (standalone || !configured || store.get("th_install_seen")) return;
+    const ua = navigator.userAgent || "";
+    const ios = /iPhone|iPad|iPod/.test(ua);
+    if (!ios && !/Android/.test(ua)) return;
+    $("installText").textContent = ios
+      ? "באייפון, ב-Safari: לוחצים על כפתור השיתוף למטה, ואז \"הוסף למסך הבית\". מעכשיו רוצו נפתח מאייקון, כמו אפליקציה."
+      : "באנדרואיד, ב-Chrome: לוחצים על שלוש הנקודות למעלה, ואז \"הוספה למסך הבית\". מעכשיו רוצו נפתח מאייקון, כמו אפליקציה.";
+    $("installCard").hidden = false;
+    $("installHide").addEventListener("click", () => { store.set("th_install_seen", true); $("installCard").hidden = true; });
+  })();
 
   $("pfForm").addEventListener("submit", async ev => {
     ev.preventDefault();
