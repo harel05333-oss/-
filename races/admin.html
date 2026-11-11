@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src https://*.supabase.co; img-src 'self' data:; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#131314">
+<meta name="robots" content="noindex, nofollow">
+<title>רוצו | ניהול מרוצים</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800;900&amp;display=swap">
+<link rel="stylesheet" href="styles.css?v=20261112c">
+</head>
+<body>
+<header class="appbar">
+  <div class="wrap wide row between">
+    <a class="brand" href="./"><img src="logo.png?v=20261112c" alt="" width="34" height="34"><span><small>קהילת רוצו</small><b>ניהול מרוצים</b></span></a>
+    <button class="btn sm quiet" type="button" id="logoutBtn" hidden>התנתקות</button>
+  </div>
+</header>
+
+<main>
+  <div class="wrap wide stack-lg">
+    <p class="notice info" id="adminState">בודק התחברות...</p>
+
+    <!-- Login -->
+    <section class="card stack" id="loginCard" hidden>
+      <h2>כניסת מנהל</h2>
+      <form class="stack" id="loginForm" novalidate>
+        <div class="grid2">
+          <div class="field"><label for="logEmail">אימייל</label><input id="logEmail" class="ltr" type="email" autocomplete="username" required></div>
+          <div class="field"><label for="logPass">סיסמה</label><input id="logPass" class="ltr" type="password" autocomplete="current-password" required></div>
+        </div>
+        <p class="notice bad" id="logErr" hidden></p>
+        <div><button class="btn" type="submit" id="logBtn">כניסה</button></div>
+      </form>
+    </section>
+
+    <div class="stack-lg" id="adminApp" hidden>
+      <!-- Everyone who created a user -->
+      <section class="card stack">
+        <div class="row between">
+          <h2>משתמשים <span class="pill num" id="userCount">0</span></h2>
+          <button class="btn sm quiet" type="button" id="usersToggle">הצגת הרשימה</button>
+        </div>
+        <p class="muted" id="usersEmpty">עוד אף אחד לא יצר משתמש.</p>
+        <div class="scroll" id="usersWrap" hidden>
+          <table>
+            <thead><tr><th>שם</th><th>עיר</th><th>הצטרף ב</th><th></th></tr></thead>
+            <tbody id="usersBody"></tbody>
+          </table>
+        </div>
+        <p class="notice bad" id="usersErr" hidden></p>
+      </section>
+
+      <!-- Sign-up protection -->
+      <section class="card stack" id="codeCard" hidden>
+        <h2>קוד קהילה</h2>
+        <p class="muted">כשמוגדר קוד, רק מי שמקליד אותו יכול ליצור משתמש. שולחים אותו בקבוצת הוואטסאפ, וכך רק חברי הקהילה נרשמים.</p>
+        <p class="notice" id="codeState"></p>
+        <form class="stack" id="codeForm" novalidate>
+          <div class="field"><label for="codeInput">קוד חדש</label><input id="codeInput" class="ltr" autocomplete="off" autocapitalize="off" spellcheck="false" maxlength="40" placeholder="למשל rutzu2026"><span class="hint">4 עד 40 תווים, אותיות וספרות. אין הבדל בין אותיות גדולות לקטנות.</span></div>
+          <p class="notice bad" id="codeErr" hidden></p>
+          <div class="row"><button class="btn sm" type="submit" id="codeSave">שמירת הקוד</button><button class="btn sm quiet" type="button" id="codeClear">ביטול הקוד</button></div>
+        </form>
+      </section>
+
+      <!-- Races -->
+      <section class="card stack">
+        <div class="row between">
+          <h2>המרוצים</h2>
+          <button class="btn sm" type="button" id="newRaceBtn">מרוץ חדש</button>
+        </div>
+        <div class="racelist" id="adminRaces"></div>
+        <p class="muted" id="noRaces" hidden>עוד אין מרוצים. לוחצים על "מרוץ חדש" כדי ליצור את הראשון.</p>
+      </section>
+
+      <!-- Create / edit -->
+      <section class="card stack" id="raceFormCard" hidden>
+        <h2 id="raceFormTitle">מרוץ חדש</h2>
+        <form class="stack" id="raceForm" novalidate>
+          <div class="field"><label for="rfTitle">שם המרוץ</label><input id="rfTitle" maxlength="80" placeholder="המרוץ הווירטואלי #1" required></div>
+          <div class="grid2">
+            <div class="field"><label for="rfDate">תאריך</label><input id="rfDate" type="date" required></div>
+            <div class="field"><label for="rfKm">מרחק בק"מ</label><input id="rfKm" class="ltr num" type="number" inputmode="decimal" min="0.5" max="100" step="0.1" value="5" required></div>
+            <div class="field"><label for="rfStart">פתיחת חלון הזינוק</label><input id="rfStart" type="time" value="06:00" required></div>
+            <div class="field"><label for="rfEnd">סגירת חלון הזינוק</label><input id="rfEnd" type="time" value="08:00" required></div>
+            <div class="field"><label for="rfMax">מקסימום רצים</label><input id="rfMax" class="ltr num" type="number" inputmode="numeric" min="1" max="5000" step="1" value="500" required></div>
+            <div class="field">
+              <label for="rfStatus">מצב</label>
+              <select id="rfStatus">
+                <option value="draft">טיוטה: רק אני רואה</option>
+                <option value="open">פתוח: מוצג באתר, אפשר להירשם</option>
+                <option value="closed">סגור: מוצג באתר, בלי הרשמה</option>
+              </select>
+            </div>
+          </div>
+          <div class="grid2">
+            <div class="field"><label for="rfFee">דמי השתתפות בש"ח</label><input id="rfFee" class="ltr num" type="number" inputmode="numeric" min="0" max="10000" step="1" value="0"><span class="hint">0 = מרוץ חינם</span></div>
+            <div class="field"><label for="rfPrize">פרס</label><input id="rfPrize" maxlength="200" placeholder="למשל: שובר 200 ש&quot;ח למקום הראשון"><span class="hint">אפשר להשאיר ריק</span></div>
+          </div>
+          <div class="field"><label for="rfPay">לינק לתשלום</label><input id="rfPay" class="ltr" type="url" inputmode="url" maxlength="300" placeholder="https://..."><span class="hint">לינק של Bit, PayBox או כל דף תשלום אחר. מוצג לרצים רק כשיש דמי השתתפות.</span></div>
+          <p class="small muted">השעות הן לפי שעון ישראל. תוצאות אפשר לדווח עד 12 שעות אחרי סגירת חלון הזינוק.</p>
+          <p class="notice bad" id="rfErr" hidden></p>
+          <div class="row">
+            <button class="btn" type="submit" id="rfSave">שמירה</button>
+            <button class="btn quiet" type="button" id="rfCancel">ביטול</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- One race -->
+      <section class="stack" id="raceAdmin" hidden>
+        <div class="card stack">
+          <div class="row between">
+            <h2 id="raTitle"></h2>
+            <span class="pill" id="raStatus"></span>
+          </div>
+          <p class="muted" id="raMeta"></p>
+          <div class="row">
+            <button class="btn sm quiet" type="button" id="raEdit">עריכה</button>
+            <button class="btn sm quiet" type="button" id="raRefresh">רענון</button>
+            <button class="btn sm danger" type="button" id="raDelete">מחיקת המרוץ</button>
+            <button class="btn sm danger" type="button" id="raDeleteYes" hidden>כן, למחוק את המרוץ ואת כל התוצאות שלו</button>
+            <button class="btn sm quiet" type="button" id="raDeleteNo" hidden>לא למחוק</button>
+          </div>
+          <p class="notice bad" id="raErr" hidden></p>
+        </div>
+
+        <div class="card stack">
+          <h3>ממתינות לבדיקה <span class="pill warn num" id="pendCount">0</span></h3>
+          <p class="small muted">חלק מהבדיקות כבר נעשו אוטומטית. את מה שמסומן "לבדוק בפעילות" בודקים בלינק עצמו.</p>
+          <div class="review" id="pendList"></div>
+          <p class="muted" id="pendEmpty">אין תוצאות שמחכות לבדיקה.</p>
+        </div>
+
+        <div class="card stack">
+          <h3>תוצאות שנבדקו</h3>
+          <div class="scroll">
+            <table>
+              <thead><tr><th>שם</th><th>עיר</th><th>זמן</th><th>מצב</th><th>לינק</th><th></th></tr></thead>
+              <tbody id="doneBody"></tbody>
+            </table>
+          </div>
+          <p class="muted" id="doneEmpty">עוד לא נבדקו תוצאות.</p>
+        </div>
+
+        <div class="card stack">
+          <h3>נרשמים <span class="pill num" id="regCount">0</span></h3>
+          <div class="scroll">
+            <table>
+              <thead><tr><th>שם</th><th>עיר</th><th>נרשם ב</th><th>שילם</th><th></th></tr></thead>
+              <tbody id="regBody"></tbody>
+            </table>
+          </div>
+          <p class="muted" id="regEmpty">עוד אין נרשמים.</p>
+        </div>
+      </section>
+    </div>
+  </div>
+</main>
+
+<script src="vendor/supabase.js?v=20261112c"></script>
+<script src="config.js?v=20261112c"></script>
+<script src="common.js?v=20261112c"></script>
+<script src="admin.js?v=20261112c"></script>
+</body>
+</html>

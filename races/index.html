@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src https://*.supabase.co; img-src 'self' data:; manifest-src 'self'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#131314">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="רוצו">
+<title>רוצו | מרוצים וירטואליים</title>
+<meta name="description" content="המרוצים הווירטואליים של קהילת רוצו: כולם רצים באותו בוקר, כל אחד בעיר שלו, עם טבלת תוצאות אחת.">
+<meta property="og:title" content="רוצו | מרוצים וירטואליים">
+<meta property="og:description" content="כולם רצים באותו בוקר, כל אחד בעיר שלו. יוצרים משתמש, רצים, ושולחים לינק לריצה.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800;900&amp;display=swap">
+<link rel="stylesheet" href="styles.css?v=20261112c">
+</head>
+<body>
+<header class="appbar">
+  <div class="wrap">
+    <a class="brand" id="brandLink" href="../team-harel/"><img src="logo.png?v=20261112c" alt="" width="34" height="34"><span><small>קהילת רוצו</small><b>מרוץ וירטואלי</b></span></a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <p class="tagpill"><i></i>מרוץ קהילתי, כל אחד בעיר שלו</p>
+    <h1>אותו בוקר.<br>כל אחד בעיר שלו.</h1>
+    <p class="lead">יוצרים משתמש בשם ועיר, יוצאים לרוץ בחלון הזינוק, ושולחים את הלינק לריצה מ-Strava או מהשעון. בסוף היום יש טבלה אחת לכל הקהילה.</p>
+    <div class="horizon" aria-hidden="true"><i></i><svg viewBox="0 0 24 24"><path d="M13.500 5.500a2 2 0 1 0 0-4 2 2 0 0 0 0 4ZM9.800 8.900 7 23h2.100l1.800-8 2.100 2v6h2v-7.500l-2.100-2 .6-3A7.300 7.300 0 0 0 19 13v-2a5 5 0 0 1-4.300-2.400l-1-1.600a2 2 0 0 0-2.500-.800L6 8.300V13h2V9.600l1.800-.7Z"/></svg><i></i></div>
+  </div>
+</section>
+
+<main>
+  <div class="wrap stack-lg">
+    <section class="card stack" id="installCard" hidden>
+      <h3>רוצו על מסך הבית</h3>
+      <p class="muted" id="installText"></p>
+      <p class="small muted">כדאי לעשות את זה לפני שיוצרים משתמש, כי המשתמש נשמר במקום שבו יצרתם אותו.</p>
+      <div><button class="btn sm quiet" type="button" id="installHide">הבנתי</button></div>
+    </section>
+
+    <section class="card stack" id="profileCard" hidden>
+      <div class="stack" id="pfNew">
+        <h2>יוצרים משתמש</h2>
+        <p class="muted">פעם אחת, שם ועיר. אחר כך מצטרפים לכל מרוץ בלחיצה אחת.</p>
+        <form class="stack" id="pfForm" novalidate>
+          <div class="grid2">
+            <div class="field"><label for="pfName">שם מלא</label><input id="pfName" autocomplete="name" maxlength="40" required></div>
+            <div class="field"><label for="pfCity">עיר</label><input id="pfCity" autocomplete="address-level2" maxlength="40" required></div>
+          </div>
+          <div class="field" id="pfCodeField" hidden>
+            <label for="pfCode">קוד קהילה</label>
+            <input id="pfCode" class="ltr" autocomplete="off" autocapitalize="off" spellcheck="false" maxlength="40">
+            <span class="hint">הקוד מופיע בקבוצת הוואטסאפ של רוצו.</span>
+          </div>
+          <p class="notice bad" id="pfErr" hidden></p>
+          <button class="btn big" type="submit" id="pfBtn">יצירת משתמש</button>
+          <p class="small muted">המשתמש נשמר בטלפון הזה ובדפדפן הזה. משם גם נרשמים למרוצים ומדווחים תוצאות.</p>
+        </form>
+        <button class="linkbtn small" type="button" id="haveBtn">יש לי כבר משתמש במכשיר אחר</button>
+        <form class="stack" id="haveForm" hidden novalidate>
+          <div class="field">
+            <label for="haveCode">קוד העברה</label>
+            <input id="haveCode" class="ltr" autocomplete="off" autocapitalize="off" spellcheck="false" maxlength="120">
+            <span class="hint">במכשיר שבו יש לכם משתמש: לוחצים "העברה למכשיר אחר" ומעתיקים את הקוד.</span>
+          </div>
+          <p class="notice bad" id="haveErr" hidden></p>
+          <div><button class="btn sm" type="submit" id="haveSend">כניסה עם הקוד</button></div>
+        </form>
+      </div>
+      <div class="stack" id="pfMine" hidden>
+        <p class="notice ok" id="pfHello"></p>
+        <p class="muted" id="pfNext"></p>
+        <div class="row">
+          <button class="linkbtn small" type="button" id="moveBtn">העברה למכשיר אחר</button>
+          <button class="linkbtn small" type="button" id="pfForget">זה לא אני</button>
+          <button class="btn sm danger" type="button" id="pfForgetYes" hidden>כן, להסיר את המשתמש מהמכשיר הזה</button>
+          <button class="btn sm quiet" type="button" id="pfForgetNo" hidden>ביטול</button>
+        </div>
+      </div>
+      <div class="stack" id="moveBox" hidden>
+        <p class="small muted">זה הקוד האישי שלכם. מדביקים אותו במכשיר או בדפדפן השני, תחת "יש לי כבר משתמש". לא שולחים אותו לאף אחד אחר: מי שמחזיק בו יכול לדווח תוצאות בשמכם.</p>
+        <div class="field"><label for="moveCode">קוד העברה</label><input id="moveCode" class="ltr" readonly></div>
+        <div class="row"><button class="btn sm" type="button" id="moveCopy">העתקת הקוד</button><span class="small muted" id="moveDone" hidden>הועתק</span></div>
+      </div>
+      <p class="small muted" id="pfCount" hidden></p>
+    </section>
+
+    <p class="notice info" id="pageState">טוען את המרוצים...</p>
+
+    <section class="stack" id="raceView" hidden>
+      <div class="row between">
+        <h2 id="raceTitle"></h2>
+        <span class="pill" id="racePhase"></span>
+      </div>
+
+      <div class="specs">
+        <div class="spec"><small>מרחק</small><b id="raceKm"></b></div>
+        <div class="spec"><small>חלון זינוק</small><b class="ltr num" id="raceWindow"></b></div>
+        <div class="spec"><small>תאריך</small><b id="raceDate"></b></div>
+        <div class="spec"><small>נרשמו</small><b class="num" id="raceCount">0</b></div>
+      </div>
+
+      <div id="countBox" hidden>
+        <p class="small muted" id="countLabel"></p>
+        <div class="count">
+          <div><b id="cd">0</b><small>ימים</small></div>
+          <div><b id="ch">00</b><small>שעות</small></div>
+          <div><b id="cm">00</b><small>דקות</small></div>
+          <div><b id="cs">00</b><small>שניות</small></div>
+        </div>
+      </div>
+
+      <div class="card stack" id="moneyCard" hidden>
+        <div class="row between" id="feeRow">
+          <div><p class="small muted">דמי השתתפות</p><p><b class="num" id="feeText"></b></p></div>
+          <a class="btn sm" id="payLink" target="_blank" rel="noopener noreferrer" hidden>לתשלום</a>
+        </div>
+        <div id="prizeRow"><p class="small muted">פרס</p><p><b id="prizeText"></b></p></div>
+      </div>
+
+      <!-- Joining this race -->
+      <div class="card stack" id="joinCard" hidden>
+        <h3>הרשמה למרוץ</h3>
+        <p class="muted" id="joinNeed" hidden>כדי להירשם למרוץ צריך קודם ליצור משתמש, בראש העמוד.</p>
+        <p class="notice bad" id="joinErr" hidden></p>
+        <button class="btn big" type="button" id="joinBtn">אני בפנים</button>
+      </div>
+
+      <!-- Registered runner -->
+      <div class="card stack" id="meCard" hidden>
+        <p class="notice ok" id="meHello"></p>
+        <p id="meHint" class="muted"></p>
+        <button class="btn big go" type="button" id="finishBtn" hidden>סיימתי את המרוץ</button>
+
+        <form class="stack" id="finishForm" hidden novalidate>
+          <h3>דיווח תוצאה</h3>
+          <div class="field">
+            <label for="finTime">הזמן שלך</label>
+            <input id="finTime" class="ltr num" inputmode="numeric" placeholder="24:31" maxlength="8" required>
+            <span class="hint">הזמן הכולל (Elapsed time) של הריצה, בדקות:שניות. מעל שעה: 1:02:03</span>
+          </div>
+          <div class="field">
+            <label for="finUrl">לינק לפעילות</label>
+            <input id="finUrl" class="ltr" type="url" inputmode="url" placeholder="https://www.strava.com/activities/..." maxlength="200" required>
+            <span class="hint">מ-Strava, Garmin Connect, Polar, Suunto או COROS: פותחים את הפעילות, לוחצים על שיתוף ומעתיקים את הלינק.</span>
+          </div>
+          <p class="notice bad" id="finErr" hidden></p>
+          <div class="row">
+            <button class="btn go" type="submit" id="finSend">שליחת התוצאה</button>
+            <button class="btn quiet" type="button" id="finCancel">ביטול</button>
+          </div>
+        </form>
+
+        <p class="notice" id="meStatus" hidden></p>
+        <button class="linkbtn small" type="button" id="finEdit" hidden>תיקון התוצאה ששלחתי</button>
+      </div>
+
+      <div class="card stack">
+        <h3>טבלת התוצאות</h3>
+        <div class="podium" id="podium"></div>
+        <div class="scroll" id="boardWrap" hidden>
+          <table>
+            <thead><tr><th>מקום</th><th>שם</th><th>עיר</th><th>זמן</th><th>קצב לק"מ</th></tr></thead>
+            <tbody id="boardBody"></tbody>
+          </table>
+        </div>
+        <p class="small muted" id="boardState"></p>
+      </div>
+
+      <div class="card stack">
+        <h3>משחק הוגן</h3>
+        <ul class="rules">
+          <li><b>רק ריצה עם GPS נספרת.</b> בלי הליכון ובלי הזנה ידנית.</li>
+          <li><b>שעת ההתחלה</b> בפעילות חייבת להיות בתוך חלון הזינוק.</li>
+          <li><b>כל המרחק בפעילות אחת</b>, בלי לעצור את השעון.</li>
+          <li><b>הפעילות צריכה להיות גלויה לכולם</b>, אחרת אי אפשר לבדוק אותה.</li>
+          <li><b>הזמן שנספר הוא הזמן הכולל</b> (Elapsed time), כולל עצירות.</li>
+          <li><b>כל תוצאה נבדקת</b> מול המפה, הקצב והשעה לפני שהיא נכנסת לטבלה.</li>
+        </ul>
+      </div>
+
+      <div class="card stack" id="runnersCard" hidden>
+        <h3>מי רץ איתנו</h3>
+        <div class="chips" id="runners"></div>
+      </div>
+    </section>
+
+    <section class="stack" id="otherRaces" hidden>
+      <h2>כל המרוצים</h2>
+      <div class="racelist" id="raceList"></div>
+    </section>
+
+    <section class="card stack">
+      <h3>עוד לא בקהילה?</h3>
+      <p class="muted">בקהילת הוואטסאפ של רוצו מכירים רצים אחרים, לומדים אחד מהשני ומקבלים את כל העדכונים על המרוצים.</p>
+      <div><a class="btn wa" id="waLink" href="#" target="_blank" rel="noopener noreferrer">הצטרפות לקהילה בוואטסאפ</a></div>
+    </section>
+  </div>
+</main>
+
+<footer>קהילת רוצו · מרוצים וירטואליים</footer>
+
+<script src="vendor/supabase.js?v=20261112c"></script>
+<script src="config.js?v=20261112c"></script>
+<script src="common.js?v=20261112c"></script>
+<script src="app.js?v=20261112c"></script>
+</body>
+</html>
