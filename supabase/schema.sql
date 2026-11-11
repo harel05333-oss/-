@@ -3,7 +3,7 @@
 --
 -- Security model
 --   * Every table has Row Level Security on. Visitors can never read or write
---     the registrations/results tables directly.
+--     the runners/registrations/results tables directly.
 --   * Visitors act only through the functions at the bottom, which validate
 --     every input and expose only safe columns (never tokens or IPs).
 --   * Only users listed in `admins` can create races or approve results.
@@ -70,19 +70,39 @@ create or replace function public.ends_at(r public.races)
 returns timestamptz language sql stable
 as $$ select (r.race_date + r.window_end) at time zone 'Asia/Jerusalem'; $$;
 
--- --------------------------------------------------------- registrations
-create table if not exists public.registrations (
+-- --------------------------------------------------------------- runners
+-- A runner creates a user once (name and city) and gets a secret token that
+-- stays on their phone. Only the hash of the token is stored.
+create table if not exists public.runners (
   id         uuid primary key default gen_random_uuid(),
-  race_id    uuid not null references public.races (id) on delete cascade,
   name       text not null check (char_length(name) between 2 and 40),
   city       text not null check (char_length(city) between 2 and 40),
   token_hash text not null,
   ip         inet,
   created_at timestamptz not null default now()
 );
-create unique index if not exists registrations_unique_runner
-  on public.registrations (race_id, lower(name), lower(city));
-create index if not exists registrations_race_ip on public.registrations (race_id, ip);
+create unique index if not exists runners_unique_person
+  on public.runners (lower(name), lower(city));
+create index if not exists runners_ip_time on public.runners (ip, created_at);
+alter table public.runners enable row level security;
+
+drop policy if exists runners_admin_read on public.runners;
+create policy runners_admin_read on public.runners
+  for select using (public.is_admin());
+
+drop policy if exists runners_admin_delete on public.runners;
+create policy runners_admin_delete on public.runners
+  for delete using (public.is_admin());
+
+-- --------------------------------------------------------- registrations
+create table if not exists public.registrations (
+  id         uuid primary key default gen_random_uuid(),
+  race_id    uuid not null references public.races (id) on delete cascade,
+  runner_id  uuid not null references public.runners (id) on delete cascade,
+  created_at timestamptz not null default now(),
+  unique (race_id, runner_id)
+);
+create index if not exists registrations_runner on public.registrations (runner_id);
 alter table public.registrations enable row level security;
 
 drop policy if exists registrations_admin_read on public.registrations;
@@ -148,63 +168,109 @@ exception when others then
   return null;
 end $$;
 
--- ---------------------------------------------------- public: register
-create or replace function public.register_runner(p_race uuid, p_name text, p_city text)
+-- Returns the runner when the id and secret token match, otherwise null.
+create or replace function public.runner_by_token(p_runner uuid, p_token text)
+returns public.runners
+language sql stable security definer
+set search_path = public, extensions
+as $$
+  select r from public.runners r
+  where r.id = p_runner and p_token is not null
+    and r.token_hash = encode(digest(p_token, 'sha256'), 'hex');
+$$;
+revoke all on function public.runner_by_token(uuid, text) from public, anon, authenticated;
+
+-- ------------------------------------------------ public: create a user
+create or replace function public.create_runner(p_name text, p_city text)
 returns json
 language plpgsql security definer
 set search_path = public, extensions
 as $$
 declare
-  r        public.races;
-  v_name   text := public.clean_text(p_name);
-  v_city   text := public.clean_text(p_city);
-  v_ip     inet := public.client_ip();
-  v_token  text := encode(gen_random_bytes(24), 'hex');
-  v_id     uuid;
+  v_name  text := public.clean_text(p_name);
+  v_city  text := public.clean_text(p_city);
+  v_ip    inet := public.client_ip();
+  v_token text := encode(gen_random_bytes(24), 'hex');
+  v_id    uuid;
 begin
-  select * into r from public.races where id = p_race;
-  if not found or r.status <> 'open' or now() >= public.ends_at(r) then
-    raise exception 'RACE_CLOSED';
-  end if;
   if not public.valid_label(v_name) or not public.valid_label(v_city) then
     raise exception 'BAD_INPUT';
   end if;
-  if (select count(*) from public.registrations where race_id = p_race) >= r.max_runners then
-    raise exception 'RACE_FULL';
-  end if;
-  -- At most 5 registrations per race from one network address.
+  -- At most 20 new users an hour from one network address. Mobile carriers
+  -- put many phones behind one address, so the limit is not tighter.
   if v_ip is not null and
-     (select count(*) from public.registrations where race_id = p_race and ip = v_ip) >= 5 then
+     (select count(*) from public.runners
+      where ip = v_ip and created_at > now() - interval '1 hour') >= 20 then
     raise exception 'TOO_MANY';
   end if;
+  if (select count(*) from public.runners) >= 20000 then
+    raise exception 'SITE_FULL';
+  end if;
   begin
-    insert into public.registrations (race_id, name, city, token_hash, ip)
-    values (p_race, v_name, v_city, encode(digest(v_token, 'sha256'), 'hex'), v_ip)
+    insert into public.runners (name, city, token_hash, ip)
+    values (v_name, v_city, encode(digest(v_token, 'sha256'), 'hex'), v_ip)
     returning id into v_id;
   exception when unique_violation then
     raise exception 'DUPLICATE';
   end;
-  return json_build_object('registration_id', v_id, 'token', v_token);
+  return json_build_object('runner_id', v_id, 'token', v_token, 'name', v_name, 'city', v_city);
 end $$;
 
--- ----------------------------------------------- public: submit a result
-create or replace function public.submit_result(
-  p_registration uuid, p_token text, p_strava_url text, p_seconds integer)
+-- ------------------------------------------- public: is my user valid
+create or replace function public.runner_me(p_runner uuid, p_token text)
+returns json
+language plpgsql stable security definer
+set search_path = public, extensions
+as $$
+declare me public.runners := public.runner_by_token(p_runner, p_token);
+begin
+  if me.id is null then return json_build_object('ok', false); end if;
+  return json_build_object('ok', true, 'name', me.name, 'city', me.city);
+end $$;
+
+-- ------------------------------------------------- public: join a race
+create or replace function public.join_race(p_race uuid, p_runner uuid, p_token text)
 returns json
 language plpgsql security definer
 set search_path = public, extensions
 as $$
 declare
+  me public.runners := public.runner_by_token(p_runner, p_token);
+  r  public.races;
+  v_id uuid;
+begin
+  if me.id is null then raise exception 'NO_USER'; end if;
+  select * into r from public.races where id = p_race;
+  if not found or r.status <> 'open' or now() >= public.ends_at(r) then
+    raise exception 'RACE_CLOSED';
+  end if;
+  select id into v_id from public.registrations where race_id = p_race and runner_id = me.id;
+  if found then return json_build_object('registration_id', v_id); end if;
+  if (select count(*) from public.registrations where race_id = p_race) >= r.max_runners then
+    raise exception 'RACE_FULL';
+  end if;
+  insert into public.registrations (race_id, runner_id) values (p_race, me.id)
+  returning id into v_id;
+  return json_build_object('registration_id', v_id);
+end $$;
+
+-- ----------------------------------------------- public: submit a result
+create or replace function public.submit_result(
+  p_race uuid, p_runner uuid, p_token text, p_strava_url text, p_seconds integer)
+returns json
+language plpgsql security definer
+set search_path = public, extensions
+as $$
+declare
+  me    public.runners := public.runner_by_token(p_runner, p_token);
   reg   public.registrations;
   r     public.races;
   v_url text := btrim(coalesce(p_strava_url, ''));
   cur   public.results;
 begin
-  select * into reg from public.registrations where id = p_registration;
-  if not found or p_token is null
-     or reg.token_hash <> encode(digest(p_token, 'sha256'), 'hex') then
-    raise exception 'NOT_REGISTERED';
-  end if;
+  if me.id is null then raise exception 'NO_USER'; end if;
+  select * into reg from public.registrations where race_id = p_race and runner_id = me.id;
+  if not found then raise exception 'NOT_REGISTERED'; end if;
   select * into r from public.races where id = reg.race_id;
   if r.status = 'draft' or now() < public.starts_at(r) then
     raise exception 'NOT_STARTED';
@@ -236,24 +302,25 @@ begin
   return json_build_object('status', 'pending');
 end $$;
 
--- --------------------------------------- public: a runner's own result
-create or replace function public.my_result(p_registration uuid, p_token text)
+-- --------------------------- public: my registration and result in a race
+create or replace function public.my_result(p_race uuid, p_runner uuid, p_token text)
 returns json
 language plpgsql stable security definer
 set search_path = public, extensions
 as $$
-declare reg public.registrations; res public.results;
+declare
+  me  public.runners := public.runner_by_token(p_runner, p_token);
+  reg public.registrations;
+  res public.results;
 begin
-  select * into reg from public.registrations where id = p_registration;
-  if not found or p_token is null
-     or reg.token_hash <> encode(digest(p_token, 'sha256'), 'hex') then
-    return json_build_object('registered', false);
-  end if;
+  if me.id is null then return json_build_object('user', false); end if;
+  select * into reg from public.registrations where race_id = p_race and runner_id = me.id;
+  if not found then return json_build_object('user', true, 'registered', false); end if;
   select * into res from public.results where registration_id = reg.id;
   if not found then
-    return json_build_object('registered', true, 'status', 'none');
+    return json_build_object('user', true, 'registered', true, 'status', 'none');
   end if;
-  return json_build_object('registered', true, 'status', res.status,
+  return json_build_object('user', true, 'registered', true, 'status', res.status,
     'claimed_seconds', res.claimed_seconds, 'final_seconds', res.final_seconds,
     'admin_note', res.admin_note);
 end $$;
@@ -264,8 +331,9 @@ returns table (name text, city text)
 language sql stable security definer
 set search_path = public
 as $$
-  select g.name, g.city
+  select u.name, u.city
   from public.registrations g
+  join public.runners u on u.id = g.runner_id
   join public.races r on r.id = g.race_id
   where g.race_id = p_race and r.status <> 'draft'
   order by g.created_at;
@@ -277,25 +345,39 @@ returns table (name text, city text, seconds integer)
 language sql stable security definer
 set search_path = public
 as $$
-  select g.name, g.city, s.final_seconds
+  select u.name, u.city, s.final_seconds
   from public.results s
   join public.registrations g on g.id = s.registration_id
+  join public.runners u on u.id = g.runner_id
   join public.races r on r.id = s.race_id
   where s.race_id = p_race and s.status = 'approved' and r.status <> 'draft'
   order by s.final_seconds, s.submitted_at;
 $$;
 
+-- ------------------------------------- public: how many users signed up
+create or replace function public.runner_count()
+returns integer
+language sql stable security definer
+set search_path = public
+as $$ select count(*)::integer from public.runners; $$;
+
 -- ----------------------------------------------------------- privileges
-revoke all on function public.register_runner(uuid, text, text) from public;
-revoke all on function public.submit_result(uuid, text, text, integer) from public;
-revoke all on function public.my_result(uuid, text) from public;
+revoke all on function public.create_runner(text, text) from public;
+revoke all on function public.runner_me(uuid, text) from public;
+revoke all on function public.join_race(uuid, uuid, text) from public;
+revoke all on function public.submit_result(uuid, uuid, text, text, integer) from public;
+revoke all on function public.my_result(uuid, uuid, text) from public;
 revoke all on function public.race_runners(uuid) from public;
 revoke all on function public.leaderboard(uuid) from public;
-grant execute on function public.register_runner(uuid, text, text) to anon, authenticated;
-grant execute on function public.submit_result(uuid, text, text, integer) to anon, authenticated;
-grant execute on function public.my_result(uuid, text) to anon, authenticated;
+revoke all on function public.runner_count() from public;
+grant execute on function public.create_runner(text, text) to anon, authenticated;
+grant execute on function public.runner_me(uuid, text) to anon, authenticated;
+grant execute on function public.join_race(uuid, uuid, text) to anon, authenticated;
+grant execute on function public.submit_result(uuid, uuid, text, text, integer) to anon, authenticated;
+grant execute on function public.my_result(uuid, uuid, text) to anon, authenticated;
 grant execute on function public.race_runners(uuid) to anon, authenticated;
 grant execute on function public.leaderboard(uuid) to anon, authenticated;
+grant execute on function public.runner_count() to anon, authenticated;
 grant execute on function public.is_admin() to anon, authenticated;
 
 -- ---------------------------------------------------------------------
