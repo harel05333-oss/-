@@ -132,31 +132,16 @@ main { display: grid; gap: 34px; padding-block: 26px 10px; }
 .bib i:nth-child(1) { top: 10px; left: 12px; } .bib i:nth-child(2) { top: 10px; right: 12px; }
 .bib i:nth-child(3) { bottom: 10px; left: 12px; } .bib i:nth-child(4) { bottom: 10px; right: 12px; }
 .bib .top { font-family: var(--logo); font-style: italic; font-weight: 900; font-size: 15px; direction: ltr; }
-.bib .big { font-weight: 900; font-size: clamp(64px, 22vw, 104px); line-height: .9; letter-spacing: -.04em; direction: ltr; }
+.bib .big { font-weight: 900; font-size: clamp(60px, 20vw, 96px); line-height: .9; letter-spacing: -.04em; direction: ltr; }
 .bib .bot { font-weight: 800; font-size: 15px; }
-.specs { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
-.spec { background: var(--night-card); border: 1px solid var(--night-line); border-radius: 14px; padding: 12px 14px; min-width: 0; }
-.spec small { display: block; font-size: 12px; color: var(--night-muted); }
-.spec b { font-size: 20px; font-weight: 900; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
-.count { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; text-align: center; direction: ltr; }
-.count div { background: var(--night-card); border: 1px solid var(--night-line); border-radius: 14px; padding: 12px 4px; }
-.count b { display: block; font-weight: 900; font-size: clamp(26px, 8vw, 36px); line-height: 1; font-variant-numeric: tabular-nums; }
-.count small { font-size: 12px; color: var(--night-muted); }
-.steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; counter-reset: s; }
-.steps li { display: grid; grid-template-columns: 34px 1fr; gap: 12px; padding-block: 12px; border-bottom: 1px solid var(--night-line); counter-increment: s; }
-.steps li:last-child { border-bottom: 0; }
-.steps li::before {
-  content: counter(s); width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center;
-  background: var(--bib); color: var(--bib-ink); font-weight: 900; font-size: 16px;
-}
-.steps b { display: block; font-weight: 800; }
-.steps span { color: var(--night-muted); font-size: 15px; }
 
 /* About */
 .about { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 20px; display: grid; gap: 10px; }
 .about p { color: var(--muted); }
-.who { display: flex; align-items: center; gap: 12px; }
-.avatar { width: 52px; height: 52px; border-radius: 50%; background: var(--night); color: var(--bib); display: grid; place-items: center; font-family: var(--logo); font-style: italic; font-weight: 900; font-size: 22px; flex: none; }
+.who { display: flex; align-items: center; gap: 14px; }
+.who h3 { font-size: 22px; }
+.lead-txt { color: var(--muted); font-size: 17px; }
+.avatar { width: 88px; height: 88px; border-radius: 50%; object-fit: cover; background: var(--night); border: 3px solid var(--bib); flex: none; }
 .who small { display: block; color: var(--muted); font-size: 14px; }
 
 footer { text-align: center; color: var(--muted); font-size: 13px; padding-block: 18px 6px; }
@@ -187,7 +172,7 @@ footer { text-align: center; color: var(--muted); font-size: 13px; padding-block
   <div class="wrap">
     <p class="label" style="color:var(--bib)">קהילת רצים · כל הארץ</p>
     <h1>לא רצים <em>לבד.</em></h1>
-    <p class="sub">מכירים רצים אחרים, לומדים אחד מהשני, ורצים ביחד מרוצים וירטואליים.</p>
+    <p class="sub">קהילת וואטסאפ שמחברת בין רצים מכל הארץ. מכירים, לומדים אחד מהשני ומשתפרים ביחד.</p>
     <svg class="route" viewBox="0 0 520 54" preserveAspectRatio="none" aria-hidden="true">
       <path class="dim" d="M6 44 C60 44 70 12 120 14 S190 46 240 40 300 8 350 12 430 44 514 20"/>
       <path d="M6 44 C60 44 70 12 120 14 S190 46 240 40 300 8 350 12"/>
@@ -204,8 +189,10 @@ footer { text-align: center; color: var(--muted); font-size: 13px; padding-block
 <main>
   <section class="sec">
     <div class="wrap sec">
-      <p class="label">מה זה TEAM HAREL</p>
-      <h2>קהילה שמחברת בין רצים</h2>
+      <p class="label">מטרת הקהילה</p>
+      <h2>שאף אחד לא ירוץ לבד</h2>
+      <p class="lead-txt">ריצה היא ספורט של יחידים. TEAM HAREL קיימת כדי לחבר בין רצים, כך שכל אחד ילמד מהאחרים, ישתפר, ויהיה חלק מקבוצה.</p>
+      <p class="label" style="margin-top:10px">מה יש בקהילה</p>
       <div class="feed">
         <article class="card">
           <div class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="8" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M2.5 19c.6-3 2.8-5 5.5-5s4.900 2 5.500 5M14.500 14.300c.8-.4 1.600-.6 2.500-.6 2.300 0 4 1.700 4.500 4.300"/></svg></div>
@@ -234,39 +221,16 @@ footer { text-align: center; color: var(--muted); font-size: 13px; padding-block
   <section class="race" id="race">
     <div class="wrap">
       <div class="sec">
-        <p class="label">המרוצים הווירטואליים</p>
+        <p class="label">מרוצים וירטואליים</p>
         <h2>אותו בוקר. כל אחד בעיר שלו.</h2>
-        <p class="lead">כל הקהילה יוצאת לרוץ באותו חלון זמן. בסוף היום יש טבלה אחת, עם מקום ראשון, שני ושלישי.</p>
+        <p class="lead">כל הקהילה רצה באותו חלון זמן, ובסוף היום יש טבלת תוצאות אחת. כדי להשתתף יוצרים משתמש פעם אחת, בשם ועיר. את הפרטים על כל מרוץ מפרסמים בקהילה.</p>
       </div>
-
-      <div class="bib" aria-label="מרוץ מספר 1, 5 קילומטר">
+      <div class="bib" aria-hidden="true">
         <i></i><i></i><i></i><i></i>
         <div class="top">TEAM HAREL</div>
-        <div class="big"><span id="bibKm">5</span>K</div>
-        <div class="bot">המרוץ הווירטואלי #1</div>
+        <div class="big">RUN</div>
+        <div class="bot">מרוצים וירטואליים</div>
       </div>
-
-      <div class="specs">
-        <div class="spec"><small>חלון זינוק</small><b class="ltr" id="win">06:00–08:00</b></div>
-        <div class="spec"><small>תאריך</small><b id="raceDate">יפורסם בקהילה</b></div>
-      </div>
-
-      <div id="countBox" hidden>
-        <p class="label" id="countLabel" style="margin-bottom:8px">הזינוק נפתח בעוד</p>
-        <div class="count">
-          <div><b id="cd">0</b><small>ימים</small></div>
-          <div><b id="ch">00</b><small>שעות</small></div>
-          <div><b id="cm">00</b><small>דקות</small></div>
-          <div><b id="cs">00</b><small>שניות</small></div>
-        </div>
-      </div>
-
-      <ol class="steps">
-        <li><div><b>יוצרים משתמש</b><span>פעם אחת, בשם ועיר, באתר המרוצים.</span></div></li>
-        <li><div><b>רצים בבוקר המרוץ</b><span>מקליטים את הריצה ב-Strava ויוצאים בתוך חלון הזינוק.</span></div></li>
-        <li><div><b>שולחים את הלינק</b><span>לוחצים "סיימתי את המרוץ", ואחרי בדיקה עולים לטבלה.</span></div></li>
-      </ol>
-
       <a class="btn yellow block" href="../races/">יצירת משתמש למרוצים</a>
     </div>
   </section>
@@ -276,7 +240,7 @@ footer { text-align: center; color: var(--muted); font-size: 13px; padding-block
       <p class="label">מי מוביל</p>
       <div class="about">
         <div class="who">
-          <div class="avatar" aria-hidden="true">H</div>
+          <img class="avatar" src="harel.jpg" alt="הראל רץ במרוץ" width="88" height="88">
           <div><h3>הראל</h3><small>מאמן ריצה וכוח</small></div>
         </div>
         <p>אני מלווה רצים ל-10 ק"מ, חצי מרתון ומרתון, עם שילוב של אימוני כוח.</p>
@@ -299,56 +263,8 @@ footer { text-align: center; color: var(--muted); font-size: 13px; padding-block
 </nav>
 
 <script>
-/* ============ הגדרות: כל מה שצריך לעדכן נמצא כאן ============ */
-const CONFIG = {
-  // לינק ההצטרפות לקהילת הוואטסאפ
-  whatsappLink: "https://chat.whatsapp.com/J2bZC626z49LJw5ADooI1B",
-
-  // המרוץ: תאריך בפורמט YYYY-MM-DD (שעון ישראל). ריק = "יפורסם בקהילה"
-  raceDate: "",
-  windowStart: "06:00",
-  windowEnd: "08:00",
-  distanceKm: 5
-};
-/* ============================================================ */
-
-const $ = id => document.getElementById(id);
-document.querySelectorAll(".js-wa").forEach(a => { a.href = CONFIG.whatsappLink; });
-$("win").textContent = CONFIG.windowStart + "–" + CONFIG.windowEnd;
-$("bibKm").textContent = String(CONFIG.distanceKm);
-
-/* ---- Race date and countdown (Israel time) ---- */
-function israelTime(dateStr, hhmm) {
-  // Build the instant for a wall-clock time in Asia/Jerusalem, whatever the viewer's zone.
-  const guess = new Date(dateStr + "T" + hhmm + ":00Z");
-  const parts = new Intl.DateTimeFormat("en-GB", {
-    timeZone: "Asia/Jerusalem", hour12: false,
-    year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit"
-  }).formatToParts(guess).reduce((o, p) => (o[p.type] = p.value, o), {});
-  const shown = Date.UTC(+parts.year, +parts.month - 1, +parts.day, +parts.hour % 24, +parts.minute);
-  return new Date(guess.getTime() - (shown - guess.getTime()));
-}
-if (/^\d{4}-\d{2}-\d{2}$/.test(CONFIG.raceDate)) {
-  const start = israelTime(CONFIG.raceDate, CONFIG.windowStart);
-  const end = israelTime(CONFIG.raceDate, CONFIG.windowEnd);
-  $("raceDate").textContent = new Intl.DateTimeFormat("he-IL", {
-    timeZone: "Asia/Jerusalem", weekday: "long", day: "numeric", month: "long"
-  }).format(start);
-  const tick = () => {
-    const now = Date.now();
-    if (now >= end.getTime()) { $("countBox").hidden = true; return false; }
-    const target = now < start.getTime() ? start : end;
-    $("countLabel").textContent = now < start.getTime() ? "הזינוק נפתח בעוד" : "חלון הזינוק פתוח! נסגר בעוד";
-    let s = Math.floor((target.getTime() - now) / 1000);
-    $("cd").textContent = Math.floor(s / 86400); s %= 86400;
-    $("ch").textContent = String(Math.floor(s / 3600)).padStart(2, "0"); s %= 3600;
-    $("cm").textContent = String(Math.floor(s / 60)).padStart(2, "0");
-    $("cs").textContent = String(s % 60).padStart(2, "0");
-    $("countBox").hidden = false;
-    return true;
-  };
-  if (tick()) { const t = setInterval(() => { if (!tick()) clearInterval(t); }, 1000); }
-}
+const WHATSAPP_LINK = "https://chat.whatsapp.com/J2bZC626z49LJw5ADooI1B";
+document.querySelectorAll(".js-wa").forEach(a => { a.href = WHATSAPP_LINK; });
 </script>
 </body>
 </html>
