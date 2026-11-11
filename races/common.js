@@ -2,6 +2,13 @@
 // All user-supplied text is written with textContent, never as HTML.
 (function () {
   "use strict";
+  // The site must never run inside another site's frame: that is how a visitor
+  // could be tricked into clicking admin buttons they cannot see.
+  if (window.top !== window.self) {
+    document.documentElement.hidden = true;
+    try { window.top.location = window.self.location.href; } catch (e) {}
+    throw new Error("framed");
+  }
   const cfg = window.RACE_CONFIG || {};
   const TZ = "Asia/Jerusalem";
 
@@ -71,6 +78,8 @@
 
   const ERRORS = {
     RACE_CLOSED: "ההרשמה למרוץ הזה סגורה.",
+    BAD_CODE: "קוד הקהילה לא נכון. הקוד מופיע בקבוצת הוואטסאפ של רוצו.",
+    BUSY: "יש כרגע עומס של הרשמות. נסו שוב בעוד שעה.",
     NO_USER: "לא מצאנו את המשתמש שלכם במכשיר הזה. צרו משתמש מחדש.",
     SITE_FULL: "אי אפשר ליצור משתמשים חדשים כרגע. פנו להראל בקהילה.",
     RACE_FULL: "המרוץ מלא, אין יותר מקומות.",

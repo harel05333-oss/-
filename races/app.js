@@ -111,8 +111,13 @@
     const name = $("pfName").value.trim().replace(/\s+/g, " ");
     const city = $("pfCity").value.trim().replace(/\s+/g, " ");
     if (name.length < 2 || city.length < 2) return showErr(err, "צריך למלא שם ועיר.");
+    const args = { p_name: name, p_city: city };
+    if (needCode) {
+      args.p_code = $("pfCode").value.trim();
+      if (!args.p_code) return showErr(err, "צריך למלא את קוד הקהילה.");
+    }
     showErr(err, ""); btn.disabled = true; btn.textContent = "יוצר...";
-    const { data, error } = await client.rpc("create_runner", { p_name: name, p_city: city });
+    const { data, error } = await client.rpc("create_runner", args);
     btn.disabled = false; btn.textContent = "יצירת משתמש";
     if (error || !data) return showErr(err, errorText(error));
     me = { id: data.runner_id, token: data.token, name: data.name, city: data.city };
@@ -122,6 +127,14 @@
     loadCount();
     if (current) { mine = { user: true, registered: false }; tick(); }
   });
+
+  // When the admin set a community code, signing up asks for it.
+  let needCode = false;
+  async function checkCode() {
+    const { data, error } = await client.rpc("join_code_required");
+    needCode = !error && data === true;
+    $("pfCodeField").hidden = !needCode;
+  }
 
   async function checkMe() {
     if (!me) return;
@@ -146,6 +159,7 @@
       return;
     }
     await checkMe();
+    checkCode();
     renderProfile();
     loadCount();
     const { data, error } = await client.from("races")

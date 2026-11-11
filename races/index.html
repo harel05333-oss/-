@@ -19,12 +19,12 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800;900&amp;display=swap">
-<link rel="stylesheet" href="styles.css?v=20261112b">
+<link rel="stylesheet" href="styles.css?v=20261112c">
 </head>
 <body>
 <header class="appbar">
   <div class="wrap">
-    <a class="brand" id="brandLink" href="../team-harel/"><img src="logo.png?v=20261112b" alt="" width="34" height="34"><span><small>קהילת רוצו</small><b>מרוץ וירטואלי</b></span></a>
+    <a class="brand" id="brandLink" href="../team-harel/"><img src="logo.png?v=20261112c" alt="" width="34" height="34"><span><small>קהילת רוצו</small><b>מרוץ וירטואלי</b></span></a>
   </div>
 </header>
 
@@ -54,6 +54,11 @@
           <div class="grid2">
             <div class="field"><label for="pfName">שם מלא</label><input id="pfName" autocomplete="name" maxlength="40" required></div>
             <div class="field"><label for="pfCity">עיר</label><input id="pfCity" autocomplete="address-level2" maxlength="40" required></div>
+          </div>
+          <div class="field" id="pfCodeField" hidden>
+            <label for="pfCode">קוד קהילה</label>
+            <input id="pfCode" class="ltr" autocomplete="off" autocapitalize="off" spellcheck="false" maxlength="40">
+            <span class="hint">הקוד מופיע בקבוצת הוואטסאפ של רוצו.</span>
           </div>
           <p class="notice bad" id="pfErr" hidden></p>
           <button class="btn big" type="submit" id="pfBtn">יצירת משתמש</button>
@@ -203,9 +208,9 @@
 
 <footer>קהילת רוצו · מרוצים וירטואליים</footer>
 
-<script src="vendor/supabase.js?v=20261112b"></script>
-<script src="config.js?v=20261112b"></script>
-<script src="common.js?v=20261112b"></script>
-<script src="app.js?v=20261112b"></script>
+<script src="vendor/supabase.js?v=20261112c"></script>
+<script src="config.js?v=20261112c"></script>
+<script src="common.js?v=20261112c"></script>
+<script src="app.js?v=20261112c"></script>
 </body>
 </html>

@@ -52,7 +52,32 @@
     setState("");
     await loadUsers();
     await loadRaces();
+    loadCode();
   }
+
+  /* ---------- community code ---------- */
+  async function loadCode() {
+    const { data, error } = await client.from("settings").select("join_code").eq("id", true);
+    if (error || !data || !data.length) { $("codeCard").hidden = true; return; }   // database not upgraded yet
+    const code = data[0].join_code;
+    $("codeState").textContent = code ? "הקוד הנוכחי: " + code : "אין קוד כרגע. כל מי שיש לו את הלינק יכול ליצור משתמש.";
+    $("codeClear").hidden = !code;
+    $("codeCard").hidden = false;
+  }
+  async function saveCode(value) {
+    const { error } = await client.from("settings").update({ join_code: value }).eq("id", true);
+    if (error) return showErr($("codeErr"), "השמירה נכשלה. נסו שוב.");
+    showErr($("codeErr"), "");
+    $("codeInput").value = "";
+    loadCode();
+  }
+  $("codeForm").addEventListener("submit", ev => {
+    ev.preventDefault();
+    const v = $("codeInput").value.trim();
+    if (!/^[A-Za-z0-9א-ת_-]{4,40}$/.test(v)) return showErr($("codeErr"), "הקוד צריך להיות באורך 4 עד 40 תווים, אותיות וספרות בלבד.");
+    saveCode(v);
+  });
+  $("codeClear").addEventListener("click", () => saveCode(null));
 
   /* ---------- users ---------- */
   async function loadUsers() {

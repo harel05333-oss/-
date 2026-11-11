@@ -160,6 +160,30 @@ drop policy if exists results_admin_delete on public.results;
 create policy results_admin_delete on public.results
   for delete using (public.is_admin());
 
+-- -------------------------------------------------------------- settings
+-- One row. join_code, when set, must be typed by anyone creating a user;
+-- the admin shares it in the WhatsApp group so only members can sign up.
+create table if not exists public.settings (
+  id        boolean primary key default true check (id),
+  join_code text check (join_code is null or char_length(join_code) between 4 and 40)
+);
+insert into public.settings (id) values (true) on conflict (id) do nothing;
+alter table public.settings enable row level security;
+
+drop policy if exists settings_admin_read on public.settings;
+create policy settings_admin_read on public.settings
+  for select using (public.is_admin());
+
+drop policy if exists settings_admin_update on public.settings;
+create policy settings_admin_update on public.settings
+  for update using (public.is_admin()) with check (public.is_admin());
+
+create or replace function public.join_code_required()
+returns boolean
+language sql stable security definer
+set search_path = public
+as $$ select coalesce((select join_code is not null from public.settings where id), false); $$;
+
 -- --------------------------------------------------------------- helpers
 create or replace function public.clean_text(p text)
 returns text language sql immutable
@@ -187,11 +211,16 @@ $$;
 create or replace function public.client_ip()
 returns inet language plpgsql stable
 as $$
-declare h text;
+declare h json; v text;
 begin
-  h := current_setting('request.headers', true);
-  if h is null or h = '' then return null; end if;
-  return nullif(btrim(split_part(h::json ->> 'x-forwarded-for', ',', 1)), '')::inet;
+  h := nullif(current_setting('request.headers', true), '')::json;
+  if h is null then return null; end if;
+  -- cf-connecting-ip is written by the edge network and cannot be forged by the visitor;
+  -- the first x-forwarded-for entry can be, so it is only the last resort.
+  v := coalesce(nullif(btrim(h ->> 'cf-connecting-ip'), ''),
+                nullif(btrim(h ->> 'x-real-ip'), ''),
+                nullif(btrim(split_part(h ->> 'x-forwarded-for', ',', 1)), ''));
+  return v::inet;
 exception when others then
   return null;
 end $$;
@@ -209,7 +238,8 @@ $$;
 revoke all on function public.runner_by_token(uuid, text) from public, anon, authenticated;
 
 -- ------------------------------------------------ public: create a user
-create or replace function public.create_runner(p_name text, p_city text)
+drop function if exists public.create_runner(text, text);
+create or replace function public.create_runner(p_name text, p_city text, p_code text default null)
 returns json
 language plpgsql security definer
 set search_path = public, extensions
@@ -219,8 +249,12 @@ declare
   v_city  text := public.clean_text(p_city);
   v_ip    inet := public.client_ip();
   v_token text := encode(gen_random_bytes(24), 'hex');
+  v_need  text := (select join_code from public.settings where id);
   v_id    uuid;
 begin
+  if v_need is not null and lower(btrim(coalesce(p_code, ''))) <> lower(btrim(v_need)) then
+    raise exception 'BAD_CODE';
+  end if;
   if not public.valid_label(v_name) or not public.valid_label(v_city) then
     raise exception 'BAD_INPUT';
   end if;
@@ -230,6 +264,10 @@ begin
      (select count(*) from public.runners
       where ip = v_ip and created_at > now() - interval '1 hour') >= 20 then
     raise exception 'TOO_MANY';
+  end if;
+  -- Site-wide brake against a flood of fake users, whatever addresses it comes from.
+  if (select count(*) from public.runners where created_at > now() - interval '1 hour') >= 500 then
+    raise exception 'BUSY';
   end if;
   if (select count(*) from public.runners) >= 20000 then
     raise exception 'SITE_FULL';
@@ -400,7 +438,8 @@ set search_path = public
 as $$ select count(*)::integer from public.runners; $$;
 
 -- ----------------------------------------------------------- privileges
-revoke all on function public.create_runner(text, text) from public;
+revoke all on function public.create_runner(text, text, text) from public;
+revoke all on function public.join_code_required() from public;
 revoke all on function public.runner_me(uuid, text) from public;
 revoke all on function public.join_race(uuid, uuid, text) from public;
 revoke all on function public.submit_result(uuid, uuid, text, text, integer) from public;
@@ -408,7 +447,8 @@ revoke all on function public.my_result(uuid, uuid, text) from public;
 revoke all on function public.race_runners(uuid) from public;
 revoke all on function public.leaderboard(uuid) from public;
 revoke all on function public.runner_count() from public;
-grant execute on function public.create_runner(text, text) to anon, authenticated;
+grant execute on function public.create_runner(text, text, text) to anon, authenticated;
+grant execute on function public.join_code_required() to anon, authenticated;
 grant execute on function public.runner_me(uuid, text) to anon, authenticated;
 grant execute on function public.join_race(uuid, uuid, text) to anon, authenticated;
 grant execute on function public.submit_result(uuid, uuid, text, text, integer) to anon, authenticated;
