@@ -2,7 +2,7 @@
 // a visitor who is not in the admins table gets nothing back, whatever this file does.
 (function () {
   "use strict";
-  const { client, configured, $, el, clear, parseTime, fmtTime, fmtDate, fmtClock, fmtKm, isStravaUrl } = window.TH;
+  const { client, configured, $, el, clear, parseTime, fmtTime, fmtDate, fmtClock, fmtKm, isActivityUrl, activitySite } = window.TH;
 
   let races = [];
   let runners = {};       // runner id -> { name, city, created_at }
@@ -113,7 +113,7 @@
   /* ---------- races ---------- */
   async function loadRaces(selectId) {
     const { data, error } = await client.from("races")
-      .select("id,title,race_date,window_start,window_end,distance_km,status,max_runners,starts_at,ends_at")
+      .select("*,starts_at,ends_at")
       .order("race_date", { ascending: false });
     if (error) { setState("לא הצלחנו לטעון את המרוצים. נסו לרענן.", "bad"); return; }
     races = data || [];
@@ -143,6 +143,9 @@
     $("rfEnd").value = r ? r.window_end.slice(0, 5) : "08:00";
     $("rfMax").value = r ? r.max_runners : 500;
     $("rfStatus").value = r ? r.status : "draft";
+    $("rfFee").value = r ? (Number(r.fee_ils) || 0) : 0;
+    $("rfPay").value = r ? (r.pay_url || "") : "";
+    $("rfPrize").value = r ? (r.prize || "") : "";
     showErr($("rfErr"), "");
     $("raceFormCard").hidden = false;
     $("raceFormCard").scrollIntoView({ block: "start" });
@@ -162,13 +165,18 @@
       window_end: $("rfEnd").value,
       distance_km: Number($("rfKm").value),
       max_runners: Number($("rfMax").value),
-      status: $("rfStatus").value
+      status: $("rfStatus").value,
+      fee_ils: Number($("rfFee").value) || 0,
+      pay_url: $("rfPay").value.trim() || null,
+      prize: $("rfPrize").value.trim().replace(/\s+/g, " ") || null
     };
     if (row.title.length < 2) return showErr(err, "צריך לתת שם למרוץ.");
     if (!/^\d{4}-\d{2}-\d{2}$/.test(row.race_date)) return showErr(err, "צריך לבחור תאריך.");
     if (!row.window_start || !row.window_end || row.window_end <= row.window_start) return showErr(err, "שעת הסגירה צריכה להיות אחרי שעת הפתיחה.");
     if (!(row.distance_km > 0 && row.distance_km <= 100)) return showErr(err, "המרחק צריך להיות בין 0.5 ל-100 ק\"מ.");
     if (!(Number.isInteger(row.max_runners) && row.max_runners >= 1 && row.max_runners <= 5000)) return showErr(err, "מקסימום הרצים צריך להיות בין 1 ל-5000.");
+    if (!(Number.isInteger(row.fee_ils) && row.fee_ils >= 0 && row.fee_ils <= 10000)) return showErr(err, "דמי ההשתתפות צריכים להיות מספר שלם בין 0 ל-10000.");
+    if (row.pay_url && !/^https:\/\/[A-Za-z0-9.-]+\//.test(row.pay_url)) return showErr(err, "הלינק לתשלום צריך להתחיל ב-https://");
     showErr(err, "");
     const btn = $("rfSave");
     btn.disabled = true;
@@ -213,8 +221,8 @@
   });
 
   function stravaLink(url) {
-    if (!isStravaUrl(url)) return el("span", "muted small", "לינק לא תקין");
-    const a = el("a", "", "פתיחה ב-Strava");
+    if (!isActivityUrl(url)) return el("span", "muted small", "לינק לא תקין");
+    const a = el("a", "", "פתיחה ב-" + activitySite(url));
     a.href = url; a.target = "_blank"; a.rel = "noopener noreferrer";
     return a;
   }
@@ -223,8 +231,8 @@
     const r = current;
     if (!r) return;
     const [regs, res] = await Promise.all([
-      client.from("registrations").select("id,runner_id,created_at").eq("race_id", r.id).order("created_at"),
-      client.from("results").select("registration_id,strava_url,claimed_seconds,final_seconds,status,admin_note,submitted_at").eq("race_id", r.id).order("submitted_at")
+      client.from("registrations").select("id,runner_id,created_at,paid").eq("race_id", r.id).order("created_at"),
+      client.from("results").select("registration_id,strava_url,claimed_seconds,final_seconds,status,admin_note,submitted_at,flags").eq("race_id", r.id).order("submitted_at")
     ]);
     if (current !== r) return;
     if (regs.error || res.error) return showErr($("raErr"), "לא הצלחנו לטעון את נתוני המרוץ. לחצו על רענון.");
@@ -260,7 +268,18 @@
       const pace = fmtTime(x.claimed_seconds / Number(current.distance_km));
       const info = el("p", "small muted", "דיווח: " + fmtTime(x.claimed_seconds) + " (קצב " + pace + " לק\"מ)");
 
-      const line = el("div", "inline");
+      // What the database already verified when the result came in, and what is left for a person.
+      const fast = (x.flags || []).indexOf("FAST_PACE") !== -1;
+      const checks = el("ul", "checks");
+      const line = (cls, text) => { const li = el("li", cls, text); checks.append(li); };
+      line("ok", "הלינק מ-" + activitySite(x.strava_url) + ", ולא נשלח על ידי רץ אחר");
+      line("ok", "נשלח ב-" + fmtClock(x.submitted_at) + ", אחרי שאפשר היה לסיים ריצה כזאת");
+      line(fast ? "warn" : "ok", fast ? "קצב מהיר מ-3:00 לק\"מ: נדיר מאוד, לבדוק היטב" : "הקצב הגיוני: " + pace + " לק\"מ");
+      line("todo", "לבדוק בפעילות: התאריך, ושעת ההתחלה בין " + fmtClock(current.starts_at) + " ל-" + fmtClock(current.ends_at));
+      line("todo", "לבדוק בפעילות: המרחק לפחות " + fmtKm(current.distance_km));
+      line("todo", "לבדוק בפעילות: הזמן הכולל (Elapsed time) הוא " + fmtTime(x.claimed_seconds));
+
+      const fields = el("div", "inline");
       const fTime = el("div", "field");
       const tId = "pt" + i, nId = "pn" + i;
       const tLab = el("label", "", "זמן סופי"); tLab.htmlFor = tId;
@@ -270,7 +289,7 @@
       const nLab = el("label", "", "סיבת דחייה (לרץ)"); nLab.htmlFor = nId;
       const nIn = el("input"); nIn.id = nId; nIn.maxLength = 200; nIn.placeholder = "למשל: ההתחלה מחוץ לחלון הזינוק";
       fNote.append(nLab, nIn);
-      line.append(fTime, fNote);
+      fields.append(fTime, fNote);
 
       const err = el("p", "notice bad"); err.hidden = true;
       const btns = el("div", "row");
@@ -287,7 +306,7 @@
         review(x, { status: "rejected", final_seconds: null, admin_note: note }, err);
       });
       btns.append(ok, no);
-      card.append(head, info, line, err, btns);
+      card.append(head, info, checks, fields, err, btns);
       box.append(card);
     });
   }
@@ -330,7 +349,17 @@
         loadRaceData();
       });
       act.append(del, sure);
-      tr.append(el("td", "", g.name), el("td", "", g.city), el("td", "n small", stamp.format(new Date(g.created_at))), act);
+      const paidTd = el("td");
+      const paid = el("input"); paid.type = "checkbox"; paid.checked = !!g.paid;
+      paid.setAttribute("aria-label", "שילם: " + g.name);
+      paid.addEventListener("change", async () => {
+        paid.disabled = true;
+        const { error } = await client.from("registrations").update({ paid: paid.checked }).eq("id", g.id);
+        paid.disabled = false;
+        if (error) { paid.checked = !paid.checked; showErr($("raErr"), "העדכון נכשל. נסו שוב."); }
+      });
+      paidTd.append(paid);
+      tr.append(el("td", "", g.name), el("td", "", g.city), el("td", "n small", stamp.format(new Date(g.created_at))), paidTd, act);
       body.append(tr);
     });
   }

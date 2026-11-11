@@ -5,24 +5,19 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src https://*.supabase.co; img-src 'self' data:; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
-<meta name="theme-color" content="#0B0B0C">
+<meta name="theme-color" content="#131314">
 <meta name="robots" content="noindex, nofollow">
 <title>רוצו | ניהול מרוצים</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800;900&family=Rubik:ital,wght@1,900&display=swap">
-<link rel="stylesheet" href="styles.css?v=20261111b">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800;900&amp;display=swap">
+<link rel="stylesheet" href="styles.css?v=20261112a">
 </head>
 <body>
-<header class="top">
-  <div class="lanes" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
-  <div class="wrap wide">
-    <div class="row between">
-      <a class="brand" href="./">קהילת <span>רוצו</span></a>
-      <button class="btn sm quiet" type="button" id="logoutBtn" hidden>התנתקות</button>
-    </div>
-    <div class="eyebrow">אזור מנהל</div>
-    <h1>ניהול מרוצים</h1>
+<header class="appbar">
+  <div class="wrap wide row between">
+    <a class="brand" href="./"><img src="logo.png?v=20261112a" alt="" width="34" height="34"><span><small>קהילת רוצו</small><b>ניהול מרוצים</b></span></a>
+    <button class="btn sm quiet" type="button" id="logoutBtn" hidden>התנתקות</button>
   </div>
 </header>
 
@@ -90,6 +85,11 @@
               </select>
             </div>
           </div>
+          <div class="grid2">
+            <div class="field"><label for="rfFee">דמי השתתפות בש"ח</label><input id="rfFee" class="ltr num" type="number" inputmode="numeric" min="0" max="10000" step="1" value="0"><span class="hint">0 = מרוץ חינם</span></div>
+            <div class="field"><label for="rfPrize">פרס</label><input id="rfPrize" maxlength="200" placeholder="למשל: שובר 200 ש&quot;ח למקום הראשון"><span class="hint">אפשר להשאיר ריק</span></div>
+          </div>
+          <div class="field"><label for="rfPay">לינק לתשלום</label><input id="rfPay" class="ltr" type="url" inputmode="url" maxlength="300" placeholder="https://..."><span class="hint">לינק של Bit, PayBox או כל דף תשלום אחר. מוצג לרצים רק כשיש דמי השתתפות.</span></div>
           <p class="small muted">השעות הן לפי שעון ישראל. תוצאות אפשר לדווח עד 12 שעות אחרי סגירת חלון הזינוק.</p>
           <p class="notice bad" id="rfErr" hidden></p>
           <div class="row">
@@ -119,7 +119,7 @@
 
         <div class="card stack">
           <h3>ממתינות לבדיקה <span class="pill warn num" id="pendCount">0</span></h3>
-          <p class="small muted">פותחים את הלינק, בודקים שעת התחלה, מרחק וקצב, ומתקנים את הזמן אם צריך.</p>
+          <p class="small muted">חלק מהבדיקות כבר נעשו אוטומטית. את מה שמסומן "לבדוק בפעילות" בודקים בלינק עצמו.</p>
           <div class="review" id="pendList"></div>
           <p class="muted" id="pendEmpty">אין תוצאות שמחכות לבדיקה.</p>
         </div>
@@ -139,7 +139,7 @@
           <h3>נרשמים <span class="pill num" id="regCount">0</span></h3>
           <div class="scroll">
             <table>
-              <thead><tr><th>שם</th><th>עיר</th><th>נרשם ב</th><th></th></tr></thead>
+              <thead><tr><th>שם</th><th>עיר</th><th>נרשם ב</th><th>שילם</th><th></th></tr></thead>
               <tbody id="regBody"></tbody>
             </table>
           </div>
@@ -150,9 +150,9 @@
   </div>
 </main>
 
-<script src="vendor/supabase.js?v=20261111b"></script>
-<script src="config.js?v=20261111b"></script>
-<script src="common.js?v=20261111b"></script>
-<script src="admin.js?v=20261111b"></script>
+<script src="vendor/supabase.js?v=20261112a"></script>
+<script src="config.js?v=20261112a"></script>
+<script src="common.js?v=20261112a"></script>
+<script src="admin.js?v=20261112a"></script>
 </body>
 </html>
