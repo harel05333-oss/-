@@ -1,10 +1,19 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>TEAM HAREL</title>
 <meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="קהילת ריצה וכוח בוואטסאפ, ומרוץ וירטואלי של 5 ק״מ שכולם רצים באותו בוקר, כל אחד בעיר שלו.">
+<meta property="og:title" content="TEAM HAREL | קהילת ריצה וכוח">
+<meta property="og:description" content="קהילה לרצים מכל הארץ, ומרוץ וירטואלי של 5 ק״מ עם טבלת תוצאות.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700&family=Rubik:ital,wght@1,800;1,900&display=swap">
 <style>
-/* Layout: one narrow column, phone first. Running-track lanes as the recurring motif. */
+/* Layout: one narrow column, phone first. Running-track lanes as the recurring motif;
+   the race section is the one dark "track" band besides the hero. */
 :root {
   --bg: #F2F4F7;
   --surface: #FFFFFF;
@@ -14,25 +23,33 @@
   --accent: #1E4BFF;
   --accent-ink: #FFFFFF;
   --track: #0D1B2E;
-  --lane: rgba(255,255,255,.22);
+  --track-ink: #FFFFFF;
+  --track-muted: rgba(255,255,255,.72);
+  --track-line: rgba(255,255,255,.16);
+  --track-surface: rgba(255,255,255,.07);
+  --track-accent: #8FA5FF;
+  --gold: #F2B705;
   --wa: #1DA851;
+  --ok: #1DA851;
   --display: "Rubik", "Heebo", system-ui, sans-serif;
   --body: "Heebo", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --bg: #0A1220; --surface: #111C2E; --ink: #EEF2F8; --muted: #9AA8BE; --line: #22314A;
-    --accent: #5B7CFF; --accent-ink: #FFFFFF; --track: #16243B; --lane: rgba(255,255,255,.14); --wa: #22B85A;
+    --accent: #5B7CFF; --accent-ink: #FFFFFF; --track: #16243B; --wa: #22B85A; --ok: #22B85A;
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
   --bg: #0A1220; --surface: #111C2E; --ink: #EEF2F8; --muted: #9AA8BE; --line: #22314A;
-  --accent: #5B7CFF; --accent-ink: #FFFFFF; --track: #16243B; --lane: rgba(255,255,255,.14); --wa: #22B85A;
+  --accent: #5B7CFF; --accent-ink: #FFFFFF; --track: #16243B; --wa: #22B85A; --ok: #22B85A;
   color-scheme: dark;
 }
 * { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
 body {
+  margin: 0;
   background: var(--bg); color: var(--ink);
   font-family: var(--body); font-size: 17px; line-height: 1.6;
   direction: rtl;
@@ -43,108 +60,155 @@ body {
   padding-right: max(16px, env(safe-area-inset-right, 0px));
 }
 section { padding-block: 40px; }
-h1, h2 { font-family: var(--display); font-style: italic; font-weight: 900; line-height: 1.05; margin: 0; text-wrap: balance; }
+h1, h2 { font-family: var(--display); font-style: italic; font-weight: 900; line-height: 1.08; margin: 0; text-wrap: balance; }
 h2 { font-size: clamp(26px, 6vw, 34px); margin-bottom: 18px; }
+h3 { margin: 0 0 2px; font-size: 18px; }
 p { margin: 0; }
-.eyebrow { font-size: 13px; font-weight: 700; letter-spacing: .08em; color: var(--accent); }
+.eyebrow { font-size: 13px; font-weight: 700; letter-spacing: .08em; color: var(--accent); margin-bottom: 6px; }
+[hidden] { display: none !important; }
 
 /* Hero */
-.hero { background: var(--track); color: #fff; position: relative; overflow: hidden; }
+.hero { background: var(--track); color: var(--track-ink); position: relative; overflow: hidden; }
 .hero .wrap { padding-block: 56px 44px; position: relative; z-index: 1; display: grid; gap: 18px; }
+.hero .eyebrow, .race .eyebrow { color: var(--track-accent); margin: 0; }
 .hero h1 { font-size: clamp(52px, 15vw, 88px); letter-spacing: -.01em; direction: ltr; text-align: right; }
-.hero h1 span { color: #8FA5FF; }
+.hero h1 span { color: var(--track-accent); }
 .hero .tag { font-size: 20px; font-weight: 700; }
-.hero .sub { color: rgba(255,255,255,.8); max-width: 34ch; }
+.hero .sub { color: var(--track-muted); max-width: 36ch; }
 .lanes { position: absolute; inset: 0; display: grid; grid-template-rows: repeat(6, 1fr); pointer-events: none; }
-.lanes i { border-bottom: 2px solid var(--lane); }
+.lanes i { border-bottom: 2px solid var(--track-line); }
+.hero-actions { display: grid; gap: 10px; justify-items: start; }
 
 .cta {
   display: inline-flex; align-items: center; justify-content: center; gap: 10px;
-  background: var(--wa); color: #fff; text-decoration: none;
-  font-weight: 700; font-size: 18px; padding: 16px 26px; border-radius: 999px;
+  background: var(--wa); color: #fff; text-decoration: none; border: 0; cursor: pointer;
+  font-family: var(--body); font-weight: 700; font-size: 18px; padding: 16px 26px; border-radius: 999px;
   width: 100%; max-width: 360px;
   transition: transform .15s ease, filter .15s ease;
 }
 .cta:hover { filter: brightness(1.07); transform: translateY(-1px); }
-.cta:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+.cta:focus-visible, .ghost:focus-visible { outline: 3px solid var(--track-accent); outline-offset: 3px; }
 .cta svg { width: 22px; height: 22px; flex: none; }
-.facts { display: flex; flex-wrap: wrap; gap: 8px 16px; font-size: 14px; color: rgba(255,255,255,.75); }
-
-/* Distances: the lanes */
-.dist { display: grid; gap: 8px; }
-.lane-row {
-  display: grid; grid-template-columns: 76px 1fr; align-items: center; gap: 12px;
-  font-variant-numeric: tabular-nums;
+.cta.blue { background: var(--accent); color: var(--accent-ink); }
+.ghost {
+  display: inline-flex; align-items: center; justify-content: center;
+  color: var(--track-ink); text-decoration: none; font-weight: 700;
+  padding: 13px 24px; border-radius: 999px; border: 2px solid var(--track-line);
+  width: 100%; max-width: 360px;
 }
-.lane-row b { font-family: var(--display); font-style: italic; font-weight: 800; font-size: 22px; direction: ltr; text-align: left; }
-.bar { height: 12px; background: var(--line); border-radius: 6px; overflow: hidden; }
-.bar span { display: block; height: 100%; background: var(--accent); border-radius: 6px; }
-.dist-note { color: var(--muted); margin-top: 14px; }
+.facts { display: flex; flex-wrap: wrap; gap: 8px 16px; font-size: 14px; color: var(--track-muted); }
 
 /* Week */
-.week { display: grid; gap: 0; border-top: 1px solid var(--line); }
+.week { display: grid; border-top: 1px solid var(--line); }
 .day { display: grid; grid-template-columns: 72px 1fr; gap: 14px; padding-block: 16px; border-bottom: 1px solid var(--line); }
 .day .d { font-weight: 700; color: var(--accent); }
-.day h3 { margin: 0 0 2px; font-size: 18px; }
 .day p { color: var(--muted); font-size: 16px; }
 
 /* Inside */
 .inside { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
 .box { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 18px; min-width: 0; }
-.box h3 { margin: 0 0 4px; font-size: 18px; }
 .box p { color: var(--muted); font-size: 16px; }
+
+/* Race band */
+.race { background: var(--track); color: var(--track-ink); position: relative; overflow: hidden; }
+.race .wrap { position: relative; z-index: 1; display: grid; gap: 28px; }
+.race h2 { margin: 0; }
+.race-head { display: grid; gap: 10px; }
+.race-head p { color: var(--track-muted); }
+.specs { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: var(--track-line); border: 1px solid var(--track-line); border-radius: 14px; overflow: hidden; }
+.spec { background: var(--track); padding: 14px 16px; min-width: 0; }
+.spec small { display: block; font-size: 13px; color: var(--track-muted); }
+.spec b { font-family: var(--display); font-style: italic; font-weight: 800; font-size: 24px; font-variant-numeric: tabular-nums; }
+.spec b span { direction: ltr; unicode-bidi: isolate; }
+
+.count { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; text-align: center; direction: ltr; }
+.count div { background: var(--track-surface); border-radius: 12px; padding: 12px 4px; }
+.count b { display: block; font-family: var(--display); font-style: italic; font-weight: 900; font-size: clamp(28px, 8vw, 40px); line-height: 1; font-variant-numeric: tabular-nums; }
+.count small { font-size: 12px; color: var(--track-muted); }
+
+.sub-h { font-size: 20px; font-weight: 700; margin: 0 0 12px; }
+.steps { list-style: none; padding: 0; margin: 0; display: grid; gap: 14px; counter-reset: s; }
+.steps li { display: grid; grid-template-columns: 36px 1fr; gap: 12px; align-items: start; counter-increment: s; }
+.steps li::before {
+  content: counter(s); font-family: var(--display); font-style: italic; font-weight: 900;
+  width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center;
+  background: var(--track-accent); color: var(--track); font-size: 18px;
+}
+.steps p { padding-top: 4px; }
+.steps small { display: block; color: var(--track-muted); font-size: 15px; }
+
+.fair { border: 1px solid var(--track-line); border-radius: 14px; padding: 18px; }
+.fair ul { margin: 0; padding: 0 18px 0 0; display: grid; gap: 6px; color: var(--track-muted); font-size: 16px; }
+.fair ul b { color: var(--track-ink); font-weight: 700; }
+
+/* Register */
+.reg { background: var(--track-surface); border-radius: 14px; padding: 18px; display: grid; gap: 12px; }
+.reg form { display: grid; gap: 12px; }
+.field { display: grid; gap: 4px; }
+.field label { font-size: 14px; font-weight: 700; }
+.field input {
+  font: inherit; color: var(--ink); background: var(--surface);
+  border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; width: 100%;
+}
+.field input:focus-visible { outline: 3px solid var(--track-accent); outline-offset: 1px; }
+.reg .note { font-size: 14px; color: var(--track-muted); }
+.reg .done { font-weight: 700; }
+.reg .err { color: #FFB4A8; font-size: 15px; }
+
+/* Leaderboard */
+.podium { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; align-items: end; direction: ltr; }
+.pod { background: var(--track-surface); border-radius: 12px 12px 0 0; padding: 12px 6px; text-align: center; min-width: 0; direction: rtl; }
+.pod .n { font-family: var(--display); font-style: italic; font-weight: 900; font-size: 30px; line-height: 1; }
+.pod.p1 { padding-block: 22px 18px; border-top: 4px solid var(--gold); }
+.pod.p1 .n { color: var(--gold); font-size: 40px; }
+.pod.p2 { padding-block: 16px 14px; border-top: 4px solid #C4CCD8; }
+.pod.p3 { border-top: 4px solid #C98A5B; }
+.pod .who { font-weight: 700; font-size: 15px; overflow-wrap: anywhere; margin-top: 6px; }
+.pod .city { font-size: 13px; color: var(--track-muted); overflow-wrap: anywhere; }
+.pod .t { font-variant-numeric: tabular-nums; font-weight: 700; direction: ltr; margin-top: 4px; }
+.pod.empty .who { color: var(--track-muted); font-weight: 400; }
+.board-wrap { overflow-x: auto; }
+table.board { width: 100%; border-collapse: collapse; font-size: 16px; }
+.board th { text-align: right; font-size: 13px; color: var(--track-muted); font-weight: 500; padding: 8px 6px; border-bottom: 1px solid var(--track-line); }
+.board td { padding: 10px 6px; border-bottom: 1px solid var(--track-line); }
+.board td.num { font-variant-numeric: tabular-nums; direction: ltr; text-align: right; white-space: nowrap; }
+.board-state { color: var(--track-muted); font-size: 15px; }
 
 /* About */
 .about { background: var(--surface); border-block: 1px solid var(--line); }
 .about p + p { margin-top: 12px; }
 
-/* Steps */
-.steps { list-style: none; padding: 0; margin: 0; display: grid; gap: 14px; counter-reset: s; }
-.steps li { display: grid; grid-template-columns: 40px 1fr; gap: 12px; align-items: start; counter-increment: s; }
-.steps li::before {
-  content: counter(s); font-family: var(--display); font-style: italic; font-weight: 900;
-  width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center;
-  background: var(--accent); color: var(--accent-ink); font-size: 20px;
-}
-.steps p { padding-top: 6px; }
-
 .final { text-align: center; display: grid; gap: 16px; justify-items: center; }
+.final h2 { margin: 0; }
 .final p { color: var(--muted); }
 footer { text-align: center; color: var(--muted); font-size: 14px; padding-block: 24px 32px; }
 
-@media (prefers-reduced-motion: reduce) { .cta { transition: none; } .cta:hover { transform: none; } }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .cta { transition: none; } .cta:hover { transform: none; }
+}
 </style>
-
+</head>
+<body>
 <header class="hero">
   <div class="lanes" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
   <div class="wrap">
-    <div class="eyebrow" style="color:#8FA5FF">קהילת ריצה וכוח</div>
+    <div class="eyebrow">קהילת ריצה וכוח</div>
     <h1>TEAM <span>HAREL</span></h1>
     <p class="tag">רצים ביחד. מתחזקים ביחד. מגיעים למטרה.</p>
-    <p class="sub">קהילה בוואטסאפ לרצים מכל הארץ: אימון שבועי, תרגילי כוח, מרוצים וירטואליים ושותפים לריצה באזור שלך.</p>
-    <a class="cta js-wa" href="#" target="_blank" rel="noopener">
-      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2c-1.5 0-3-.4-4.3-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2c0 1.3.9 2.5 1 2.7.1.2 1.8 2.8 4.4 3.9 1.6.7 2.3.8 3.1.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.6-.3Z"/></svg>
-      הצטרפות לקהילה בוואטסאפ
-    </a>
+    <p class="sub">קהילה בוואטסאפ לרצים מכל הארץ: ידע מקצועי, אימון שבועי, שותפים לריצה, ומרוץ וירטואלי שכולם רצים באותו בוקר.</p>
+    <div class="hero-actions">
+      <a class="cta js-wa" href="#" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2c-1.5 0-3-.4-4.3-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2c0 1.3.9 2.5 1 2.7.1.2 1.8 2.8 4.4 3.9 1.6.7 2.3.8 3.1.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.6-.3Z"/></svg>
+        הצטרפות לקהילה בוואטסאפ
+      </a>
+      <a class="ghost" href="#race">למרוץ הווירטואלי</a>
+    </div>
     <div class="facts"><span>חינם</span><span>·</span><span>כל הרמות</span><span>·</span><span>בכל הארץ</span></div>
   </div>
 </header>
 
 <main>
-  <section>
-    <div class="wrap">
-      <div class="eyebrow">המטרות שלנו</div>
-      <h2>מהקילומטר הראשון ועד קו הסיום של מרתון</h2>
-      <div class="dist" role="list">
-        <div class="lane-row" role="listitem"><b>5K</b><div class="bar"><span style="width:12%"></span></div></div>
-        <div class="lane-row" role="listitem"><b>10K</b><div class="bar"><span style="width:24%"></span></div></div>
-        <div class="lane-row" role="listitem"><b>21.1K</b><div class="bar"><span style="width:50%"></span></div></div>
-        <div class="lane-row" role="listitem"><b>42.2K</b><div class="bar"><span style="width:100%"></span></div></div>
-      </div>
-      <p class="dist-note">ריצה לבד לא מספיקה. כאן משלבים אימוני כוח, כדי לרוץ מהר יותר ולהיפצע פחות.</p>
-    </div>
-  </section>
-
   <section>
     <div class="wrap">
       <div class="eyebrow">שבוע בקהילה</div>
@@ -153,21 +217,102 @@ footer { text-align: center; color: var(--muted); font-size: 14px; padding-block
         <div class="day"><span class="d">ראשון</span><div><h3>האימון של השבוע</h3><p>אימון ריצה אחד עם מטרה ברורה, שכל הקהילה עושה באותו שבוע.</p></div></div>
         <div class="day"><span class="d">שלישי</span><div><h3>כוח לרצים</h3><p>סרטון קצר עם תרגיל אחד, ולמה הוא עוזר בריצה.</p></div></div>
         <div class="day"><span class="d">רביעי</span><div><h3>פירוק ריצה</h3><p>שולחים צילום מהשעון, והראל מפרק מה עבד ומה לשנות.</p></div></div>
-        <div class="day"><span class="d">חמישי</span><div><h3>המדע מאחורי הצעד</h3><p>ניוזלטר קצר: מושג אחד מעולם הריצה, בשפה פשוטה.</p></div></div>
+        <div class="day"><span class="d">חמישי</span><div><h3>המדע מאחורי הצעד</h3><p>מושג אחד מעולם הריצה, בשפה פשוטה.</p></div></div>
         <div class="day"><span class="d">שישי</span><div><h3>שישי של הישגים</h3><p>כולם משתפים את הריצה של השבוע ומפרגנים אחד לשני.</p></div></div>
       </div>
     </div>
   </section>
 
-  <section>
+  <section style="padding-top:0">
     <div class="wrap">
       <div class="eyebrow">בפנים</div>
       <h2>עוד בקהילה</h2>
       <div class="inside">
-        <div class="box"><h3>קבוצות לפי אזור</h3><p>צפון, מרכז ושרון, ירושלים ודרום. מוצאים שותפים לריצה קרוב לבית.</p></div>
-        <div class="box"><h3>מרוץ וירטואלי</h3><p>פעם בחודש כולם מזנקים באותה שעה, כל אחד בעיר שלו, עם טבלת תוצאות.</p></div>
-        <div class="box"><h3>אזורי דופק אישיים</h3><p>מהמרוץ מחשבים את אזורי האימון שלך, כדי לדעת באיזה קצב לרוץ.</p></div>
-        <div class="box"><h3>מפגשים במרוצים</h3><p>נפגשים במרוצים הגדולים בחולצות הקבוצה.</p></div>
+        <div class="box"><h3>שותפים לריצה</h3><p>קבוצות לפי אזור: צפון, מרכז ושרון, ירושלים ודרום. מתאמים ריצות קרוב לבית.</p></div>
+        <div class="box"><h3>ריצה וכוח ביחד</h3><p>לא רק קילומטרים. אימוני כוח שהופכים אותך לרץ מהיר יותר ופצוע פחות.</p></div>
+        <div class="box"><h3>כל המרחקים</h3><p>מ-5 ק"מ ראשונים, דרך 10 ק"מ וחצי מרתון, ועד מרתון.</p></div>
+        <div class="box"><h3>מפגשים במרוצים</h3><p>נפגשים במרוצים הגדולים, עם חולצות הקבוצה.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="race" id="race">
+    <div class="lanes" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    <div class="wrap">
+      <div class="race-head">
+        <div class="eyebrow">המרוץ הווירטואלי #1</div>
+        <h2>5 ק"מ. אותו בוקר. כל אחד בעיר שלו.</h2>
+        <p>יוצאים לרוץ בחלון של שעתיים, כל אחד איפה שהוא גר. בסוף היום יש טבלה אחת של כל הקהילה, עם מקום ראשון, שני ושלישי.</p>
+      </div>
+
+      <div class="specs">
+        <div class="spec"><small>מרחק</small><b><span>5</span> ק"מ</b></div>
+        <div class="spec"><small>חלון זינוק</small><b><span id="win">06:00–08:00</span></b></div>
+        <div class="spec"><small>תאריך</small><b id="raceDate" style="font-size:19px">יפורסם בקהילה</b></div>
+        <div class="spec"><small>עלות</small><b>חינם</b></div>
+      </div>
+
+      <div id="countBox" hidden>
+        <p class="sub-h" id="countLabel">הזינוק נפתח בעוד</p>
+        <div class="count" aria-live="off">
+          <div><b id="cd">0</b><small>ימים</small></div>
+          <div><b id="ch">0</b><small>שעות</small></div>
+          <div><b id="cm">0</b><small>דקות</small></div>
+          <div><b id="cs">0</b><small>שניות</small></div>
+        </div>
+      </div>
+
+      <div>
+        <p class="sub-h">איך זה עובד</p>
+        <ol class="steps">
+          <li><p>נרשמים כאן בשם ובעיר.</p></li>
+          <li><p>בבוקר המרוץ מפעילים הקלטת ריצה ויוצאים.<small>Strava בטלפון, או שעון ריצה שמסונכרן ל-Strava.</small></p></li>
+          <li><p>רצים 5 ק"מ ברצף.<small>ההתחלה חייבת להיות בתוך חלון הזינוק.</small></p></li>
+          <li><p>שולחים להראל את הלינק לפעילות ב-Strava.</p></li>
+          <li><p>אחרי בדיקה, התוצאה עולה לטבלה.</p></li>
+        </ol>
+      </div>
+
+      <div class="fair">
+        <p class="sub-h">משחק הוגן</p>
+        <ul>
+          <li><b>רק ריצה עם GPS נספרת.</b> בלי הליכון ובלי הזנה ידנית.</li>
+          <li><b>שעת ההתחלה</b> בפעילות חייבת להיות בתוך חלון הזינוק.</li>
+          <li><b>לפחות 5.00 ק"מ</b> בפעילות אחת, בלי לעצור את השעון.</li>
+          <li><b>כל תוצאה נבדקת</b> מול המפה, הקצב והדופק לפני שהיא נכנסת לטבלה.</li>
+        </ul>
+      </div>
+
+      <div class="reg" id="reg">
+        <p class="sub-h" style="margin:0">הרשמה למרוץ</p>
+        <form id="regForm" hidden novalidate>
+          <div class="field"><label for="regName">שם מלא</label><input id="regName" name="name" autocomplete="name" required maxlength="60"></div>
+          <div class="field"><label for="regCity">עיר</label><input id="regCity" name="city" autocomplete="address-level2" required maxlength="60"></div>
+          <p class="err" id="regErr" hidden></p>
+          <button class="cta blue" type="submit" id="regBtn">אני בפנים</button>
+        </form>
+        <p class="done" id="regDone" hidden></p>
+        <div id="regSoon" hidden>
+          <p class="note" style="margin-bottom:12px">ההרשמה תיפתח בקרוב. כדי לקבל הודעה ברגע שהיא נפתחת, הצטרפו לקהילה.</p>
+          <a class="cta js-wa" href="#" target="_blank" rel="noopener">הצטרפות לקהילה בוואטסאפ</a>
+        </div>
+        <p class="note" id="regCount" hidden></p>
+      </div>
+
+      <div>
+        <p class="sub-h">טבלת התוצאות</p>
+        <div class="podium" id="podium">
+          <div class="pod p2 empty"><div class="n">2</div><div class="who">פנוי</div></div>
+          <div class="pod p1 empty"><div class="n">1</div><div class="who">מחכה לך</div></div>
+          <div class="pod p3 empty"><div class="n">3</div><div class="who">פנוי</div></div>
+        </div>
+        <div class="board-wrap" id="boardWrap" hidden>
+          <table class="board">
+            <thead><tr><th>מקום</th><th>שם</th><th>עיר</th><th>זמן</th><th>קצב לק"מ</th></tr></thead>
+            <tbody id="boardBody"></tbody>
+          </table>
+        </div>
+        <p class="board-state" id="boardState" style="margin-top:12px">התוצאות יופיעו כאן אחרי המרוץ.</p>
       </div>
     </div>
   </section>
@@ -178,18 +323,6 @@ footer { text-align: center; color: var(--muted); font-size: 14px; padding-block
       <h2>הראל, מאמן ריצה וכוח</h2>
       <p>אני מלווה רצים ל-10 ק"מ, חצי מרתון ומרתון, עם שילוב קבוע של אימוני כוח.</p>
       <p>פתחתי את TEAM HAREL כדי שלא תרוצו לבד: מקום אחד עם ידע, מוטיבציה ואנשים שרצים לאותן מטרות.</p>
-    </div>
-  </section>
-
-  <section>
-    <div class="wrap">
-      <div class="eyebrow">איך מצטרפים</div>
-      <h2>שלושה צעדים</h2>
-      <ol class="steps">
-        <li><p>לוחצים על הכפתור ונכנסים לקהילה בוואטסאפ.</p></li>
-        <li><p>מצטרפים לקבוצה של האזור שלכם.</p></li>
-        <li><p>כותבים בלובי שם, עיר ומטרה, וזהו. אתם בצוות.</p></li>
-      </ol>
     </div>
   </section>
 
@@ -208,7 +341,201 @@ footer { text-align: center; color: var(--muted); font-size: 14px; padding-block
 <footer>TEAM HAREL · קהילת ריצה וכוח</footer>
 
 <script>
-  // Paste the WhatsApp Community invite link here:
-  const WHATSAPP_LINK = "https://chat.whatsapp.com/REPLACE_WITH_INVITE_CODE";
-  document.querySelectorAll(".js-wa").forEach(a => { a.href = WHATSAPP_LINK; });
+/* ============ הגדרות: כל מה שצריך לעדכן נמצא כאן ============ */
+const CONFIG = {
+  // לינק ההצטרפות לקהילת הוואטסאפ
+  whatsappLink: "https://chat.whatsapp.com/REPLACE_WITH_INVITE_CODE",
+
+  // המרוץ: תאריך בפורמט YYYY-MM-DD (שעון ישראל). ריק = "יפורסם בקהילה"
+  raceDate: "",
+  windowStart: "06:00",
+  windowEnd: "08:00",
+  distanceKm: 5,
+
+  // הרשמה: טופס Google Forms. ריק = "ההרשמה תיפתח בקרוב"
+  // formAction נראה כך: https://docs.google.com/forms/d/e/XXXX/formResponse
+  formAction: "",
+  formNameField: "",   // למשל entry.123456
+  formCityField: "",   // למשל entry.654321
+
+  // גיליון Google שפורסם כ-CSV. עמודות: שם, עיר, זמן, מאושר
+  resultsCsv: "",
+  // אופציונלי: גיליון הנרשמים שפורסם כ-CSV, כדי להציג כמה נרשמו
+  registrationsCsv: ""
+};
+/* ============================================================ */
+
+const $ = id => document.getElementById(id);
+const store = {
+  get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+  set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+};
+
+document.querySelectorAll(".js-wa").forEach(a => { a.href = CONFIG.whatsappLink; });
+$("win").textContent = CONFIG.windowStart + "–" + CONFIG.windowEnd;
+
+/* ---- Race date and countdown (Israel time) ---- */
+function israelTime(dateStr, hhmm) {
+  // Build the instant for a wall-clock time in Asia/Jerusalem, whatever the viewer's zone.
+  const guess = new Date(dateStr + "T" + hhmm + ":00Z");
+  const parts = new Intl.DateTimeFormat("en-GB", {
+    timeZone: "Asia/Jerusalem", hour12: false,
+    year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit"
+  }).formatToParts(guess).reduce((o, p) => (o[p.type] = p.value, o), {});
+  const shown = Date.UTC(+parts.year, +parts.month - 1, +parts.day, +parts.hour % 24, +parts.minute);
+  return new Date(guess.getTime() - (shown - guess.getTime()));
+}
+if (/^\d{4}-\d{2}-\d{2}$/.test(CONFIG.raceDate)) {
+  const start = israelTime(CONFIG.raceDate, CONFIG.windowStart);
+  const end = israelTime(CONFIG.raceDate, CONFIG.windowEnd);
+  $("raceDate").textContent = new Intl.DateTimeFormat("he-IL", {
+    timeZone: "Asia/Jerusalem", weekday: "long", day: "numeric", month: "long"
+  }).format(start);
+  const tick = () => {
+    const now = Date.now();
+    if (now >= end.getTime()) { $("countBox").hidden = true; return false; }
+    const target = now < start.getTime() ? start : end;
+    $("countLabel").textContent = now < start.getTime() ? "הזינוק נפתח בעוד" : "חלון הזינוק פתוח! נסגר בעוד";
+    let s = Math.floor((target.getTime() - now) / 1000);
+    $("cd").textContent = Math.floor(s / 86400); s %= 86400;
+    $("ch").textContent = String(Math.floor(s / 3600)).padStart(2, "0"); s %= 3600;
+    $("cm").textContent = String(Math.floor(s / 60)).padStart(2, "0");
+    $("cs").textContent = String(s % 60).padStart(2, "0");
+    $("countBox").hidden = false;
+    return true;
+  };
+  if (tick()) { const t = setInterval(() => { if (!tick()) clearInterval(t); }, 1000); }
+}
+
+/* ---- CSV ---- */
+function parseCsv(text) {
+  const rows = []; let row = [], cell = "", q = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (q) {
+      if (c === '"' && text[i + 1] === '"') { cell += '"'; i++; }
+      else if (c === '"') q = false;
+      else cell += c;
+    } else if (c === '"') q = true;
+    else if (c === ",") { row.push(cell); cell = ""; }
+    else if (c === "\n" || c === "\r") {
+      if (c === "\r" && text[i + 1] === "\n") i++;
+      row.push(cell); cell = ""; rows.push(row); row = [];
+    } else cell += c;
+  }
+  if (cell !== "" || row.length) { row.push(cell); rows.push(row); }
+  return rows.filter(r => r.some(x => x.trim() !== ""));
+}
+async function fetchCsv(url) {
+  const ctl = new AbortController();
+  const timer = setTimeout(() => ctl.abort(), 10000);
+  try {
+    const res = await fetch(url, { signal: ctl.signal, cache: "no-store" });
+    if (!res.ok) throw new Error("http " + res.status);
+    return parseCsv(await res.text());
+  } finally { clearTimeout(timer); }
+}
+
+/* ---- Results ---- */
+function parseTime(s) {
+  // "24:31" or "1:02:03" -> seconds; anything else -> null
+  const m = String(s).trim().match(/^(?:(\d{1,2}):)?(\d{1,2}):(\d{2})$/);
+  if (!m) return null;
+  const sec = (+(m[1] || 0)) * 3600 + (+m[2]) * 60 + (+m[3]);
+  return sec > 0 ? sec : null;
+}
+function fmtTime(sec) {
+  const h = Math.floor(sec / 3600), m = Math.floor((sec % 3600) / 60), s = Math.round(sec % 60);
+  return (h ? h + ":" + String(m).padStart(2, "0") : m) + ":" + String(s).padStart(2, "0");
+}
+function buildResults(rows) {
+  if (rows.length < 2) return [];
+  const head = rows[0].map(h => h.trim());
+  const col = names => head.findIndex(h => names.some(n => h.includes(n)));
+  const iName = col(["שם"]), iCity = col(["עיר"]), iTime = col(["זמן"]), iOk = col(["מאושר", "אושר"]);
+  if (iName < 0 || iTime < 0) return [];
+  const yes = v => /^(כן|v|✓|true|yes|1|מאושר)$/i.test(String(v || "").trim());
+  return rows.slice(1).map(r => ({
+    name: (r[iName] || "").trim(),
+    city: iCity >= 0 ? (r[iCity] || "").trim() : "",
+    sec: parseTime(r[iTime] || ""),
+    ok: iOk < 0 ? true : yes(r[iOk])
+  })).filter(r => r.name && r.sec && r.ok).sort((a, b) => a.sec - b.sec);
+}
+function el(tag, cls, text) {
+  const e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (text != null) e.textContent = text;
+  return e;
+}
+function renderResults(list) {
+  if (!list.length) return;
+  const order = [1, 0, 2], cls = ["p2", "p1", "p3"];
+  const pod = $("podium"); pod.textContent = "";
+  order.forEach((idx, i) => {
+    const r = list[idx];
+    const box = el("div", "pod " + cls[i] + (r ? "" : " empty"));
+    box.append(el("div", "n", String(idx + 1)));
+    box.append(el("div", "who", r ? r.name : "פנוי"));
+    if (r) { if (r.city) box.append(el("div", "city", r.city)); box.append(el("div", "t", fmtTime(r.sec))); }
+    pod.append(box);
+  });
+  const body = $("boardBody"); body.textContent = "";
+  list.forEach((r, i) => {
+    const tr = document.createElement("tr");
+    tr.append(el("td", "num", String(i + 1)), el("td", "", r.name), el("td", "", r.city),
+      el("td", "num", fmtTime(r.sec)), el("td", "num", fmtTime(r.sec / CONFIG.distanceKm)));
+    body.append(tr);
+  });
+  $("boardWrap").hidden = false;
+  $("boardState").textContent = list.length + " רצים סיימו. רק תוצאות שנבדקו ואושרו מופיעות כאן.";
+}
+if (CONFIG.resultsCsv) {
+  fetchCsv(CONFIG.resultsCsv).then(rows => renderResults(buildResults(rows)))
+    .catch(() => { $("boardState").textContent = "לא הצלחנו לטעון את התוצאות כרגע. נסו לרענן בעוד כמה דקות."; });
+}
+if (CONFIG.registrationsCsv) {
+  fetchCsv(CONFIG.registrationsCsv).then(rows => {
+    const n = Math.max(0, rows.length - 1);
+    if (n > 0) { $("regCount").textContent = "כבר נרשמו " + n + " רצים."; $("regCount").hidden = false; }
+  }).catch(() => {});
+}
+
+/* ---- Registration ---- */
+const regReady = CONFIG.formAction && CONFIG.formNameField && CONFIG.formCityField;
+function showRegistered(name) {
+  $("regForm").hidden = true;
+  $("regDone").textContent = "נרשמת, " + name + "! כל הפרטים והעדכונים על המרוץ יהיו בקהילה.";
+  $("regDone").hidden = false;
+}
+if (!regReady) {
+  $("regSoon").hidden = false;
+} else if (store.get("th_reg_name")) {
+  showRegistered(store.get("th_reg_name"));
+} else {
+  $("regForm").hidden = false;
+  $("regForm").addEventListener("submit", async ev => {
+    ev.preventDefault();
+    const name = $("regName").value.trim(), city = $("regCity").value.trim();
+    const err = $("regErr");
+    if (name.length < 2 || city.length < 2) {
+      err.textContent = "צריך למלא שם ועיר כדי להירשם."; err.hidden = false; return;
+    }
+    err.hidden = true;
+    const btn = $("regBtn"); btn.disabled = true; btn.textContent = "שולח...";
+    const data = new URLSearchParams();
+    data.set(CONFIG.formNameField, name);
+    data.set(CONFIG.formCityField, city);
+    try {
+      await fetch(CONFIG.formAction, { method: "POST", mode: "no-cors", body: data });
+      store.set("th_reg_name", name);
+      showRegistered(name);
+    } catch (e) {
+      err.textContent = "ההרשמה לא נשלחה. בדקו את החיבור לאינטרנט ונסו שוב."; err.hidden = false;
+      btn.disabled = false; btn.textContent = "אני בפנים";
+    }
+  });
+}
 </script>
+</body>
+</html>
