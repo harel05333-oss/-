@@ -11,12 +11,12 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800;900&amp;display=swap">
-<link rel="stylesheet" href="styles.css?v=20261112a">
+<link rel="stylesheet" href="styles.css?v=20261112c">
 </head>
 <body>
 <header class="appbar">
   <div class="wrap wide row between">
-    <a class="brand" href="./"><img src="logo.png?v=20261112a" alt="" width="34" height="34"><span><small>קהילת רוצו</small><b>ניהול מרוצים</b></span></a>
+    <a class="brand" href="./"><img src="logo.png?v=20261112c" alt="" width="34" height="34"><span><small>קהילת רוצו</small><b>ניהול מרוצים</b></span></a>
     <button class="btn sm quiet" type="button" id="logoutBtn" hidden>התנתקות</button>
   </div>
 </header>
@@ -53,6 +53,18 @@
           </table>
         </div>
         <p class="notice bad" id="usersErr" hidden></p>
+      </section>
+
+      <!-- Sign-up protection -->
+      <section class="card stack" id="codeCard" hidden>
+        <h2>קוד קהילה</h2>
+        <p class="muted">כשמוגדר קוד, רק מי שמקליד אותו יכול ליצור משתמש. שולחים אותו בקבוצת הוואטסאפ, וכך רק חברי הקהילה נרשמים.</p>
+        <p class="notice" id="codeState"></p>
+        <form class="stack" id="codeForm" novalidate>
+          <div class="field"><label for="codeInput">קוד חדש</label><input id="codeInput" class="ltr" autocomplete="off" autocapitalize="off" spellcheck="false" maxlength="40" placeholder="למשל rutzu2026"><span class="hint">4 עד 40 תווים, אותיות וספרות. אין הבדל בין אותיות גדולות לקטנות.</span></div>
+          <p class="notice bad" id="codeErr" hidden></p>
+          <div class="row"><button class="btn sm" type="submit" id="codeSave">שמירת הקוד</button><button class="btn sm quiet" type="button" id="codeClear">ביטול הקוד</button></div>
+        </form>
       </section>
 
       <!-- Races -->
@@ -150,9 +162,9 @@
   </div>
 </main>
 
-<script src="vendor/supabase.js?v=20261112a"></script>
-<script src="config.js?v=20261112a"></script>
-<script src="common.js?v=20261112a"></script>
-<script src="admin.js?v=20261112a"></script>
+<script src="vendor/supabase.js?v=20261112c"></script>
+<script src="config.js?v=20261112c"></script>
+<script src="common.js?v=20261112c"></script>
+<script src="admin.js?v=20261112c"></script>
 </body>
 </html>

@@ -3,9 +3,15 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src https://*.supabase.co; img-src 'self' data:; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src https://*.supabase.co; img-src 'self' data:; manifest-src 'self'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#131314">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="רוצו">
 <title>רוצו | מרוצים וירטואליים</title>
 <meta name="description" content="המרוצים הווירטואליים של קהילת רוצו: כולם רצים באותו בוקר, כל אחד בעיר שלו, עם טבלת תוצאות אחת.">
 <meta property="og:title" content="רוצו | מרוצים וירטואליים">
@@ -13,12 +19,12 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800;900&amp;display=swap">
-<link rel="stylesheet" href="styles.css?v=20261112a">
+<link rel="stylesheet" href="styles.css?v=20261112c">
 </head>
 <body>
 <header class="appbar">
   <div class="wrap">
-    <a class="brand" id="brandLink" href="../team-harel/"><img src="logo.png?v=20261112a" alt="" width="34" height="34"><span><small>קהילת רוצו</small><b>מרוץ וירטואלי</b></span></a>
+    <a class="brand" id="brandLink" href="../team-harel/"><img src="logo.png?v=20261112c" alt="" width="34" height="34"><span><small>קהילת רוצו</small><b>מרוץ וירטואלי</b></span></a>
   </div>
 </header>
 
@@ -33,6 +39,13 @@
 
 <main>
   <div class="wrap stack-lg">
+    <section class="card stack" id="installCard" hidden>
+      <h3>רוצו על מסך הבית</h3>
+      <p class="muted" id="installText"></p>
+      <p class="small muted">כדאי לעשות את זה לפני שיוצרים משתמש, כי המשתמש נשמר במקום שבו יצרתם אותו.</p>
+      <div><button class="btn sm quiet" type="button" id="installHide">הבנתי</button></div>
+    </section>
+
     <section class="card stack" id="profileCard" hidden>
       <div class="stack" id="pfNew">
         <h2>יוצרים משתמש</h2>
@@ -42,19 +55,40 @@
             <div class="field"><label for="pfName">שם מלא</label><input id="pfName" autocomplete="name" maxlength="40" required></div>
             <div class="field"><label for="pfCity">עיר</label><input id="pfCity" autocomplete="address-level2" maxlength="40" required></div>
           </div>
+          <div class="field" id="pfCodeField" hidden>
+            <label for="pfCode">קוד קהילה</label>
+            <input id="pfCode" class="ltr" autocomplete="off" autocapitalize="off" spellcheck="false" maxlength="40">
+            <span class="hint">הקוד מופיע בקבוצת הוואטסאפ של רוצו.</span>
+          </div>
           <p class="notice bad" id="pfErr" hidden></p>
           <button class="btn big" type="submit" id="pfBtn">יצירת משתמש</button>
           <p class="small muted">המשתמש נשמר בטלפון הזה ובדפדפן הזה. משם גם נרשמים למרוצים ומדווחים תוצאות.</p>
+        </form>
+        <button class="linkbtn small" type="button" id="haveBtn">יש לי כבר משתמש במכשיר אחר</button>
+        <form class="stack" id="haveForm" hidden novalidate>
+          <div class="field">
+            <label for="haveCode">קוד העברה</label>
+            <input id="haveCode" class="ltr" autocomplete="off" autocapitalize="off" spellcheck="false" maxlength="120">
+            <span class="hint">במכשיר שבו יש לכם משתמש: לוחצים "העברה למכשיר אחר" ומעתיקים את הקוד.</span>
+          </div>
+          <p class="notice bad" id="haveErr" hidden></p>
+          <div><button class="btn sm" type="submit" id="haveSend">כניסה עם הקוד</button></div>
         </form>
       </div>
       <div class="stack" id="pfMine" hidden>
         <p class="notice ok" id="pfHello"></p>
         <p class="muted" id="pfNext"></p>
         <div class="row">
+          <button class="linkbtn small" type="button" id="moveBtn">העברה למכשיר אחר</button>
           <button class="linkbtn small" type="button" id="pfForget">זה לא אני</button>
           <button class="btn sm danger" type="button" id="pfForgetYes" hidden>כן, להסיר את המשתמש מהמכשיר הזה</button>
           <button class="btn sm quiet" type="button" id="pfForgetNo" hidden>ביטול</button>
         </div>
+      </div>
+      <div class="stack" id="moveBox" hidden>
+        <p class="small muted">זה הקוד האישי שלכם. מדביקים אותו במכשיר או בדפדפן השני, תחת "יש לי כבר משתמש". לא שולחים אותו לאף אחד אחר: מי שמחזיק בו יכול לדווח תוצאות בשמכם.</p>
+        <div class="field"><label for="moveCode">קוד העברה</label><input id="moveCode" class="ltr" readonly></div>
+        <div class="row"><button class="btn sm" type="button" id="moveCopy">העתקת הקוד</button><span class="small muted" id="moveDone" hidden>הועתק</span></div>
       </div>
       <p class="small muted" id="pfCount" hidden></p>
     </section>
@@ -174,9 +208,9 @@
 
 <footer>קהילת רוצו · מרוצים וירטואליים</footer>
 
-<script src="vendor/supabase.js?v=20261112a"></script>
-<script src="config.js?v=20261112a"></script>
-<script src="common.js?v=20261112a"></script>
-<script src="app.js?v=20261112a"></script>
+<script src="vendor/supabase.js?v=20261112c"></script>
+<script src="config.js?v=20261112c"></script>
+<script src="common.js?v=20261112c"></script>
+<script src="app.js?v=20261112c"></script>
 </body>
 </html>
