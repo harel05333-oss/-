@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src https://*.supabase.co; img-src 'self' data:; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<title>TEAM HAREL | מרוצים וירטואליים</title>
+<meta name="description" content="המרוצים הווירטואליים של TEAM HAREL: כולם רצים באותו בוקר, כל אחד בעיר שלו, עם טבלת תוצאות אחת.">
+<meta property="og:title" content="TEAM HAREL | מרוצים וירטואליים">
+<meta property="og:description" content="כולם רצים באותו בוקר, כל אחד בעיר שלו. נרשמים בשם ועיר, רצים, ושולחים לינק מ-Strava.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700&family=Rubik:ital,wght@1,800;1,900&display=swap">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="top">
+  <div class="lanes" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+  <div class="wrap">
+    <a class="brand" id="brandLink" href="../team-harel/">TEAM <span>HAREL</span></a>
+    <div class="eyebrow">מרוצים וירטואליים</div>
+    <h1>אותו בוקר. כל אחד בעיר שלו.</h1>
+    <p class="lead">נרשמים בשם ועיר, יוצאים לרוץ בחלון הזינוק, ושולחים את הלינק מ-Strava. בסוף היום יש טבלה אחת לכל הקהילה.</p>
+  </div>
+</header>
+
+<main>
+  <div class="wrap stack-lg">
+    <p class="notice info" id="pageState">טוען את המרוצים...</p>
+
+    <section class="stack" id="raceView" hidden>
+      <div class="row between">
+        <h2 id="raceTitle"></h2>
+        <span class="pill" id="racePhase"></span>
+      </div>
+
+      <div class="specs">
+        <div class="spec"><small>מרחק</small><b id="raceKm"></b></div>
+        <div class="spec"><small>חלון זינוק</small><b class="ltr num" id="raceWindow"></b></div>
+        <div class="spec"><small>תאריך</small><b id="raceDate"></b></div>
+        <div class="spec"><small>נרשמו</small><b class="num" id="raceCount">0</b></div>
+      </div>
+
+      <div id="countBox" hidden>
+        <p class="small muted" id="countLabel"></p>
+        <div class="count">
+          <div><b id="cd">0</b><small>ימים</small></div>
+          <div><b id="ch">00</b><small>שעות</small></div>
+          <div><b id="cm">00</b><small>דקות</small></div>
+          <div><b id="cs">00</b><small>שניות</small></div>
+        </div>
+      </div>
+
+      <!-- Registration -->
+      <div class="card stack" id="regCard" hidden>
+        <h3>הרשמה למרוץ</h3>
+        <form class="stack" id="regForm" novalidate>
+          <div class="grid2">
+            <div class="field"><label for="regName">שם מלא</label><input id="regName" autocomplete="name" maxlength="40" required></div>
+            <div class="field"><label for="regCity">עיר</label><input id="regCity" autocomplete="address-level2" maxlength="40" required></div>
+          </div>
+          <p class="notice bad" id="regErr" hidden></p>
+          <button class="btn big" type="submit" id="regBtn">אני בפנים</button>
+          <p class="small muted">ההרשמה נשמרת במכשיר הזה. את התוצאה מדווחים מאותו טלפון ומאותו דפדפן.</p>
+        </form>
+      </div>
+
+      <!-- Registered runner -->
+      <div class="card stack" id="meCard" hidden>
+        <p class="notice ok" id="meHello"></p>
+        <p id="meHint" class="muted"></p>
+        <button class="btn big go" type="button" id="finishBtn" hidden>סיימתי את המרוץ</button>
+
+        <form class="stack" id="finishForm" hidden novalidate>
+          <h3>דיווח תוצאה</h3>
+          <div class="field">
+            <label for="finTime">הזמן שלך</label>
+            <input id="finTime" class="ltr num" inputmode="numeric" placeholder="24:31" maxlength="8" required>
+            <span class="hint">דקות:שניות, כמו שמופיע ב-Strava. מעל שעה: 1:02:03</span>
+          </div>
+          <div class="field">
+            <label for="finUrl">לינק לפעילות ב-Strava</label>
+            <input id="finUrl" class="ltr" type="url" inputmode="url" placeholder="https://www.strava.com/activities/..." maxlength="200" required>
+            <span class="hint">ב-Strava: פותחים את הפעילות, לוחצים על שיתוף, ומעתיקים את הלינק.</span>
+          </div>
+          <p class="notice bad" id="finErr" hidden></p>
+          <div class="row">
+            <button class="btn go" type="submit" id="finSend">שליחת התוצאה</button>
+            <button class="btn quiet" type="button" id="finCancel">ביטול</button>
+          </div>
+        </form>
+
+        <p class="notice" id="meStatus" hidden></p>
+        <button class="linkbtn small" type="button" id="finEdit" hidden>תיקון התוצאה ששלחתי</button>
+      </div>
+
+      <div class="card stack">
+        <h3>טבלת התוצאות</h3>
+        <div class="podium" id="podium"></div>
+        <div class="scroll" id="boardWrap" hidden>
+          <table>
+            <thead><tr><th>מקום</th><th>שם</th><th>עיר</th><th>זמן</th><th>קצב לק"מ</th></tr></thead>
+            <tbody id="boardBody"></tbody>
+          </table>
+        </div>
+        <p class="small muted" id="boardState"></p>
+      </div>
+
+      <div class="card stack">
+        <h3>משחק הוגן</h3>
+        <ul class="rules">
+          <li><b>רק ריצה עם GPS נספרת.</b> בלי הליכון ובלי הזנה ידנית.</li>
+          <li><b>שעת ההתחלה</b> בפעילות חייבת להיות בתוך חלון הזינוק.</li>
+          <li><b>כל המרחק בפעילות אחת</b>, בלי לעצור את השעון.</li>
+          <li><b>הפעילות ב-Strava צריכה להיות גלויה</b>, אחרת אי אפשר לבדוק אותה.</li>
+          <li><b>כל תוצאה נבדקת</b> מול המפה, הקצב והשעה לפני שהיא נכנסת לטבלה.</li>
+        </ul>
+      </div>
+
+      <div class="card stack" id="runnersCard" hidden>
+        <h3>מי רץ איתנו</h3>
+        <div class="chips" id="runners"></div>
+      </div>
+    </section>
+
+    <section class="stack" id="otherRaces" hidden>
+      <h2>כל המרוצים</h2>
+      <div class="racelist" id="raceList"></div>
+    </section>
+
+    <section class="card stack">
+      <h3>עוד לא בקהילה?</h3>
+      <p class="muted">כל העדכונים על המרוצים, אימון שבועי ושותפים לריצה נמצאים בקהילת הוואטסאפ של TEAM HAREL.</p>
+      <div><a class="btn wa" id="waLink" href="#" target="_blank" rel="noopener noreferrer">הצטרפות לקהילה בוואטסאפ</a></div>
+    </section>
+  </div>
+</main>
+
+<footer>TEAM HAREL · מרוצים וירטואליים</footer>
+
+<script src="vendor/supabase.js"></script>
+<script src="config.js"></script>
+<script src="common.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

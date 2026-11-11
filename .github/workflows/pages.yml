@@ -1,11 +1,13 @@
-# Publishes the runner nutrition site (nutrition/) to the gh-pages branch,
-# which GitHub Pages serves at https://harel05333-oss.github.io/-/
+# Publishes the runner nutrition site (nutrition/) and the TEAM HAREL page
+# (team-harel/) to the gh-pages branch, which GitHub Pages serves at
+# https://harel05333-oss.github.io/-/ and https://harel05333-oss.github.io/-/team-harel/,
+# and the virtual races app (races/) at https://harel05333-oss.github.io/-/races/
 name: Deploy site
 
 on:
   push:
     branches: [main]
-    paths: ["nutrition/**", ".github/workflows/pages.yml"]
+    paths: ["nutrition/**", "team-harel/**", "races/**", ".github/workflows/pages.yml"]
   workflow_dispatch:
 
 permissions:
@@ -24,6 +26,10 @@ jobs:
         run: |
           mkdir _site
           cp -r nutrition/. _site/
+          # TEAM HAREL community + virtual race page, served at /team-harel/
+          cp -r team-harel _site/team-harel
+          # Virtual races app (runner page + admin page), served at /races/
+          cp -r races _site/races
           find _site -name '*.md' -delete
           touch _site/.nojekyll
       - name: Push to gh-pages
