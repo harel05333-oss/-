@@ -5,8 +5,10 @@
   const { client, configured, $, el, clear, parseTime, fmtTime, fmtDate, fmtClock, fmtKm, isStravaUrl } = window.TH;
 
   let races = [];
+  let runners = {};       // runner id -> { name, city, created_at }
   let current = null;
   let editingId = null;
+  const stamp = new Intl.DateTimeFormat("he-IL", { timeZone: "Asia/Jerusalem", day: "numeric", month: "numeric", hour: "2-digit", minute: "2-digit" });
 
   function setState(text, kind) {
     const s = $("adminState");
@@ -48,8 +50,44 @@
     $("logoutBtn").hidden = false;
     $("adminApp").hidden = false;
     setState("");
+    await loadUsers();
     await loadRaces();
   }
+
+  /* ---------- users ---------- */
+  async function loadUsers() {
+    const { data, error } = await client.from("runners").select("id,name,city,created_at").order("created_at", { ascending: false });
+    if (error) return showErr($("usersErr"), "לא הצלחנו לטעון את רשימת המשתמשים.");
+    showErr($("usersErr"), "");
+    runners = {};
+    data.forEach(u => { runners[u.id] = u; });
+    $("userCount").textContent = String(data.length);
+    $("usersEmpty").hidden = data.length > 0;
+    $("usersToggle").hidden = data.length === 0;
+    const body = $("usersBody");
+    clear(body);
+    data.forEach(u => {
+      const tr = el("tr");
+      const act = el("td");
+      const del = el("button", "linkbtn small", "מחיקה"); del.type = "button";
+      const sure = el("button", "linkbtn small", "בטוח? למחוק כולל התוצאות שלו"); sure.type = "button"; sure.hidden = true;
+      del.addEventListener("click", () => { del.hidden = true; sure.hidden = false; });
+      sure.addEventListener("click", async () => {
+        const { error: e2 } = await client.from("runners").delete().eq("id", u.id);
+        if (e2) return showErr($("usersErr"), "המחיקה נכשלה. נסו שוב.");
+        await loadUsers();
+        if (current) loadRaceData();
+      });
+      act.append(del, sure);
+      tr.append(el("td", "", u.name), el("td", "", u.city), el("td", "n small", stamp.format(new Date(u.created_at))), act);
+      body.append(tr);
+    });
+  }
+  $("usersToggle").addEventListener("click", () => {
+    const w = $("usersWrap");
+    w.hidden = !w.hidden;
+    $("usersToggle").textContent = w.hidden ? "הצגת הרשימה" : "הסתרת הרשימה";
+  });
 
   $("loginForm").addEventListener("submit", async ev => {
     ev.preventDefault();
@@ -158,7 +196,7 @@
     $("raceAdmin").hidden = false;
     loadRaceData();
   }
-  $("raRefresh").addEventListener("click", loadRaceData);
+  $("raRefresh").addEventListener("click", async () => { await loadUsers(); loadRaceData(); });
 
   function resetDelete() {
     $("raDelete").hidden = false; $("raDeleteYes").hidden = true; $("raDeleteNo").hidden = true;
@@ -185,14 +223,18 @@
     const r = current;
     if (!r) return;
     const [regs, res] = await Promise.all([
-      client.from("registrations").select("id,name,city,created_at").eq("race_id", r.id).order("created_at"),
+      client.from("registrations").select("id,runner_id,created_at").eq("race_id", r.id).order("created_at"),
       client.from("results").select("registration_id,strava_url,claimed_seconds,final_seconds,status,admin_note,submitted_at").eq("race_id", r.id).order("submitted_at")
     ]);
     if (current !== r) return;
     if (regs.error || res.error) return showErr($("raErr"), "לא הצלחנו לטעון את נתוני המרוץ. לחצו על רענון.");
     showErr($("raErr"), "");
     const byId = {};
-    regs.data.forEach(g => { byId[g.id] = g; });
+    regs.data.forEach(g => {
+      const u = runners[g.runner_id] || { name: "?", city: "" };
+      g.name = u.name; g.city = u.city;
+      byId[g.id] = g;
+    });
     const rows = res.data.map(x => Object.assign({ reg: byId[x.registration_id] || { name: "?", city: "" } }, x));
     renderPending(rows.filter(x => x.status === "pending"));
     renderDone(rows.filter(x => x.status !== "pending"));
@@ -276,12 +318,11 @@
     clear(body);
     $("regCount").textContent = String(list.length);
     $("regEmpty").hidden = list.length > 0;
-    const fmt = new Intl.DateTimeFormat("he-IL", { timeZone: "Asia/Jerusalem", day: "numeric", month: "numeric", hour: "2-digit", minute: "2-digit" });
     list.forEach(g => {
       const tr = el("tr");
       const act = el("td");
-      const del = el("button", "linkbtn small", "הסרה"); del.type = "button";
-      const sure = el("button", "linkbtn small", "בטוח? להסיר"); sure.type = "button"; sure.hidden = true;
+      const del = el("button", "linkbtn small", "הסרה מהמרוץ"); del.type = "button";
+      const sure = el("button", "linkbtn small", "בטוח? להסיר מהמרוץ"); sure.type = "button"; sure.hidden = true;
       del.addEventListener("click", () => { del.hidden = true; sure.hidden = false; });
       sure.addEventListener("click", async () => {
         const { error } = await client.from("registrations").delete().eq("id", g.id);
@@ -289,7 +330,7 @@
         loadRaceData();
       });
       act.append(del, sure);
-      tr.append(el("td", "", g.name), el("td", "", g.city), el("td", "n small", fmt.format(new Date(g.created_at))), act);
+      tr.append(el("td", "", g.name), el("td", "", g.city), el("td", "n small", stamp.format(new Date(g.created_at))), act);
       body.append(tr);
     });
   }

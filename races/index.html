@@ -21,12 +21,38 @@
     <a class="brand" id="brandLink" href="../team-harel/">TEAM <span>HAREL</span></a>
     <div class="eyebrow">מרוצים וירטואליים</div>
     <h1>אותו בוקר. כל אחד בעיר שלו.</h1>
-    <p class="lead">נרשמים בשם ועיר, יוצאים לרוץ בחלון הזינוק, ושולחים את הלינק מ-Strava. בסוף היום יש טבלה אחת לכל הקהילה.</p>
+    <p class="lead">יוצרים משתמש בשם ועיר, יוצאים לרוץ בחלון הזינוק, ושולחים את הלינק מ-Strava. בסוף היום יש טבלה אחת לכל הקהילה.</p>
   </div>
 </header>
 
 <main>
   <div class="wrap stack-lg">
+    <section class="card stack" id="profileCard" hidden>
+      <div class="stack" id="pfNew">
+        <h2>יוצרים משתמש</h2>
+        <p class="muted">פעם אחת, שם ועיר. אחר כך מצטרפים לכל מרוץ בלחיצה אחת.</p>
+        <form class="stack" id="pfForm" novalidate>
+          <div class="grid2">
+            <div class="field"><label for="pfName">שם מלא</label><input id="pfName" autocomplete="name" maxlength="40" required></div>
+            <div class="field"><label for="pfCity">עיר</label><input id="pfCity" autocomplete="address-level2" maxlength="40" required></div>
+          </div>
+          <p class="notice bad" id="pfErr" hidden></p>
+          <button class="btn big" type="submit" id="pfBtn">יצירת משתמש</button>
+          <p class="small muted">המשתמש נשמר בטלפון הזה ובדפדפן הזה. משם גם נרשמים למרוצים ומדווחים תוצאות.</p>
+        </form>
+      </div>
+      <div class="stack" id="pfMine" hidden>
+        <p class="notice ok" id="pfHello"></p>
+        <p class="muted" id="pfNext"></p>
+        <div class="row">
+          <button class="linkbtn small" type="button" id="pfForget">זה לא אני</button>
+          <button class="btn sm danger" type="button" id="pfForgetYes" hidden>כן, להסיר את המשתמש מהמכשיר הזה</button>
+          <button class="btn sm quiet" type="button" id="pfForgetNo" hidden>ביטול</button>
+        </div>
+      </div>
+      <p class="small muted" id="pfCount" hidden></p>
+    </section>
+
     <p class="notice info" id="pageState">טוען את המרוצים...</p>
 
     <section class="stack" id="raceView" hidden>
@@ -52,18 +78,12 @@
         </div>
       </div>
 
-      <!-- Registration -->
-      <div class="card stack" id="regCard" hidden>
+      <!-- Joining this race -->
+      <div class="card stack" id="joinCard" hidden>
         <h3>הרשמה למרוץ</h3>
-        <form class="stack" id="regForm" novalidate>
-          <div class="grid2">
-            <div class="field"><label for="regName">שם מלא</label><input id="regName" autocomplete="name" maxlength="40" required></div>
-            <div class="field"><label for="regCity">עיר</label><input id="regCity" autocomplete="address-level2" maxlength="40" required></div>
-          </div>
-          <p class="notice bad" id="regErr" hidden></p>
-          <button class="btn big" type="submit" id="regBtn">אני בפנים</button>
-          <p class="small muted">ההרשמה נשמרת במכשיר הזה. את התוצאה מדווחים מאותו טלפון ומאותו דפדפן.</p>
-        </form>
+        <p class="muted" id="joinNeed" hidden>כדי להירשם למרוץ צריך קודם ליצור משתמש, בראש העמוד.</p>
+        <p class="notice bad" id="joinErr" hidden></p>
+        <button class="btn big" type="button" id="joinBtn">אני בפנים</button>
       </div>
 
       <!-- Registered runner -->

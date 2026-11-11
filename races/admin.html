@@ -43,6 +43,22 @@
     </section>
 
     <div class="stack-lg" id="adminApp" hidden>
+      <!-- Everyone who created a user -->
+      <section class="card stack">
+        <div class="row between">
+          <h2>משתמשים <span class="pill num" id="userCount">0</span></h2>
+          <button class="btn sm quiet" type="button" id="usersToggle">הצגת הרשימה</button>
+        </div>
+        <p class="muted" id="usersEmpty">עוד אף אחד לא יצר משתמש.</p>
+        <div class="scroll" id="usersWrap" hidden>
+          <table>
+            <thead><tr><th>שם</th><th>עיר</th><th>הצטרף ב</th><th></th></tr></thead>
+            <tbody id="usersBody"></tbody>
+          </table>
+        </div>
+        <p class="notice bad" id="usersErr" hidden></p>
+      </section>
+
       <!-- Races -->
       <section class="card stack">
         <div class="row between">

@@ -1,18 +1,19 @@
-// Public page: list races, register, report a result, show the leaderboard.
+// Public page: create a user, join a race, report a result, show the leaderboard.
 (function () {
   "use strict";
-  const { cfg, client, configured, $, el, clear, parseTime, fmtTime, fmtDate, fmtClock, fmtKm, errorText, store } = window.TH;
+  const { cfg, client, configured, $, el, clear, parseTime, fmtTime, fmtDate, fmtClock, fmtKm, isStravaUrl, errorText, store } = window.TH;
   const SUBMIT_GRACE_MS = 12 * 3600 * 1000; // must match submit_result() in schema.sql
+  const ME_KEY = "th_runner";
 
   if (cfg.whatsappLink) $("waLink").href = cfg.whatsappLink;
   if (cfg.communityUrl) $("brandLink").href = cfg.communityUrl;
 
+  let me = store.get(ME_KEY);   // { id, token, name, city } or null
   let races = [];
-  let current = null;      // the race on screen
-  let myResult = null;     // result of my_result() for the race on screen
+  let current = null;           // the race on screen
+  let mine = null;              // my_result() for the race on screen
   let timer = null;
 
-  const regKey = id => "th_race_" + id;
   const startMs = r => new Date(r.starts_at).getTime();
   const endMs = r => new Date(r.ends_at).getTime();
 
@@ -30,18 +31,83 @@
     s.textContent = text;
     s.hidden = false;
   }
+  function showErr(node, text) { node.textContent = text; node.hidden = !text; }
 
+  /* ---------- my user ---------- */
+  function renderProfile() {
+    $("profileCard").hidden = false;
+    $("pfNew").hidden = !!me;
+    $("pfMine").hidden = !me;
+    if (!me) return;
+    $("pfHello").textContent = "שלום " + me.name + " מ" + me.city + ". המשתמש שלך מוכן.";
+    $("pfNext").textContent = races.length
+      ? "מכאן נרשמים למרוץ בלחיצה אחת."
+      : "ברגע שייפתח מרוץ, נודיע בקהילה ותוכלו להירשם אליו כאן בלחיצה אחת.";
+  }
+
+  function forgetReset() {
+    $("pfForget").hidden = false; $("pfForgetYes").hidden = true; $("pfForgetNo").hidden = true;
+  }
+  $("pfForget").addEventListener("click", () => {
+    $("pfForget").hidden = true; $("pfForgetYes").hidden = false; $("pfForgetNo").hidden = false;
+  });
+  $("pfForgetNo").addEventListener("click", forgetReset);
+  $("pfForgetYes").addEventListener("click", () => {
+    store.del(ME_KEY); me = null; mine = null;
+    forgetReset(); renderProfile();
+    if (current) tick();
+  });
+
+  $("pfForm").addEventListener("submit", async ev => {
+    ev.preventDefault();
+    const err = $("pfErr"), btn = $("pfBtn");
+    const name = $("pfName").value.trim().replace(/\s+/g, " ");
+    const city = $("pfCity").value.trim().replace(/\s+/g, " ");
+    if (name.length < 2 || city.length < 2) return showErr(err, "צריך למלא שם ועיר.");
+    showErr(err, ""); btn.disabled = true; btn.textContent = "יוצר...";
+    const { data, error } = await client.rpc("create_runner", { p_name: name, p_city: city });
+    btn.disabled = false; btn.textContent = "יצירת משתמש";
+    if (error || !data) return showErr(err, errorText(error));
+    me = { id: data.runner_id, token: data.token, name: data.name, city: data.city };
+    store.set(ME_KEY, me);
+    $("pfForm").reset();
+    renderProfile();
+    loadCount();
+    if (current) { mine = { user: true, registered: false }; tick(); }
+  });
+
+  async function checkMe() {
+    if (!me) return;
+    const { data, error } = await client.rpc("runner_me", { p_runner: me.id, p_token: me.token });
+    if (error || !data) return;                 // offline: keep what we have
+    if (data.ok === false) { store.del(ME_KEY); me = null; }
+    else { me.name = data.name; me.city = data.city; store.set(ME_KEY, me); }
+  }
+
+  async function loadCount() {
+    const { data, error } = await client.rpc("runner_count");
+    const n = $("pfCount");
+    if (error || typeof data !== "number" || data < 5) { n.hidden = true; return; }
+    n.textContent = "כבר " + data + " רצים יצרו משתמש.";
+    n.hidden = false;
+  }
+
+  /* ---------- races ---------- */
   async function init() {
     if (!configured || !client) {
-      setState("האתר עדיין בהקמה. המרוץ הראשון יפורסם בקהילת הוואטסאפ.", "info");
+      setState("האתר עדיין בהקמה. ההרשמה תיפתח בקרוב, ונודיע על זה בקהילת הוואטסאפ.", "info");
       return;
     }
+    await checkMe();
+    renderProfile();
+    loadCount();
     const { data, error } = await client.from("races")
       .select("id,title,race_date,window_start,window_end,distance_km,status,starts_at,ends_at")
       .order("race_date", { ascending: true });
     if (error) { setState("לא הצלחנו לטעון את המרוצים. נסו לרענן בעוד כמה דקות.", "bad"); return; }
     races = data || [];
-    if (!races.length) { setState("עוד אין מרוץ פתוח. המרוץ הבא יפורסם בקהילת הוואטסאפ.", "info"); return; }
+    renderProfile();
+    if (!races.length) { setState("עוד אין מרוץ פתוח. המרוץ הראשון יפורסם בקהילת הוואטסאפ.", "info"); return; }
     setState("");
     const now = Date.now();
     // Show the next race that is still running or reporting; otherwise the latest finished one.
@@ -72,14 +138,14 @@
 
   function showRace(r) {
     current = r;
-    myResult = null;
+    mine = null;
     $("raceTitle").textContent = r.title;
     $("raceKm").textContent = fmtKm(r.distance_km);
     $("raceWindow").textContent = fmtClock(r.starts_at) + "–" + fmtClock(r.ends_at);
     $("raceDate").textContent = fmtDate(r.starts_at);
     $("raceCount").textContent = "0";
     $("finishForm").hidden = true;
-    $("regErr").hidden = true;
+    showErr($("joinErr"), "");
     $("runnersCard").hidden = true;
     renderBoard([]);
     $("raceView").hidden = false;
@@ -95,12 +161,11 @@
     const r = current;
     if (!r) return;
     const now = Date.now(), p = phase(r, now);
-    const pill = $("racePhase");
     const labels = { before: ["ההרשמה פתוחה", "pill"], window: ["חלון הזינוק פתוח", "pill ok"], reporting: ["מדווחים תוצאות", "pill warn"], done: ["המרוץ הסתיים", "pill off"] };
     let label = labels[p];
     if (p === "before" && r.status !== "open") label = ["ההרשמה סגורה", "pill off"];
-    pill.textContent = label[0];
-    pill.className = label[1];
+    $("racePhase").textContent = label[0];
+    $("racePhase").className = label[1];
 
     const target = p === "before" ? startMs(r) : p === "window" ? endMs(r) : null;
     if (target) {
@@ -112,77 +177,75 @@
       $("cs").textContent = String(s % 60).padStart(2, "0");
     }
     $("countBox").hidden = !target;
-    renderMe(p);
+    renderMine(p);
   }
 
-  /* ---------- registration and my state ---------- */
-  function renderMe(p) {
-    const r = current, reg = store.get(regKey(r.id));
-    const canRegister = r.status === "open" && (p === "before" || p === "window");
-    $("regCard").hidden = !!reg || !canRegister;
-    $("meCard").hidden = !reg;
-    if (!reg) return;
+  /* ---------- me in this race ---------- */
+  function renderMine(p) {
+    const r = current;
+    const joined = !!(me && mine && mine.registered);
+    const canJoin = r.status === "open" && (p === "before" || p === "window");
+    // Until my_result() answers we do not know whether I already joined.
+    const known = !me || mine !== null;
+    $("joinCard").hidden = joined || !canJoin || !known;
+    $("joinNeed").hidden = !!me;
+    $("joinBtn").hidden = !me;
+    $("meCard").hidden = !joined;
+    if (!joined) return;
 
-    $("meHello").textContent = "נרשמת, " + reg.name + ".";
-    const st = myResult && myResult.status;
+    $("meHello").textContent = "נרשמת למרוץ, " + me.name + ".";
+    const st = mine.status;
     const formOpen = !$("finishForm").hidden;
     const canReport = (p === "window" || p === "reporting") && st !== "approved";
     const hint = $("meHint"), status = $("meStatus");
 
     if (p === "before") hint.textContent = "בבוקר המרוץ: מפעילים את Strava, רצים " + fmtKm(r.distance_km) + " וחוזרים לכאן כדי לדווח.";
-    else if (st === "none" || !st) hint.textContent = p === "done" ? "הזמן לדיווח תוצאות נגמר." : "סיימת לרוץ? לוחצים על הכפתור ושולחים את הלינק מ-Strava.";
+    else if (st === "none") hint.textContent = p === "done" ? "הזמן לדיווח תוצאות נגמר." : "סיימת לרוץ? לוחצים על הכפתור ושולחים את הלינק מ-Strava.";
     else hint.textContent = "";
     hint.hidden = !hint.textContent;
 
-    $("finishBtn").hidden = !(canReport && (st === "none" || !st) && !formOpen);
+    $("finishBtn").hidden = !(canReport && st === "none" && !formOpen);
     $("finEdit").hidden = !(canReport && (st === "pending" || st === "rejected") && !formOpen);
 
     if (st === "pending") {
       status.className = "notice warn";
-      status.textContent = "התוצאה שלך (" + fmtTime(myResult.claimed_seconds) + ") נשלחה ומחכה לבדיקה של הראל.";
+      status.textContent = "התוצאה שלך (" + fmtTime(mine.claimed_seconds) + ") נשלחה ומחכה לבדיקה של הראל.";
     } else if (st === "approved") {
       status.className = "notice ok";
-      status.textContent = "התוצאה אושרה: " + fmtTime(myResult.final_seconds) + ". כל הכבוד!";
+      status.textContent = "התוצאה אושרה: " + fmtTime(mine.final_seconds) + ". כל הכבוד!";
     } else if (st === "rejected") {
       status.className = "notice bad";
-      status.textContent = "התוצאה לא אושרה." + (myResult.admin_note ? " הסיבה: " + myResult.admin_note : "");
+      status.textContent = "התוצאה לא אושרה." + (mine.admin_note ? " הסיבה: " + mine.admin_note : "");
     }
     status.hidden = !(st === "pending" || st === "approved" || st === "rejected");
   }
 
   async function loadMine(r) {
-    const reg = store.get(regKey(r.id));
-    if (!reg) return;
-    const { data, error } = await client.rpc("my_result", { p_registration: reg.id, p_token: reg.token });
+    if (!me) return;
+    const { data, error } = await client.rpc("my_result", { p_race: r.id, p_runner: me.id, p_token: me.token });
     if (current !== r || error || !data) return;
-    if (data.registered === false) { store.del(regKey(r.id)); myResult = null; }
-    else myResult = data;
+    if (data.user === false) { store.del(ME_KEY); me = null; mine = null; renderProfile(); }
+    else mine = data;
     tick();
-    if (myResult && myResult.status === "approved") markMe();
+    markMe();
   }
 
-  $("regForm").addEventListener("submit", async ev => {
-    ev.preventDefault();
-    const r = current, err = $("regErr"), btn = $("regBtn");
-    const name = $("regName").value.trim().replace(/\s+/g, " ");
-    const city = $("regCity").value.trim().replace(/\s+/g, " ");
-    if (name.length < 2 || city.length < 2) {
-      err.textContent = "צריך למלא שם ועיר כדי להירשם."; err.hidden = false; return;
-    }
-    err.hidden = true; btn.disabled = true; btn.textContent = "שולח...";
-    const { data, error } = await client.rpc("register_runner", { p_race: r.id, p_name: name, p_city: city });
+  $("joinBtn").addEventListener("click", async () => {
+    const r = current, btn = $("joinBtn"), err = $("joinErr");
+    if (!me) return;
+    showErr(err, ""); btn.disabled = true; btn.textContent = "רושם...";
+    const { data, error } = await client.rpc("join_race", { p_race: r.id, p_runner: me.id, p_token: me.token });
     btn.disabled = false; btn.textContent = "אני בפנים";
-    if (error || !data) { err.textContent = errorText(error); err.hidden = false; return; }
-    store.set(regKey(r.id), { id: data.registration_id, token: data.token, name: name });
-    myResult = { registered: true, status: "none" };
-    $("regForm").reset();
+    if (error || !data) return showErr(err, errorText(error));
+    if (current !== r) return;
+    mine = { user: true, registered: true, status: "none" };
     tick();
     loadRunners(r);
   });
 
   /* ---------- finishing ---------- */
   function openFinish() {
-    $("finErr").hidden = true;
+    showErr($("finErr"), "");
     $("finishForm").hidden = false;
     tick();
     $("finTime").focus();
@@ -193,18 +256,18 @@
 
   $("finishForm").addEventListener("submit", async ev => {
     ev.preventDefault();
-    const r = current, reg = store.get(regKey(r.id)), err = $("finErr"), btn = $("finSend");
+    const r = current, err = $("finErr"), btn = $("finSend");
     const seconds = parseTime($("finTime").value);
     const url = $("finUrl").value.trim();
-    if (!seconds) { err.textContent = "כתבו את הזמן בצורה דקות:שניות, למשל 24:31."; err.hidden = false; return; }
-    if (!window.TH.isStravaUrl(url)) { err.textContent = errorText({ message: "BAD_LINK" }); err.hidden = false; return; }
-    err.hidden = true; btn.disabled = true; btn.textContent = "שולח...";
+    if (!seconds) return showErr(err, "כתבו את הזמן בצורה דקות:שניות, למשל 24:31.");
+    if (!isStravaUrl(url)) return showErr(err, errorText({ message: "BAD_LINK" }));
+    showErr(err, ""); btn.disabled = true; btn.textContent = "שולח...";
     const { error } = await client.rpc("submit_result", {
-      p_registration: reg.id, p_token: reg.token, p_strava_url: url, p_seconds: seconds
+      p_race: r.id, p_runner: me.id, p_token: me.token, p_strava_url: url, p_seconds: seconds
     });
     btn.disabled = false; btn.textContent = "שליחת התוצאה";
-    if (error) { err.textContent = errorText(error); err.hidden = false; return; }
-    myResult = { registered: true, status: "pending", claimed_seconds: seconds };
+    if (error) return showErr(err, errorText(error));
+    mine = { user: true, registered: true, status: "pending", claimed_seconds: seconds };
     $("finishForm").hidden = true;
     $("finishForm").reset();
     tick();
@@ -251,11 +314,10 @@
   }
 
   function markMe() {
-    const reg = current && store.get(regKey(current.id));
-    if (!reg || !myResult || myResult.status !== "approved") return;
+    const on = me && mine && mine.status === "approved";
     Array.from($("boardBody").children).forEach((tr, i) => {
       const x = board[i];
-      tr.className = x && x.name === reg.name && x.seconds === myResult.final_seconds ? "me" : "";
+      tr.className = on && x && x.name === me.name && x.city === me.city && x.seconds === mine.final_seconds ? "me" : "";
     });
   }
 
@@ -269,8 +331,9 @@
   // Keep the board and my status fresh while the page is open and visible.
   setInterval(() => {
     if (!current || document.hidden || !client) return;
-    if (phase(current, Date.now()) === "before") { loadRunners(current); return; }
-    loadBoard(current); loadMine(current); loadRunners(current);
+    loadRunners(current);
+    if (phase(current, Date.now()) === "before") return;
+    loadBoard(current); loadMine(current);
   }, 60000);
 
   init();
