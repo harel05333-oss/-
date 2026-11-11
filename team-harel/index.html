@@ -265,10 +265,10 @@ footer { text-align: center; color: var(--muted); font-size: 14px; padding-block
       <div>
         <p class="sub-h">איך זה עובד</p>
         <ol class="steps">
-          <li><p>נרשמים כאן בשם ובעיר.</p></li>
+          <li><p>נרשמים באתר המרוצים בשם ובעיר.</p></li>
           <li><p>בבוקר המרוץ מפעילים הקלטת ריצה ויוצאים.<small>Strava בטלפון, או שעון ריצה שמסונכרן ל-Strava.</small></p></li>
           <li><p>רצים 5 ק"מ ברצף.<small>ההתחלה חייבת להיות בתוך חלון הזינוק.</small></p></li>
-          <li><p>שולחים להראל את הלינק לפעילות ב-Strava.</p></li>
+          <li><p>לוחצים "סיימתי את המרוץ" ושולחים את הלינק לפעילות ב-Strava.</p></li>
           <li><p>אחרי בדיקה, התוצאה עולה לטבלה.</p></li>
         </ol>
       </div>
@@ -283,36 +283,10 @@ footer { text-align: center; color: var(--muted); font-size: 14px; padding-block
         </ul>
       </div>
 
-      <div class="reg" id="reg">
-        <p class="sub-h" style="margin:0">הרשמה למרוץ</p>
-        <form id="regForm" hidden novalidate>
-          <div class="field"><label for="regName">שם מלא</label><input id="regName" name="name" autocomplete="name" required maxlength="60"></div>
-          <div class="field"><label for="regCity">עיר</label><input id="regCity" name="city" autocomplete="address-level2" required maxlength="60"></div>
-          <p class="err" id="regErr" hidden></p>
-          <button class="cta blue" type="submit" id="regBtn">אני בפנים</button>
-        </form>
-        <p class="done" id="regDone" hidden></p>
-        <div id="regSoon" hidden>
-          <p class="note" style="margin-bottom:12px">ההרשמה תיפתח בקרוב. כדי לקבל הודעה ברגע שהיא נפתחת, הצטרפו לקהילה.</p>
-          <a class="cta js-wa" href="#" target="_blank" rel="noopener">הצטרפות לקהילה בוואטסאפ</a>
-        </div>
-        <p class="note" id="regCount" hidden></p>
-      </div>
-
-      <div>
-        <p class="sub-h">טבלת התוצאות</p>
-        <div class="podium" id="podium">
-          <div class="pod p2 empty"><div class="n">2</div><div class="who">פנוי</div></div>
-          <div class="pod p1 empty"><div class="n">1</div><div class="who">מחכה לך</div></div>
-          <div class="pod p3 empty"><div class="n">3</div><div class="who">פנוי</div></div>
-        </div>
-        <div class="board-wrap" id="boardWrap" hidden>
-          <table class="board">
-            <thead><tr><th>מקום</th><th>שם</th><th>עיר</th><th>זמן</th><th>קצב לק"מ</th></tr></thead>
-            <tbody id="boardBody"></tbody>
-          </table>
-        </div>
-        <p class="board-state" id="boardState" style="margin-top:12px">התוצאות יופיעו כאן אחרי המרוץ.</p>
+      <div class="reg">
+        <p class="sub-h" style="margin:0">הרשמה ותוצאות</p>
+        <p class="note">ההרשמה, דיווח התוצאה וטבלת התוצאות נמצאים באתר המרוצים.</p>
+        <a class="cta blue" href="../races/">לאתר המרוצים</a>
       </div>
     </div>
   </section>
@@ -350,26 +324,11 @@ const CONFIG = {
   raceDate: "",
   windowStart: "06:00",
   windowEnd: "08:00",
-  distanceKm: 5,
-
-  // הרשמה: טופס Google Forms. ריק = "ההרשמה תיפתח בקרוב"
-  // formAction נראה כך: https://docs.google.com/forms/d/e/XXXX/formResponse
-  formAction: "",
-  formNameField: "",   // למשל entry.123456
-  formCityField: "",   // למשל entry.654321
-
-  // גיליון Google שפורסם כ-CSV. עמודות: שם, עיר, זמן, מאושר
-  resultsCsv: "",
-  // אופציונלי: גיליון הנרשמים שפורסם כ-CSV, כדי להציג כמה נרשמו
-  registrationsCsv: ""
+  distanceKm: 5
 };
 /* ============================================================ */
 
 const $ = id => document.getElementById(id);
-const store = {
-  get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
-  set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
-};
 
 document.querySelectorAll(".js-wa").forEach(a => { a.href = CONFIG.whatsappLink; });
 $("win").textContent = CONFIG.windowStart + "–" + CONFIG.windowEnd;
@@ -405,136 +364,6 @@ if (/^\d{4}-\d{2}-\d{2}$/.test(CONFIG.raceDate)) {
     return true;
   };
   if (tick()) { const t = setInterval(() => { if (!tick()) clearInterval(t); }, 1000); }
-}
-
-/* ---- CSV ---- */
-function parseCsv(text) {
-  const rows = []; let row = [], cell = "", q = false;
-  for (let i = 0; i < text.length; i++) {
-    const c = text[i];
-    if (q) {
-      if (c === '"' && text[i + 1] === '"') { cell += '"'; i++; }
-      else if (c === '"') q = false;
-      else cell += c;
-    } else if (c === '"') q = true;
-    else if (c === ",") { row.push(cell); cell = ""; }
-    else if (c === "\n" || c === "\r") {
-      if (c === "\r" && text[i + 1] === "\n") i++;
-      row.push(cell); cell = ""; rows.push(row); row = [];
-    } else cell += c;
-  }
-  if (cell !== "" || row.length) { row.push(cell); rows.push(row); }
-  return rows.filter(r => r.some(x => x.trim() !== ""));
-}
-async function fetchCsv(url) {
-  const ctl = new AbortController();
-  const timer = setTimeout(() => ctl.abort(), 10000);
-  try {
-    const res = await fetch(url, { signal: ctl.signal, cache: "no-store" });
-    if (!res.ok) throw new Error("http " + res.status);
-    return parseCsv(await res.text());
-  } finally { clearTimeout(timer); }
-}
-
-/* ---- Results ---- */
-function parseTime(s) {
-  // "24:31" or "1:02:03" -> seconds; anything else -> null
-  const m = String(s).trim().match(/^(?:(\d{1,2}):)?(\d{1,2}):(\d{2})$/);
-  if (!m) return null;
-  const sec = (+(m[1] || 0)) * 3600 + (+m[2]) * 60 + (+m[3]);
-  return sec > 0 ? sec : null;
-}
-function fmtTime(sec) {
-  const h = Math.floor(sec / 3600), m = Math.floor((sec % 3600) / 60), s = Math.round(sec % 60);
-  return (h ? h + ":" + String(m).padStart(2, "0") : m) + ":" + String(s).padStart(2, "0");
-}
-function buildResults(rows) {
-  if (rows.length < 2) return [];
-  const head = rows[0].map(h => h.trim());
-  const col = names => head.findIndex(h => names.some(n => h.includes(n)));
-  const iName = col(["שם"]), iCity = col(["עיר"]), iTime = col(["זמן"]), iOk = col(["מאושר", "אושר"]);
-  if (iName < 0 || iTime < 0) return [];
-  const yes = v => /^(כן|v|✓|true|yes|1|מאושר)$/i.test(String(v || "").trim());
-  return rows.slice(1).map(r => ({
-    name: (r[iName] || "").trim(),
-    city: iCity >= 0 ? (r[iCity] || "").trim() : "",
-    sec: parseTime(r[iTime] || ""),
-    ok: iOk < 0 ? true : yes(r[iOk])
-  })).filter(r => r.name && r.sec && r.ok).sort((a, b) => a.sec - b.sec);
-}
-function el(tag, cls, text) {
-  const e = document.createElement(tag);
-  if (cls) e.className = cls;
-  if (text != null) e.textContent = text;
-  return e;
-}
-function renderResults(list) {
-  if (!list.length) return;
-  const order = [1, 0, 2], cls = ["p2", "p1", "p3"];
-  const pod = $("podium"); pod.textContent = "";
-  order.forEach((idx, i) => {
-    const r = list[idx];
-    const box = el("div", "pod " + cls[i] + (r ? "" : " empty"));
-    box.append(el("div", "n", String(idx + 1)));
-    box.append(el("div", "who", r ? r.name : "פנוי"));
-    if (r) { if (r.city) box.append(el("div", "city", r.city)); box.append(el("div", "t", fmtTime(r.sec))); }
-    pod.append(box);
-  });
-  const body = $("boardBody"); body.textContent = "";
-  list.forEach((r, i) => {
-    const tr = document.createElement("tr");
-    tr.append(el("td", "num", String(i + 1)), el("td", "", r.name), el("td", "", r.city),
-      el("td", "num", fmtTime(r.sec)), el("td", "num", fmtTime(r.sec / CONFIG.distanceKm)));
-    body.append(tr);
-  });
-  $("boardWrap").hidden = false;
-  $("boardState").textContent = list.length + " רצים סיימו. רק תוצאות שנבדקו ואושרו מופיעות כאן.";
-}
-if (CONFIG.resultsCsv) {
-  fetchCsv(CONFIG.resultsCsv).then(rows => renderResults(buildResults(rows)))
-    .catch(() => { $("boardState").textContent = "לא הצלחנו לטעון את התוצאות כרגע. נסו לרענן בעוד כמה דקות."; });
-}
-if (CONFIG.registrationsCsv) {
-  fetchCsv(CONFIG.registrationsCsv).then(rows => {
-    const n = Math.max(0, rows.length - 1);
-    if (n > 0) { $("regCount").textContent = "כבר נרשמו " + n + " רצים."; $("regCount").hidden = false; }
-  }).catch(() => {});
-}
-
-/* ---- Registration ---- */
-const regReady = CONFIG.formAction && CONFIG.formNameField && CONFIG.formCityField;
-function showRegistered(name) {
-  $("regForm").hidden = true;
-  $("regDone").textContent = "נרשמת, " + name + "! כל הפרטים והעדכונים על המרוץ יהיו בקהילה.";
-  $("regDone").hidden = false;
-}
-if (!regReady) {
-  $("regSoon").hidden = false;
-} else if (store.get("th_reg_name")) {
-  showRegistered(store.get("th_reg_name"));
-} else {
-  $("regForm").hidden = false;
-  $("regForm").addEventListener("submit", async ev => {
-    ev.preventDefault();
-    const name = $("regName").value.trim(), city = $("regCity").value.trim();
-    const err = $("regErr");
-    if (name.length < 2 || city.length < 2) {
-      err.textContent = "צריך למלא שם ועיר כדי להירשם."; err.hidden = false; return;
-    }
-    err.hidden = true;
-    const btn = $("regBtn"); btn.disabled = true; btn.textContent = "שולח...";
-    const data = new URLSearchParams();
-    data.set(CONFIG.formNameField, name);
-    data.set(CONFIG.formCityField, city);
-    try {
-      await fetch(CONFIG.formAction, { method: "POST", mode: "no-cors", body: data });
-      store.set("th_reg_name", name);
-      showRegistered(name);
-    } catch (e) {
-      err.textContent = "ההרשמה לא נשלחה. בדקו את החיבור לאינטרנט ונסו שוב."; err.hidden = false;
-      btn.disabled = false; btn.textContent = "אני בפנים";
-    }
-  });
 }
 </script>
 </body>
