@@ -308,8 +308,11 @@
     [[1, "p2"], [0, "p1"], [2, "p3"]].forEach(([idx, cls]) => {
       const x = list[idx];
       const box = el("div", "pod " + cls + (x ? "" : " empty"));
-      box.append(el("div", "n", idx + 1), el("div", "who", x ? x.name : (idx === 0 ? "מחכה לך" : "פנוי")));
-      if (x) box.append(el("div", "city", x.city), el("div", "t", fmtTime(x.seconds)));
+      const initials = x ? x.name.split(" ").slice(0, 2).map(w => w.charAt(0)).join("") : "";
+      const head = el("div", "podhead");
+      head.append(el("div", "av", initials), el("div", "who", x ? x.name : (idx === 0 ? "מחכה לך" : "פנוי")));
+      if (x) head.append(el("div", "city", x.city), el("div", "t", fmtTime(x.seconds)));
+      box.append(head, el("div", "block", idx + 1));
       pod.append(box);
     });
     const body = $("boardBody");
