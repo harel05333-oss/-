@@ -3,44 +3,37 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>TEAM HAREL</title>
+<title>קהילת רוצו</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="description" content="קהילת רצים מכל הארץ: מכירים רצים אחרים, לומדים אחד מהשני, ורצים ביחד מרוצים וירטואליים.">
-<meta property="og:title" content="TEAM HAREL | לא רצים לבד">
+<meta property="og:title" content="קהילת רוצו | לא רצים לבד">
 <meta property="og:description" content="קהילת רצים מכל הארץ. מכירים, לומדים, משתפרים ביחד, ורצים מרוצים וירטואליים כקהילה.">
 <meta name="theme-color" content="#0B0B0C">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800;900&family=Rubik:ital,wght@1,900&display=swap">
 <style>
-/* Layout: a phone app shell. Black app bar and hero, a feed of rounded cards on a soft
-   ground, a race bib as the one loud object, and a sticky action bar like an app's tab bar. */
+/* Layout: a phone app shell in black and white only (single dark look by design).
+   Depth comes from gradients: white-to-silver on the things you tap, soft dark gradients on cards. */
 :root {
-  --ground: #F3F3F1;
-  --card: #FFFFFF;
-  --ink: #0B0B0C;
-  --muted: #5E6066;
-  --line: #E2E2DE;
-  --bib: #FFD60A;          /* race-bib yellow: always carries black text */
+  color-scheme: dark;
+  --ground: #0B0B0C;
+  --card: #18181B;
+  --ink: #F4F4F2;
+  --muted: #A6A8AE;
+  --line: #2A2A2F;
+  --bib: #FFFFFF;          /* the bright end: always carries black text */
+  --grad: linear-gradient(135deg, #FFFFFF 0%, #C9CBD1 55%, #8E9199 100%);
+  --grad-text: linear-gradient(100deg, #FFFFFF 10%, #8E9199 95%);
+  --grad-card: linear-gradient(180deg, #1D1D20 0%, #121214 100%);
   --bib-ink: #0B0B0C;
-  --night: #0B0B0C;        /* app bar, hero, race band: same in both themes */
+  --night: #0B0B0C;        /* app bar, hero, race band */
   --night-card: #18181B;
   --night-ink: #FFFFFF;
   --night-muted: #A6A8AE;
   --night-line: #2A2A2F;
-  --wa: #1DA851;
   --display: "Heebo", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
   --logo: "Rubik", "Heebo", system-ui, sans-serif;
-}
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --ground: #0B0B0C; --card: #18181B; --ink: #F4F4F2; --muted: #A6A8AE; --line: #2A2A2F;
-    color-scheme: dark;
-  }
-}
-:root[data-theme="dark"] {
-  --ground: #0B0B0C; --card: #18181B; --ink: #F4F4F2; --muted: #A6A8AE; --line: #2A2A2F;
-  color-scheme: dark;
 }
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
@@ -69,25 +62,25 @@ h3 { font-size: 19px; font-weight: 800; line-height: 1.25; }
 }
 body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 30; background: var(--night); }
 .bar .wrap { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-block: 10px; }
-.logo { font-family: var(--logo); font-style: italic; font-weight: 900; font-size: 19px; direction: ltr; color: var(--night-ink); text-decoration: none; }
-.logo span { color: var(--bib); }
+.logo { font-family: var(--logo); font-style: italic; font-weight: 900; font-size: 21px; color: var(--night-ink); text-decoration: none; }
+.logo span { background: var(--grad-text); -webkit-background-clip: text; background-clip: text; color: transparent; padding-inline: 2px; }
 .bar a.pill {
-  font-size: 14px; font-weight: 800; text-decoration: none; color: var(--bib-ink); background: var(--bib);
+  font-size: 14px; font-weight: 800; text-decoration: none; color: var(--bib-ink); background: var(--grad);
   padding: 7px 14px; border-radius: 999px; white-space: nowrap;
 }
 
 /* Hero */
-.hero { background: var(--night); color: var(--night-ink); overflow: hidden; }
+.hero { background: radial-gradient(120% 90% at 85% -10%, #34343A 0%, #17171A 38%, var(--night) 72%); color: var(--night-ink); overflow: hidden; }
 .hero .wrap { padding-block: 34px 30px; display: grid; gap: 18px; }
 .hero h1 { font-size: clamp(50px, 15.5vw, 78px); }
-.hero h1 em { font-style: normal; color: var(--bib); }
+.hero h1 em { font-style: normal; background: var(--grad-text); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .hero .sub { color: var(--night-muted); font-size: 18px; max-width: 34ch; }
 .tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-.tile { background: var(--night-card); border: 1px solid var(--night-line); border-radius: 14px; padding: 12px 10px; text-align: center; min-width: 0; }
+.tile { background: var(--grad-card); border: 1px solid var(--night-line); border-radius: 14px; padding: 12px 10px; text-align: center; min-width: 0; }
 .tile b { display: block; font-size: 18px; font-weight: 900; }
 .tile small { font-size: 12px; color: var(--night-muted); }
 .route { display: block; width: 100%; height: 54px; }
-.route path { fill: none; stroke: var(--bib); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.route path { fill: none; stroke: url(#routeGrad); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
 .route circle { fill: var(--bib); }
 .route .dim { stroke: var(--night-line); }
 
@@ -102,8 +95,8 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .btn:active { transform: scale(.98); }
 .btn:focus-visible { outline: 3px solid var(--bib); outline-offset: 3px; }
 .btn svg { width: 21px; height: 21px; flex: none; }
-.btn.wa { background: var(--wa); color: #fff; }
-.btn.yellow { background: var(--bib); color: var(--bib-ink); }
+.btn.wa { background: var(--grad); color: var(--bib-ink); }
+.btn.yellow { background: var(--grad-card); color: var(--night-ink); border: 1px solid #4A4A52; }
 .btn.block { width: 100%; }
 
 /* Feed */
@@ -111,37 +104,37 @@ main { display: grid; gap: 34px; padding-block: 26px 10px; }
 .sec { display: grid; gap: 14px; }
 .feed { display: grid; gap: 10px; }
 .card {
-  background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 18px;
+  background: var(--grad-card); border: 1px solid var(--line); border-radius: 18px; padding: 18px;
   display: grid; grid-template-columns: 46px 1fr; gap: 14px; align-items: start; min-width: 0;
 }
 .card p { color: var(--muted); font-size: 16px; margin-top: 3px; }
-.ico { width: 46px; height: 46px; border-radius: 13px; background: var(--bib); color: var(--bib-ink); display: grid; place-items: center; }
+.ico { width: 46px; height: 46px; border-radius: 13px; background: var(--grad); color: var(--bib-ink); display: grid; place-items: center; }
 .ico svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
 
 /* Race band */
-.race { background: var(--night); color: var(--night-ink); }
+.race { background: linear-gradient(180deg, #1A1A1D 0%, var(--night) 55%); color: var(--night-ink); border-block: 1px solid var(--line); }
 .race .wrap { padding-block: 34px; display: grid; gap: 22px; }
-.race .label { color: var(--bib); }
+.race .label { color: var(--night-muted); }
 .race .lead { color: var(--night-muted); }
 .bib {
-  background: var(--bib); color: var(--bib-ink); border-radius: 16px; padding: 14px 18px 16px;
+  background: var(--grad); color: var(--bib-ink); border-radius: 16px; padding: 14px 18px 16px;
   position: relative; transform: rotate(-1.5deg); display: grid; gap: 2px; text-align: center;
   box-shadow: 0 14px 30px rgba(0,0,0,.45);
 }
 .bib i { position: absolute; width: 10px; height: 10px; border-radius: 50%; background: var(--night); }
 .bib i:nth-child(1) { top: 10px; left: 12px; } .bib i:nth-child(2) { top: 10px; right: 12px; }
 .bib i:nth-child(3) { bottom: 10px; left: 12px; } .bib i:nth-child(4) { bottom: 10px; right: 12px; }
-.bib .top { font-family: var(--logo); font-style: italic; font-weight: 900; font-size: 15px; direction: ltr; }
-.bib .big { font-weight: 900; font-size: clamp(60px, 20vw, 96px); line-height: .9; letter-spacing: -.04em; direction: ltr; }
+.bib .top { font-family: var(--logo); font-style: italic; font-weight: 900; font-size: 17px; }
+.bib .big { font-weight: 900; font-size: clamp(60px, 20vw, 96px); line-height: 1.05; letter-spacing: -.02em; }
 .bib .bot { font-weight: 800; font-size: 15px; }
 
 /* About */
-.about { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 20px; display: grid; gap: 10px; }
+.about { background: var(--grad-card); border: 1px solid var(--line); border-radius: 18px; padding: 20px; display: grid; gap: 10px; }
 .about p { color: var(--muted); }
 .who { display: flex; align-items: center; gap: 14px; }
 .who h3 { font-size: 22px; }
 .lead-txt { color: var(--muted); font-size: 17px; }
-.avatar { width: 88px; height: 88px; border-radius: 50%; object-fit: cover; background: var(--night); border: 3px solid var(--bib); flex: none; }
+.avatar { width: 88px; height: 88px; border-radius: 50%; object-fit: cover; background: var(--night); border: 3px solid var(--bib); flex: none; filter: grayscale(1) contrast(1.08); }
 .who small { display: block; color: var(--muted); font-size: 14px; }
 
 footer { text-align: center; color: var(--muted); font-size: 13px; padding-block: 18px 6px; }
@@ -163,18 +156,19 @@ footer { text-align: center; color: var(--muted); font-size: 13px; padding-block
 <body>
 <div class="bar">
   <div class="wrap">
-    <a class="logo" href="#top">TEAM <span>HAREL</span></a>
+    <a class="logo" href="#top">קהילת <span>רוצו</span></a>
     <a class="pill js-wa" href="#" target="_blank" rel="noopener">הצטרפות</a>
   </div>
 </div>
 
 <header class="hero" id="top">
   <div class="wrap">
-    <p class="label" style="color:var(--bib)">קהילת רצים · כל הארץ</p>
+    <p class="label" style="color:var(--night-muted)">קהילת רצים · כל הארץ</p>
     <h1>לא רצים <em>לבד.</em></h1>
     <p class="sub">קהילת וואטסאפ שמחברת בין רצים מכל הארץ. מכירים, לומדים אחד מהשני ומשתפרים ביחד.</p>
     <svg class="route" viewBox="0 0 520 54" preserveAspectRatio="none" aria-hidden="true">
-      <path class="dim" d="M6 44 C60 44 70 12 120 14 S190 46 240 40 300 8 350 12 430 44 514 20"/>
+      <defs><linearGradient id="routeGrad" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#6B6E76"/><stop offset="1" stop-color="#FFFFFF"/></linearGradient></defs>
+      <path class="dim" style="stroke:#2A2A2F" d="M6 44 C60 44 70 12 120 14 S190 46 240 40 300 8 350 12 430 44 514 20"/>
       <path d="M6 44 C60 44 70 12 120 14 S190 46 240 40 300 8 350 12"/>
       <circle cx="350" cy="12" r="6"/>
     </svg>
@@ -191,7 +185,7 @@ footer { text-align: center; color: var(--muted); font-size: 13px; padding-block
     <div class="wrap sec">
       <p class="label">מטרת הקהילה</p>
       <h2>שאף אחד לא ירוץ לבד</h2>
-      <p class="lead-txt">ריצה היא ספורט של יחידים. TEAM HAREL קיימת כדי לחבר בין רצים, כך שכל אחד ילמד מהאחרים, ישתפר, ויהיה חלק מקבוצה.</p>
+      <p class="lead-txt">ריצה היא ספורט של יחידים. קהילת רוצו קיימת כדי לחבר בין רצים, כך שכל אחד ילמד מהאחרים, ישתפר, ויהיה חלק מקבוצה.</p>
       <p class="label" style="margin-top:10px">מה יש בקהילה</p>
       <div class="feed">
         <article class="card">
@@ -227,8 +221,8 @@ footer { text-align: center; color: var(--muted); font-size: 13px; padding-block
       </div>
       <div class="bib" aria-hidden="true">
         <i></i><i></i><i></i><i></i>
-        <div class="top">TEAM HAREL</div>
-        <div class="big">RUN</div>
+        <div class="top">קהילת</div>
+        <div class="big">רוצו</div>
         <div class="bot">מרוצים וירטואליים</div>
       </div>
       <a class="btn yellow block" href="../races/">יצירת משתמש למרוצים</a>
@@ -244,13 +238,13 @@ footer { text-align: center; color: var(--muted); font-size: 13px; padding-block
           <div><h3>הראל</h3><small>מאמן ריצה וכוח</small></div>
         </div>
         <p>אני מלווה רצים ל-10 ק"מ, חצי מרתון ומרתון, עם שילוב של אימוני כוח.</p>
-        <p>פתחתי את TEAM HAREL כי ריצה היא ספורט של יחידים, ועם אנשים מסביב מתמידים יותר ונהנים יותר.</p>
+        <p>פתחתי את קהילת רוצו כי ריצה היא ספורט של יחידים, ועם אנשים מסביב מתמידים יותר ונהנים יותר.</p>
       </div>
     </div>
   </section>
 </main>
 
-<footer>TEAM HAREL · קהילת רצים</footer>
+<footer>קהילת רוצו · רצים ביחד</footer>
 
 <nav class="dock" aria-label="פעולות">
   <div class="wrap">
