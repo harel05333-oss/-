@@ -430,6 +430,15 @@ as $$
   order by s.final_seconds, s.submitted_at;
 $$;
 
+-- --------------------------------- public: everyone who created a user
+create or replace function public.all_runners()
+returns table (name text, city text)
+language sql stable security definer
+set search_path = public
+as $$
+  select u.name, u.city from public.runners u order by u.created_at limit 2000;
+$$;
+
 -- ------------------------------------- public: how many users signed up
 create or replace function public.runner_count()
 returns integer
@@ -447,6 +456,7 @@ revoke all on function public.my_result(uuid, uuid, text) from public;
 revoke all on function public.race_runners(uuid) from public;
 revoke all on function public.leaderboard(uuid) from public;
 revoke all on function public.runner_count() from public;
+revoke all on function public.all_runners() from public;
 grant execute on function public.create_runner(text, text, text) to anon, authenticated;
 grant execute on function public.join_code_required() to anon, authenticated;
 grant execute on function public.runner_me(uuid, text) to anon, authenticated;
@@ -456,6 +466,7 @@ grant execute on function public.my_result(uuid, uuid, text) to anon, authentica
 grant execute on function public.race_runners(uuid) to anon, authenticated;
 grant execute on function public.leaderboard(uuid) to anon, authenticated;
 grant execute on function public.runner_count() to anon, authenticated;
+grant execute on function public.all_runners() to anon, authenticated;
 grant execute on function public.is_admin() to anon, authenticated;
 
 -- ---------------------------------------------------------------------

@@ -125,6 +125,7 @@
     $("pfForm").reset();
     renderProfile();
     loadCount();
+    loadAllRunners();
     if (current) { mine = { user: true, registered: false }; tick(); }
   });
 
@@ -160,6 +161,7 @@
     }
     await checkMe();
     checkCode();
+    await loadAllRunners();
     renderProfile();
     loadCount();
     const { data, error } = await client.from("races")
@@ -208,7 +210,6 @@
     renderMoney(r);
     $("finishForm").hidden = true;
     showErr($("joinErr"), "");
-    $("runnersCard").hidden = true;
     renderBoard([]);
     $("raceView").hidden = false;
     if (timer) clearInterval(timer);
@@ -349,16 +350,29 @@
   });
 
   /* ---------- runners and leaderboard ---------- */
+  // "Who runs with us": everyone who created a user, not only this race's runners.
+  let allRunnersOk = true;
+  function renderRunners(list) {
+    const box = $("runners");
+    clear(box);
+    const MAX = 300;
+    list.slice(0, MAX).forEach(x => box.append(el("span", "chip", x.name + " · " + x.city)));
+    if (list.length > MAX) box.append(el("span", "chip", "ועוד " + (list.length - MAX)));
+    $("runnersCount").textContent = String(list.length);
+    $("runnersCard").hidden = list.length === 0;
+  }
+  async function loadAllRunners() {
+    const { data, error } = await client.rpc("all_runners");
+    if (error || !data) { allRunnersOk = false; return; }   // database not upgraded yet
+    allRunnersOk = true;
+    renderRunners(data);
+  }
+
   async function loadRunners(r) {
     const { data, error } = await client.rpc("race_runners", { p_race: r.id });
     if (current !== r || error || !data) return;
     $("raceCount").textContent = String(data.length);
-    const box = $("runners");
-    clear(box);
-    const MAX = 60;
-    data.slice(0, MAX).forEach(x => box.append(el("span", "chip", x.name + " · " + x.city)));
-    if (data.length > MAX) box.append(el("span", "chip", "ועוד " + (data.length - MAX)));
-    $("runnersCard").hidden = data.length === 0;
+    if (!allRunnersOk) renderRunners(data);
   }
 
   let board = [];
@@ -408,7 +422,9 @@
 
   // Keep the board and my status fresh while the page is open and visible.
   setInterval(() => {
-    if (!current || document.hidden || !client) return;
+    if (document.hidden || !client) return;
+    loadAllRunners();
+    if (!current) return;
     loadRunners(current);
     if (phase(current, Date.now()) === "before") return;
     loadBoard(current); loadMine(current);
