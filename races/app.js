@@ -1,7 +1,7 @@
 // Public page: create a user, join a race, report a result, show the leaderboard.
 (function () {
   "use strict";
-  const { cfg, client, configured, $, el, clear, parseTime, fmtTime, fmtDate, fmtClock, fmtKm, isStravaUrl, errorText, store } = window.TH;
+  const { cfg, client, configured, $, el, clear, parseTime, fmtTime, fmtDate, fmtClock, fmtKm, isActivityUrl, errorText, store } = window.TH;
   const SUBMIT_GRACE_MS = 12 * 3600 * 1000; // must match submit_result() in schema.sql
   const ME_KEY = "th_runner";
 
@@ -102,7 +102,7 @@
     renderProfile();
     loadCount();
     const { data, error } = await client.from("races")
-      .select("id,title,race_date,window_start,window_end,distance_km,status,starts_at,ends_at")
+      .select("*,starts_at,ends_at")
       .order("race_date", { ascending: true });
     if (error) { setState("לא הצלחנו לטעון את המרוצים. נסו לרענן בעוד כמה דקות.", "bad"); return; }
     races = data || [];
@@ -144,6 +144,7 @@
     $("raceWindow").textContent = fmtClock(r.starts_at) + "–" + fmtClock(r.ends_at);
     $("raceDate").textContent = fmtDate(r.starts_at);
     $("raceCount").textContent = "0";
+    renderMoney(r);
     $("finishForm").hidden = true;
     showErr($("joinErr"), "");
     $("runnersCard").hidden = true;
@@ -155,6 +156,19 @@
     loadRunners(r);
     loadBoard(r);
     loadMine(r);
+  }
+
+  // Optional entry fee, payment link and prize. Hidden when the race has none.
+  function renderMoney(r) {
+    const fee = Number(r.fee_ils) || 0, prize = (r.prize || "").trim();
+    $("moneyCard").hidden = !(fee > 0 || prize);
+    $("feeRow").hidden = !(fee > 0);
+    $("feeText").textContent = fee + " ₪";
+    const pay = $("payLink"), ok = fee > 0 && /^https:\/\/[A-Za-z0-9.-]+\//.test(r.pay_url || "");
+    pay.hidden = !ok;
+    if (ok) pay.href = r.pay_url; else pay.removeAttribute("href");
+    $("prizeRow").hidden = !prize;
+    $("prizeText").textContent = prize;
   }
 
   function tick() {
@@ -199,8 +213,8 @@
     const canReport = (p === "window" || p === "reporting") && st !== "approved";
     const hint = $("meHint"), status = $("meStatus");
 
-    if (p === "before") hint.textContent = "בבוקר המרוץ: מפעילים את Strava, רצים " + fmtKm(r.distance_km) + " וחוזרים לכאן כדי לדווח.";
-    else if (st === "none") hint.textContent = p === "done" ? "הזמן לדיווח תוצאות נגמר." : "סיימת לרוץ? לוחצים על הכפתור ושולחים את הלינק מ-Strava.";
+    if (p === "before") hint.textContent = "בבוקר המרוץ: מקליטים את הריצה בשעון או ב-Strava, רצים " + fmtKm(r.distance_km) + " וחוזרים לכאן כדי לדווח.";
+    else if (st === "none") hint.textContent = p === "done" ? "הזמן לדיווח תוצאות נגמר." : "סיימת לרוץ? לוחצים על הכפתור ושולחים את הלינק לפעילות.";
     else hint.textContent = "";
     hint.hidden = !hint.textContent;
 
@@ -260,7 +274,7 @@
     const seconds = parseTime($("finTime").value);
     const url = $("finUrl").value.trim();
     if (!seconds) return showErr(err, "כתבו את הזמן בצורה דקות:שניות, למשל 24:31.");
-    if (!isStravaUrl(url)) return showErr(err, errorText({ message: "BAD_LINK" }));
+    if (!isActivityUrl(url)) return showErr(err, errorText({ message: "BAD_LINK" }));
     showErr(err, ""); btn.disabled = true; btn.textContent = "שולח...";
     const { error } = await client.rpc("submit_result", {
       p_race: r.id, p_runner: me.id, p_token: me.token, p_strava_url: url, p_seconds: seconds

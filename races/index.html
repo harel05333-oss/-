@@ -9,11 +9,11 @@
 <title>רוצו | מרוצים וירטואליים</title>
 <meta name="description" content="המרוצים הווירטואליים של קהילת רוצו: כולם רצים באותו בוקר, כל אחד בעיר שלו, עם טבלת תוצאות אחת.">
 <meta property="og:title" content="רוצו | מרוצים וירטואליים">
-<meta property="og:description" content="כולם רצים באותו בוקר, כל אחד בעיר שלו. נרשמים בשם ועיר, רצים, ושולחים לינק מ-Strava.">
+<meta property="og:description" content="כולם רצים באותו בוקר, כל אחד בעיר שלו. יוצרים משתמש, רצים, ושולחים לינק לריצה.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800;900&family=Rubik:ital,wght@1,900&display=swap">
-<link rel="stylesheet" href="styles.css?v=20261111b">
+<link rel="stylesheet" href="styles.css?v=20261111c">
 </head>
 <body>
 <header class="top">
@@ -22,7 +22,7 @@
     <a class="brand" id="brandLink" href="../team-harel/">קהילת <span>רוצו</span></a>
     <div class="eyebrow">מרוצים וירטואליים</div>
     <h1>אותו בוקר. כל אחד בעיר שלו.</h1>
-    <p class="lead">יוצרים משתמש בשם ועיר, יוצאים לרוץ בחלון הזינוק, ושולחים את הלינק מ-Strava. בסוף היום יש טבלה אחת לכל הקהילה.</p>
+    <p class="lead">יוצרים משתמש בשם ועיר, יוצאים לרוץ בחלון הזינוק, ושולחים את הלינק לריצה מ-Strava או מהשעון. בסוף היום יש טבלה אחת לכל הקהילה.</p>
   </div>
 </header>
 
@@ -79,6 +79,14 @@
         </div>
       </div>
 
+      <div class="card stack" id="moneyCard" hidden>
+        <div class="row between" id="feeRow">
+          <div><p class="small muted">דמי השתתפות</p><p><b class="num" id="feeText"></b></p></div>
+          <a class="btn sm" id="payLink" target="_blank" rel="noopener noreferrer" hidden>לתשלום</a>
+        </div>
+        <div id="prizeRow"><p class="small muted">פרס</p><p><b id="prizeText"></b></p></div>
+      </div>
+
       <!-- Joining this race -->
       <div class="card stack" id="joinCard" hidden>
         <h3>הרשמה למרוץ</h3>
@@ -98,12 +106,12 @@
           <div class="field">
             <label for="finTime">הזמן שלך</label>
             <input id="finTime" class="ltr num" inputmode="numeric" placeholder="24:31" maxlength="8" required>
-            <span class="hint">דקות:שניות, כמו שמופיע ב-Strava. מעל שעה: 1:02:03</span>
+            <span class="hint">הזמן הכולל (Elapsed time) של הריצה, בדקות:שניות. מעל שעה: 1:02:03</span>
           </div>
           <div class="field">
-            <label for="finUrl">לינק לפעילות ב-Strava</label>
+            <label for="finUrl">לינק לפעילות</label>
             <input id="finUrl" class="ltr" type="url" inputmode="url" placeholder="https://www.strava.com/activities/..." maxlength="200" required>
-            <span class="hint">ב-Strava: פותחים את הפעילות, לוחצים על שיתוף, ומעתיקים את הלינק.</span>
+            <span class="hint">מ-Strava, Garmin Connect, Polar, Suunto או COROS: פותחים את הפעילות, לוחצים על שיתוף ומעתיקים את הלינק.</span>
           </div>
           <p class="notice bad" id="finErr" hidden></p>
           <div class="row">
@@ -134,7 +142,8 @@
           <li><b>רק ריצה עם GPS נספרת.</b> בלי הליכון ובלי הזנה ידנית.</li>
           <li><b>שעת ההתחלה</b> בפעילות חייבת להיות בתוך חלון הזינוק.</li>
           <li><b>כל המרחק בפעילות אחת</b>, בלי לעצור את השעון.</li>
-          <li><b>הפעילות ב-Strava צריכה להיות גלויה</b>, אחרת אי אפשר לבדוק אותה.</li>
+          <li><b>הפעילות צריכה להיות גלויה לכולם</b>, אחרת אי אפשר לבדוק אותה.</li>
+          <li><b>הזמן שנספר הוא הזמן הכולל</b> (Elapsed time), כולל עצירות.</li>
           <li><b>כל תוצאה נבדקת</b> מול המפה, הקצב והשעה לפני שהיא נכנסת לטבלה.</li>
         </ul>
       </div>
@@ -160,9 +169,9 @@
 
 <footer>קהילת רוצו · מרוצים וירטואליים</footer>
 
-<script src="vendor/supabase.js?v=20261111b"></script>
-<script src="config.js?v=20261111b"></script>
-<script src="common.js?v=20261111b"></script>
-<script src="app.js?v=20261111b"></script>
+<script src="vendor/supabase.js?v=20261111c"></script>
+<script src="config.js?v=20261111c"></script>
+<script src="common.js?v=20261111c"></script>
+<script src="app.js?v=20261111c"></script>
 </body>
 </html>

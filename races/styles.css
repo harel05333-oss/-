@@ -142,3 +142,12 @@ tr.me td { background: var(--accent-soft); font-weight: 800; }
 footer { text-align: center; color: var(--muted); font-size: 13px; padding-block: 8px 32px; }
 @media (max-width: 420px) { .card { padding: 16px; } }
 @media (prefers-reduced-motion: reduce) { .btn { transition: none; } .btn:active { transform: none; } }
+
+/* Automatic checks on a submitted result */
+.checks { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; font-size: 15px; }
+.checks li { display: grid; grid-template-columns: 22px 1fr; gap: 6px; align-items: start; }
+.checks li::before { font-weight: 900; text-align: center; }
+.checks .ok { color: var(--muted); } .checks .ok::before { content: "✓"; color: var(--ok); }
+.checks .warn { color: var(--warn); font-weight: 800; } .checks .warn::before { content: "!"; }
+.checks .todo::before { content: "○"; color: var(--muted); }
+input[type="checkbox"] { width: 20px; height: 20px; accent-color: #FFFFFF; }

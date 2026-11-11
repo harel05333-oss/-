@@ -42,6 +42,13 @@ create table if not exists public.races (
   created_at   timestamptz not null default now(),
   check (window_end > window_start)
 );
+-- Optional money: an entry fee, a link where runners pay it, and a prize note.
+alter table public.races add column if not exists fee_ils integer not null default 0
+  check (fee_ils between 0 and 10000);
+alter table public.races add column if not exists pay_url text
+  check (pay_url is null or (char_length(pay_url) <= 300 and pay_url ~ '^https://[A-Za-z0-9.-]+/'));
+alter table public.races add column if not exists prize text
+  check (prize is null or char_length(prize) <= 200);
 alter table public.races enable row level security;
 
 drop policy if exists races_read on public.races;
@@ -103,11 +110,17 @@ create table if not exists public.registrations (
   unique (race_id, runner_id)
 );
 create index if not exists registrations_runner on public.registrations (runner_id);
+-- The admin ticks this when a runner has paid the entry fee.
+alter table public.registrations add column if not exists paid boolean not null default false;
 alter table public.registrations enable row level security;
 
 drop policy if exists registrations_admin_read on public.registrations;
 create policy registrations_admin_read on public.registrations
   for select using (public.is_admin());
+
+drop policy if exists registrations_admin_update on public.registrations;
+create policy registrations_admin_update on public.registrations
+  for update using (public.is_admin()) with check (public.is_admin());
 
 drop policy if exists registrations_admin_delete on public.registrations;
 create policy registrations_admin_delete on public.registrations
@@ -128,6 +141,11 @@ create table if not exists public.results (
   check (status <> 'approved' or final_seconds is not null)
 );
 create index if not exists results_race on public.results (race_id, status, final_seconds);
+-- What the automatic checks noticed when the result was submitted.
+alter table public.results add column if not exists flags text[] not null default '{}';
+-- One activity link can be used once per race (ignoring anything after ? or #).
+create unique index if not exists results_unique_link
+  on public.results (race_id, lower(regexp_replace(strava_url, '[?#].*$', '')));
 alter table public.results enable row level security;
 
 drop policy if exists results_admin_read on public.results;
@@ -154,6 +172,16 @@ as $$
   select char_length(p) between 2 and 40
      and p !~ '[<>{}\[\]\\/@#$%^*=+|~`;:_]'
      and p !~* '(https?|www\.)';
+$$;
+
+-- Activity links are accepted only from the sites runners actually record on.
+create or replace function public.valid_activity_url(p text)
+returns boolean language sql immutable
+as $$
+  select char_length(p) <= 200
+     and p ~ ('^https://(www\.strava\.com|strava\.com|strava\.app\.link|connect\.garmin\.com'
+           || '|flow\.polar\.com|(www\.|maps\.)?suunto\.com|([a-z0-9-]+\.)?coros\.com)'
+           || '/[A-Za-z0-9_=&%.?/#~+-]{1,170}$');
 $$;
 
 create or replace function public.client_ip()
@@ -267,6 +295,7 @@ declare
   r     public.races;
   v_url text := btrim(coalesce(p_strava_url, ''));
   cur   public.results;
+  v_flags text[] := '{}';
 begin
   if me.id is null then raise exception 'NO_USER'; end if;
   select * into reg from public.registrations where race_id = p_race and runner_id = me.id;
@@ -279,26 +308,35 @@ begin
   if now() > public.ends_at(r) + interval '12 hours' then
     raise exception 'TOO_LATE';
   end if;
-  if char_length(v_url) > 200
-     or (v_url !~ '^https://(www\.)?strava\.com/activities/[0-9]+([/?][A-Za-z0-9_=&%./-]*)?$'
-         and v_url !~ '^https://strava\.app\.link/[A-Za-z0-9_-]+$') then
+  if not public.valid_activity_url(v_url) then
     raise exception 'BAD_LINK';
   end if;
   -- Faster than 2:30 per km is not a real result; slower than 20:00 per km is not a run.
   if p_seconds is null or p_seconds < r.distance_km * 150 or p_seconds > r.distance_km * 1200 then
     raise exception 'BAD_TIME';
   end if;
+  -- Nobody can have finished before the window opened plus their own running time.
+  if now() < public.starts_at(r) + make_interval(secs => p_seconds) - interval '1 minute' then
+    raise exception 'TOO_EARLY';
+  end if;
+  -- Faster than 3:00 per km is possible but rare: accept it and mark it for a closer look.
+  if p_seconds < r.distance_km * 180 then v_flags := array_append(v_flags, 'FAST_PACE'); end if;
   select * into cur from public.results where registration_id = reg.id;
   if found and cur.status = 'approved' then
     raise exception 'ALREADY_APPROVED';
   end if;
-  insert into public.results (registration_id, race_id, strava_url, claimed_seconds)
-  values (reg.id, reg.race_id, v_url, p_seconds)
-  on conflict (registration_id) do update
-    set strava_url = excluded.strava_url,
-        claimed_seconds = excluded.claimed_seconds,
-        status = 'pending', final_seconds = null, admin_note = null,
-        submitted_at = now(), reviewed_at = null;
+  begin
+    insert into public.results (registration_id, race_id, strava_url, claimed_seconds, flags)
+    values (reg.id, reg.race_id, v_url, p_seconds, v_flags)
+    on conflict (registration_id) do update
+      set strava_url = excluded.strava_url,
+          claimed_seconds = excluded.claimed_seconds,
+          flags = excluded.flags,
+          status = 'pending', final_seconds = null, admin_note = null,
+          submitted_at = now(), reviewed_at = null;
+  exception when unique_violation then
+    raise exception 'DUP_LINK';   -- another runner already sent this activity
+  end;
   return json_build_object('status', 'pending');
 end $$;
 

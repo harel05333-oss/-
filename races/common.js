@@ -55,10 +55,18 @@
     return (Number.isInteger(v) ? String(v) : v.toFixed(2).replace(/0$/, "")) + " ק\"מ";
   }
 
-  // Only real Strava activity links are ever turned into clickable links.
-  function isStravaUrl(u) {
-    return /^https:\/\/(www\.)?strava\.com\/activities\/[0-9]+([/?][A-Za-z0-9_=&%.\/-]*)?$/.test(u) ||
-           /^https:\/\/strava\.app\.link\/[A-Za-z0-9_-]+$/.test(u);
+  // Only links to the sites runners record on are accepted or turned into clickable links.
+  // Must match valid_activity_url() in schema.sql.
+  const ACTIVITY_URL = /^https:\/\/(www\.strava\.com|strava\.com|strava\.app\.link|connect\.garmin\.com|flow\.polar\.com|(www\.|maps\.)?suunto\.com|([a-z0-9-]+\.)?coros\.com)\/[A-Za-z0-9_=&%.?\/#~+-]{1,170}$/;
+  function isActivityUrl(u) { return typeof u === "string" && u.length <= 200 && ACTIVITY_URL.test(u); }
+  function activitySite(u) {
+    if (!isActivityUrl(u)) return "";
+    const h = new URL(u).hostname;
+    if (h.indexOf("strava") !== -1) return "Strava";
+    if (h.indexOf("garmin") !== -1) return "Garmin";
+    if (h.indexOf("polar") !== -1) return "Polar";
+    if (h.indexOf("suunto") !== -1) return "Suunto";
+    return "COROS";
   }
 
   const ERRORS = {
@@ -72,7 +80,9 @@
     NOT_REGISTERED: "אתם לא רשומים למרוץ הזה.",
     NOT_STARTED: "אפשר לדווח תוצאה רק אחרי שחלון הזינוק נפתח.",
     TOO_LATE: "הזמן לדיווח תוצאות למרוץ הזה נגמר.",
-    BAD_LINK: "הלינק צריך להיות לינק לפעילות ב-Strava, למשל https://www.strava.com/activities/123456",
+    BAD_LINK: "הלינק צריך להיות לינק לפעילות מ-Strava, Garmin, Polar, Suunto או COROS, ולהתחיל ב-https.",
+    TOO_EARLY: "לפי הזמן שכתבתם, עוד לא יכולתם לסיים: חלון הזינוק נפתח לפני פחות זמן מזה. בדקו את הזמן.",
+    DUP_LINK: "הלינק הזה כבר נשלח על ידי רץ אחר במרוץ הזה.",
     BAD_TIME: "הזמן שהוזן לא מתאים למרחק של המרוץ. בדקו אותו שוב.",
     ALREADY_APPROVED: "התוצאה שלכם כבר אושרה ואי אפשר לשנות אותה."
   };
@@ -89,5 +99,5 @@
     del(k) { try { localStorage.removeItem(k); } catch (e) {} }
   };
 
-  window.TH = { cfg, client, configured, $, el, clear, parseTime, fmtTime, fmtDate, fmtClock, fmtKm, isStravaUrl, errorText, store };
+  window.TH = { cfg, client, configured, $, el, clear, parseTime, fmtTime, fmtDate, fmtClock, fmtKm, isActivityUrl, activitySite, errorText, store };
 })();
