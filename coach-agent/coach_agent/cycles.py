@@ -85,6 +85,7 @@ def analyze_cycle(rows: list[dict], load_weeks: int | None = 3) -> dict | None:
         return None
 
     out = {
+        "known": saw_drop or recovery,  # we saw where the cycle starts
         "recovery_week": recovery,
         "loading_weeks": len(loading),
         "load_weeks_planned": load_weeks,

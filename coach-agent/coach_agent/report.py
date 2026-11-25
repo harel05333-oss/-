@@ -125,7 +125,7 @@ def render_athlete(s: dict) -> str:
     if c:
         if c["recovery_week"]:
             out.append(f"שבוע הורדה (אחרי {c['loading_weeks']} שבועות עומס)")
-        elif c.get("load_weeks_planned"):
+        elif c.get("load_weeks_planned") and c.get("known"):
             out.append(f"שבוע עומס {c['loading_weeks']} מתוך {c['load_weeks_planned']} במחזור")
 
     # intensity

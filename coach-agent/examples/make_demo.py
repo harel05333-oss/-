@@ -53,19 +53,28 @@ def easy(day, km_, pace="5:10", hr=145, **kw):
 
 def dani():
     acts = []
-    for w in range(WEEKS - 1, 0, -1):  # history weeks, easy HR a bit higher early on
+    # 3:1 cycles. Volume step 3 km, long-run step 1 km; the recovery week is the
+    # cycle's first week minus the step. The target week (80 km, long 22) is week 2 of a cycle.
+    #          w7  w6  w5  w4  w3  w2  w1
+    volumes = [65, 56, 68, 71, 74, 65, 77]
+    longs = [17, 14, 18, 19, 20, 17, 21]
+    recovery = [False, True, False, False, False, True, False]
+    for w, vol, long_km, rec in zip(range(WEEKS - 1, 0, -1), volumes, longs, recovery):
         sun = TARGET_SUNDAY - timedelta(days=7 * w)
         hr_easy = 146 + w  # aerobic efficiency improves week to week
+        tempo_km = 4 if rec else 6
+        quality = (3 + tempo_km + 2) + 11 + 6  # tempo run + intervals + recovery run
+        each_easy = round((vol - quality - long_km) / 3, 2)
         acts += [
-            easy(sun, 10, hr=hr_easy),
-            easy(sun + timedelta(1), 8, hr=hr_easy),
-            run(sun + timedelta(2), "טמפו", laps((3, "5:10", hr_easy), (6, "4:24", 165), (2, "5:15", 150)), rpe=7),
-            easy(sun + timedelta(3), 10, hr=hr_easy),
+            easy(sun, each_easy, hr=hr_easy),
+            easy(sun + timedelta(1), each_easy, hr=hr_easy),
+            run(sun + timedelta(2), "טמפו", laps((3, "5:10", hr_easy), (tempo_km, "4:24", 165), (2, "5:15", 150)), rpe=7),
+            easy(sun + timedelta(3), each_easy, hr=hr_easy),
             run(sun + timedelta(4), "אינטרוולים", laps(
-                (2, "5:10", hr_easy), *[(1, "4:10", 171), (0.4, "5:40", 150)] * 5, (2, "5:20", 148)), rpe=8),
+                (2, "5:10", hr_easy), *[(1, "4:10", 171), (0.4, "5:40", 150)] * (3 if rec else 5),
+                (2 + (2.8 if rec else 0), "5:20", 148)), rpe=8),
             easy(sun + timedelta(5), 6, pace="5:40", hr=135),
-            # long run grows 1.5 km a week, with an easier week every 4th week (3:1)
-            easy(sun + timedelta(6), 14 if w == 4 else 22 - 1.5 * w, pace="5:05", hr=hr_easy + 2),
+            easy(sun + timedelta(6), long_km, pace="5:05", hr=hr_easy + 2),
         ]
     s = TARGET_SUNDAY
     acts += [

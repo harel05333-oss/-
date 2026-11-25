@@ -75,23 +75,8 @@
      "avg_hr": 153
     },
     {
-     "distance_km": 1.0,
-     "duration": "5:10",
-     "avg_hr": 153
-    },
-    {
-     "distance_km": 1.0,
-     "duration": "5:10",
-     "avg_hr": 153
-    },
-    {
-     "distance_km": 1.0,
-     "duration": "5:10",
-     "avg_hr": 153
-    },
-    {
-     "distance_km": 1.0,
-     "duration": "5:10",
+     "distance_km": 0.67,
+     "duration": "3:28",
      "avg_hr": 153
     }
    ]
@@ -133,13 +118,8 @@
      "avg_hr": 153
     },
     {
-     "distance_km": 1.0,
-     "duration": "5:10",
-     "avg_hr": 153
-    },
-    {
-     "distance_km": 1.0,
-     "duration": "5:10",
+     "distance_km": 0.67,
+     "duration": "3:28",
      "avg_hr": 153
     }
    ]
@@ -245,23 +225,8 @@
      "avg_hr": 153
     },
     {
-     "distance_km": 1.0,
-     "duration": "5:10",
-     "avg_hr": 153
-    },
-    {
-     "distance_km": 1.0,
-     "duration": "5:10",
-     "avg_hr": 153
-    },
-    {
-     "distance_km": 1.0,
-     "duration": "5:10",
-     "avg_hr": 153
-    },
-    {
-     "distance_km": 1.0,
-     "duration": "5:10",
+     "distance_km": 0.67,
+     "duration": "3:28",
      "avg_hr": 153
     }
    ]
@@ -445,8 +410,33 @@
      "avg_hr": 155
     },
     {
-     "distance_km": 0.5,
-     "duration": "2:32",
+     "distance_km": 1.0,
+     "duration": "5:05",
+     "avg_hr": 155
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:05",
+     "avg_hr": 155
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:05",
+     "avg_hr": 155
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:05",
+     "avg_hr": 155
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:05",
+     "avg_hr": 155
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:05",
      "avg_hr": 155
     }
    ]
@@ -483,28 +473,8 @@
      "avg_hr": 152
     },
     {
-     "distance_km": 1.0,
-     "duration": "5:10",
-     "avg_hr": 152
-    },
-    {
-     "distance_km": 1.0,
-     "duration": "5:10",
-     "avg_hr": 152
-    },
-    {
-     "distance_km": 1.0,
-     "duration": "5:10",
-     "avg_hr": 152
-    },
-    {
-     "distance_km": 1.0,
-     "duration": "5:10",
-     "avg_hr": 152
-    },
-    {
-     "distance_km": 1.0,
-     "duration": "5:10",
+     "distance_km": 0.33,
+     "duration": "1:42",
      "avg_hr": 152
     }
    ]
@@ -541,18 +511,8 @@
      "avg_hr": 152
     },
     {
-     "distance_km": 1.0,
-     "duration": "5:10",
-     "avg_hr": 152
-    },
-    {
-     "distance_km": 1.0,
-     "duration": "5:10",
-     "avg_hr": 152
-    },
-    {
-     "distance_km": 1.0,
-     "duration": "5:10",
+     "distance_km": 0.33,
+     "duration": "1:42",
      "avg_hr": 152
     }
    ]
@@ -577,16 +537,6 @@
      "distance_km": 1.0,
      "duration": "5:10",
      "avg_hr": 152
-    },
-    {
-     "distance_km": 1.0,
-     "duration": "4:24",
-     "avg_hr": 165
-    },
-    {
-     "distance_km": 1.0,
-     "duration": "4:24",
-     "avg_hr": 165
     },
     {
      "distance_km": 1.0,
@@ -653,28 +603,8 @@
      "avg_hr": 152
     },
     {
-     "distance_km": 1.0,
-     "duration": "5:10",
-     "avg_hr": 152
-    },
-    {
-     "distance_km": 1.0,
-     "duration": "5:10",
-     "avg_hr": 152
-    },
-    {
-     "distance_km": 1.0,
-     "duration": "5:10",
-     "avg_hr": 152
-    },
-    {
-     "distance_km": 1.0,
-     "duration": "5:10",
-     "avg_hr": 152
-    },
-    {
-     "distance_km": 1.0,
-     "duration": "5:10",
+     "distance_km": 0.33,
+     "duration": "1:42",
      "avg_hr": 152
     }
    ]
@@ -726,24 +656,9 @@
      "avg_hr": 150
     },
     {
-     "distance_km": 1,
-     "duration": "4:10",
-     "avg_hr": 171
-    },
-    {
-     "distance_km": 0.4,
-     "duration": "2:16",
-     "avg_hr": 150
-    },
-    {
-     "distance_km": 1,
-     "duration": "4:10",
-     "avg_hr": 171
-    },
-    {
-     "distance_km": 0.4,
-     "duration": "2:16",
-     "avg_hr": 150
+     "distance_km": 1.0,
+     "duration": "5:20",
+     "avg_hr": 148
     },
     {
      "distance_km": 1.0,
@@ -753,6 +668,16 @@
     {
      "distance_km": 1.0,
      "duration": "5:20",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:20",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.8,
+     "duration": "4:16",
      "avg_hr": 148
     }
    ],
@@ -866,6 +791,11 @@
      "distance_km": 1.0,
      "duration": "5:05",
      "avg_hr": 154
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:05",
+     "avg_hr": 154
     }
    ]
   },
@@ -911,18 +841,8 @@
      "avg_hr": 151
     },
     {
-     "distance_km": 1.0,
-     "duration": "5:10",
-     "avg_hr": 151
-    },
-    {
-     "distance_km": 1.0,
-     "duration": "5:10",
-     "avg_hr": 151
-    },
-    {
-     "distance_km": 1.0,
-     "duration": "5:10",
+     "distance_km": 0.33,
+     "duration": "1:42",
      "avg_hr": 151
     }
    ]
@@ -969,8 +889,8 @@
      "avg_hr": 151
     },
     {
-     "distance_km": 1.0,
-     "duration": "5:10",
+     "distance_km": 0.33,
+     "duration": "1:42",
      "avg_hr": 151
     }
    ]
@@ -1081,18 +1001,8 @@
      "avg_hr": 151
     },
     {
-     "distance_km": 1.0,
-     "duration": "5:10",
-     "avg_hr": 151
-    },
-    {
-     "distance_km": 1.0,
-     "duration": "5:10",
-     "avg_hr": 151
-    },
-    {
-     "distance_km": 1.0,
-     "duration": "5:10",
+     "distance_km": 0.33,
+     "duration": "1:42",
      "avg_hr": 151
     }
    ]
@@ -1291,8 +1201,23 @@
      "avg_hr": 153
     },
     {
-     "distance_km": 0.5,
-     "duration": "2:32",
+     "distance_km": 1.0,
+     "duration": "5:05",
+     "avg_hr": 153
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:05",
+     "avg_hr": 153
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:05",
+     "avg_hr": 153
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:05",
      "avg_hr": 153
     }
    ]
@@ -1303,16 +1228,6 @@
    "sport": "run",
    "title": "קלה",
    "laps": [
-    {
-     "distance_km": 1.0,
-     "duration": "5:10",
-     "avg_hr": 150
-    },
-    {
-     "distance_km": 1.0,
-     "duration": "5:10",
-     "avg_hr": 150
-    },
     {
      "distance_km": 1.0,
      "duration": "5:10",
@@ -1473,16 +1388,6 @@
    "sport": "run",
    "title": "קלה",
    "laps": [
-    {
-     "distance_km": 1.0,
-     "duration": "5:10",
-     "avg_hr": 150
-    },
-    {
-     "distance_km": 1.0,
-     "duration": "5:10",
-     "avg_hr": 150
-    },
     {
      "distance_km": 1.0,
      "duration": "5:10",
@@ -1717,6 +1622,31 @@
      "distance_km": 1.0,
      "duration": "5:05",
      "avg_hr": 152
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:05",
+     "avg_hr": 152
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:05",
+     "avg_hr": 152
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:05",
+     "avg_hr": 152
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:05",
+     "avg_hr": 152
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:05",
+     "avg_hr": 152
     }
    ]
   },
@@ -1767,13 +1697,8 @@
      "avg_hr": 149
     },
     {
-     "distance_km": 1.0,
-     "duration": "5:10",
-     "avg_hr": 149
-    },
-    {
-     "distance_km": 1.0,
-     "duration": "5:10",
+     "distance_km": 0.67,
+     "duration": "3:28",
      "avg_hr": 149
     }
    ]
@@ -1822,6 +1747,11 @@
     {
      "distance_km": 1.0,
      "duration": "5:10",
+     "avg_hr": 149
+    },
+    {
+     "distance_km": 0.67,
+     "duration": "3:28",
      "avg_hr": 149
     }
    ]
@@ -1937,13 +1867,8 @@
      "avg_hr": 149
     },
     {
-     "distance_km": 1.0,
-     "duration": "5:10",
-     "avg_hr": 149
-    },
-    {
-     "distance_km": 1.0,
-     "duration": "5:10",
+     "distance_km": 0.67,
+     "duration": "3:28",
      "avg_hr": 149
     }
    ]
@@ -2157,8 +2082,18 @@
      "avg_hr": 151
     },
     {
-     "distance_km": 0.5,
-     "duration": "2:32",
+     "distance_km": 1.0,
+     "duration": "5:05",
+     "avg_hr": 151
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:05",
+     "avg_hr": 151
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:05",
      "avg_hr": 151
     }
    ]
@@ -2205,18 +2140,8 @@
      "avg_hr": 148
     },
     {
-     "distance_km": 1.0,
-     "duration": "5:10",
-     "avg_hr": 148
-    },
-    {
-     "distance_km": 1.0,
-     "duration": "5:10",
-     "avg_hr": 148
-    },
-    {
-     "distance_km": 1.0,
-     "duration": "5:10",
+     "distance_km": 0.33,
+     "duration": "1:42",
      "avg_hr": 148
     }
    ]
@@ -2263,8 +2188,8 @@
      "avg_hr": 148
     },
     {
-     "distance_km": 1.0,
-     "duration": "5:10",
+     "distance_km": 0.33,
+     "duration": "1:42",
      "avg_hr": 148
     }
    ]
@@ -2289,16 +2214,6 @@
      "distance_km": 1.0,
      "duration": "5:10",
      "avg_hr": 148
-    },
-    {
-     "distance_km": 1.0,
-     "duration": "4:24",
-     "avg_hr": 165
-    },
-    {
-     "distance_km": 1.0,
-     "duration": "4:24",
-     "avg_hr": 165
     },
     {
      "distance_km": 1.0,
@@ -2375,18 +2290,8 @@
      "avg_hr": 148
     },
     {
-     "distance_km": 1.0,
-     "duration": "5:10",
-     "avg_hr": 148
-    },
-    {
-     "distance_km": 1.0,
-     "duration": "5:10",
-     "avg_hr": 148
-    },
-    {
-     "distance_km": 1.0,
-     "duration": "5:10",
+     "distance_km": 0.33,
+     "duration": "1:42",
      "avg_hr": 148
     }
    ]
@@ -2438,24 +2343,9 @@
      "avg_hr": 150
     },
     {
-     "distance_km": 1,
-     "duration": "4:10",
-     "avg_hr": 171
-    },
-    {
-     "distance_km": 0.4,
-     "duration": "2:16",
-     "avg_hr": 150
-    },
-    {
-     "distance_km": 1,
-     "duration": "4:10",
-     "avg_hr": 171
-    },
-    {
-     "distance_km": 0.4,
-     "duration": "2:16",
-     "avg_hr": 150
+     "distance_km": 1.0,
+     "duration": "5:20",
+     "avg_hr": 148
     },
     {
      "distance_km": 1.0,
@@ -2465,6 +2355,16 @@
     {
      "distance_km": 1.0,
      "duration": "5:20",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:20",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.8,
+     "duration": "4:16",
      "avg_hr": 148
     }
    ],
@@ -2514,16 +2414,6 @@
    "sport": "run",
    "title": "קלה",
    "laps": [
-    {
-     "distance_km": 1.0,
-     "duration": "5:05",
-     "avg_hr": 150
-    },
-    {
-     "distance_km": 1.0,
-     "duration": "5:05",
-     "avg_hr": 150
-    },
     {
      "distance_km": 1.0,
      "duration": "5:05",
@@ -2663,8 +2553,8 @@
      "avg_hr": 147
     },
     {
-     "distance_km": 1.0,
-     "duration": "5:10",
+     "distance_km": 0.33,
+     "duration": "1:42",
      "avg_hr": 147
     }
    ]
@@ -2713,6 +2603,16 @@
     {
      "distance_km": 1.0,
      "duration": "5:10",
+     "avg_hr": 147
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:10",
+     "avg_hr": 147
+    },
+    {
+     "distance_km": 0.33,
+     "duration": "1:42",
      "avg_hr": 147
     }
    ]
@@ -2833,8 +2733,8 @@
      "avg_hr": 147
     },
     {
-     "distance_km": 1.0,
-     "duration": "5:10",
+     "distance_km": 0.33,
+     "duration": "1:42",
      "avg_hr": 147
     }
    ]
@@ -3063,8 +2963,8 @@
      "avg_hr": 149
     },
     {
-     "distance_km": 0.5,
-     "duration": "2:32",
+     "distance_km": 1.0,
+     "duration": "5:05",
      "avg_hr": 149
     }
    ]
