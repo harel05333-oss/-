@@ -55,17 +55,20 @@ QUESTIONS: list[Question] = [
     Question("max_hr", "דופק מקסימלי ידוע", "int", S3),
     Question("resting_hr", "דופק מנוחה", "int", S3),
 
+    Question("volume_unit", "המתאמן עובד לפי", "choice", S4, [("distance", "מרחק (ק\"מ)"), ("time", "זמן (דקות), למשל מתחיל בריצה-הליכה")]),
+    Question("walk_pace", "קצב שאיטי ממנו נחשב הליכה (לא חובה)", "time", S4, hint="ברירת מחדל 10:00 לק\"מ"),
     Question("week_start", "באיזה יום מתחיל השבוע של המתאמן?", "choice", S4,
              [(d, he) for d, he in zip(WEEKDAYS[-1:] + WEEKDAYS[:-1], WEEKDAYS_HE[-1:] + WEEKDAYS_HE[:-1])],
              required=True),
     Question("zone_source", "לפי מה לקבוע את הזונים?", "choice", S4, list(ZONE_SOURCES.items()),
              hint="בשטח והרים עדיף דופק"),
-    Question("weekly_km", "טווח נפח שבועי מתוכנן בק\"מ", "range", S4, hint="למשל 60-80"),
+    Question("weekly_km", "טווח נפח שבועי מתוכנן (ק\"מ, או דקות למי שעובד לפי זמן)", "range", S4, hint="למשל 60-80"),
     Question("max_quality", "כמה אימוני איכות לכל היותר בשבוע?", "int", S4),
     Question("max_increase", "עלייה מקסימלית בנפח משבוע לשבוע (%)", "number", S4, hint="ברירת מחדל 15"),
     Question("cycle", "מחזוריות עומס/הורדה", "choice", S4,
              [("3", "3:1"), ("2", "2:1"), ("4", "4:1"), ("0", "בלי מחזוריות קבועה")]),
-    Question("lsd_progress", "התקדמות בריצה הארוכה משבוע לשבוע, בק\"מ", "range", S4, hint="ברירת מחדל 0.5-2.5"),
+    Question("lsd_progress", "התקדמות בריצה הארוכה משבוע לשבוע (ק\"מ, או דקות למי שעובד לפי זמן)", "range", S4,
+             hint="ברירת מחדל 0.5-2.5 ק\"מ או 5-15 דקות"),
     Question("hard_increase", "עלייה מקסימלית בק\"מ עצימים (Z4 ומעלה) משבוע לשבוע", "number", S4,
              hint="ריק = לא לבדוק"),
 
@@ -178,8 +181,14 @@ def answers_to_athlete(answers: dict, athlete_id: str | None = None) -> dict:
         profile["max_weekly_increase"] = a("max_increase") / 100
     if a("cycle") is not None:
         profile["cycle_load_weeks"] = int(a("cycle")) or None
+    if a("volume_unit"):
+        profile["volume_unit"] = a("volume_unit")
+    if a("walk_pace"):
+        profile["walk_pace_s"] = parse_time(a("walk_pace"))
     if a("lsd_progress"):
-        profile["lsd_increase_min_km"], profile["lsd_increase_max_km"] = a("lsd_progress")
+        keys = ("lsd_increase_min_min", "lsd_increase_max_min") if a("volume_unit") == "time" \
+            else ("lsd_increase_min_km", "lsd_increase_max_km")
+        profile[keys[0]], profile[keys[1]] = a("lsd_progress")
     if a("hard_increase") is not None:
         profile["hard_km_increase_max"] = a("hard_increase")
     for key, src in (("injuries", "injuries"), ("other_sports", "other_sports")):
@@ -213,7 +222,14 @@ def athlete_to_answers(athlete: dict) -> dict:
     ans["max_quality"] = p.get("max_quality_per_week")
     if "max_weekly_increase" in p:
         ans["max_increase"] = round(p["max_weekly_increase"] * 100)
-    if "lsd_increase_max_km" in p:
+    if p.get("volume_unit"):
+        ans["volume_unit"] = p["volume_unit"]
+    if p.get("walk_pace_s"):
+        m, s_ = divmod(round(p["walk_pace_s"]), 60)
+        ans["walk_pace"] = f"{m}:{s_:02d}"
+    if p.get("volume_unit") == "time" and "lsd_increase_max_min" in p:
+        ans["lsd_progress"] = [p.get("lsd_increase_min_min", 5), p["lsd_increase_max_min"]]
+    elif "lsd_increase_max_km" in p:
         ans["lsd_progress"] = [p.get("lsd_increase_min_km", 0.5), p["lsd_increase_max_km"]]
     ans["hard_increase"] = p.get("hard_km_increase_max")
     if "cycle_load_weeks" in p:

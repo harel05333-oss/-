@@ -84,6 +84,7 @@ def activity_from_dict(d: dict) -> Activity:
             avg_hr=l.get("avg_hr"),
             elevation_gain_m=l.get("elevation_gain_m"),
             intensity=l.get("intensity"),
+            cadence_spm=l.get("cadence"),
         )
         for l in d.get("laps", [])
     ]
@@ -121,6 +122,9 @@ def planned_from_dict(d: dict) -> PlannedWorkout:
         pace_fast_s=parse_time(d.get("pace_fast")),
         pace_slow_s=parse_time(d.get("pace_slow")),
         rpe=d.get("rpe"),
+        run_s=parse_time(d.get("run")),
+        walk_s=parse_time(d.get("walk")),
+        reps=d.get("reps"),
     )
 
 

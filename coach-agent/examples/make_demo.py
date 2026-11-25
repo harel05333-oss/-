@@ -156,8 +156,63 @@ def michal():
     }
 
 
+def run_walk_session(day, title, run_s, walk_s, reps, run_pace="9:00", run_hr=148, hour=7, **kw):
+    """Beginner session with one lap per step, as a structured Garmin workout records it."""
+    def lap(sec, pace, hr):
+        m, s_ = pace.split(":")
+        pace_s = int(m) * 60 + int(s_)
+        return {"distance_km": round(sec / pace_s, 3), "duration": sec, "avg_hr": hr}
+    laps = [lap(300, "11:30", 110)]  # 5 minutes walking warm-up
+    for _ in range(reps):
+        laps += [lap(run_s, run_pace, run_hr), lap(walk_s, "11:30", 125)]
+    laps.append(lap(300, "11:30", 115))
+    return run(day, title, laps, hour=hour, **kw)
+
+
+def roni():
+    """Beginner on run/walk, works by time. Run parts grow every week."""
+    acts = []
+    #            w6  w5  w4  w3  w2  w1
+    run_parts = [60, 75, 90, 60, 90, 105]
+    reps = [8, 8, 8, 6, 8, 8]
+    for w, r, n in zip(range(6, 0, -1), run_parts, reps):
+        sun = TARGET_SUNDAY - timedelta(days=7 * w)
+        acts += [
+            run_walk_session(sun, "ריצה-הליכה", r, 90, n),
+            run_walk_session(sun + timedelta(2), "ריצה-הליכה", r, 90, n),
+            run_walk_session(sun + timedelta(4), "ריצה-הליכה ארוכה", r, 90, n + 2),
+        ]
+    s = TARGET_SUNDAY
+    acts += [
+        run_walk_session(s, "ריצה-הליכה", 120, 60, 8, rpe=4),
+        # planned 2:00 / 1:00, but ran 6 minutes straight before walking
+        run(s + timedelta(2), "ריצה-הליכה", [
+            {"distance_km": 0.43, "duration": 300, "avg_hr": 110},
+            {"distance_km": 0.78, "duration": 360, "avg_hr": 168},
+            {"distance_km": 0.13, "duration": 90, "avg_hr": 130},
+            *[{"distance_km": 0.222, "duration": 120, "avg_hr": 150}, {"distance_km": 0.087, "duration": 60, "avg_hr": 128}] * 5,
+            {"distance_km": 0.43, "duration": 300, "avg_hr": 115},
+        ], rpe=7, comment="הרגשתי טוב אז המשכתי לרוץ"),
+        run_walk_session(s + timedelta(4), "ריצה-הליכה ארוכה", 150, 60, 10, rpe=5),
+    ]
+    return {
+        "athlete": {
+            "id": "roni", "name": "רוני אבן",
+            "races": [{"date": "2026-10-30", "distance_km": 5, "time": "36:00", "is_race": True}],
+            "profile": {"week_start": "sunday", "volume_unit": "time", "walk_pace_s": 600,
+                        "weekly_km_min": 90, "weekly_km_max": 150, "cycle_load_weeks": 3},
+        },
+        "activities": acts,
+        "planned": [
+            {"date": s.isoformat(), "title": "ריצה-הליכה 8×(2:00/1:00)", "run": "2:00", "walk": "1:00", "reps": 8},
+            {"date": (s + timedelta(2)).isoformat(), "title": "ריצה-הליכה 8×(2:00/1:00)", "run": "2:00", "walk": "1:00", "reps": 8},
+            {"date": (s + timedelta(4)).isoformat(), "title": "ריצה-הליכה 10×(2:30/1:00)", "run": "2:30", "walk": "1:00", "reps": 10},
+        ],
+    }
+
+
 if __name__ == "__main__":
     OUT.mkdir(exist_ok=True)
-    for name, data in (("dani", dani()), ("michal", michal())):
+    for name, data in (("dani", dani()), ("michal", michal()), ("roni", roni())):
         (OUT / f"{name}.json").write_text(json.dumps(data, ensure_ascii=False, indent=1), encoding="utf-8")
         print(OUT / f"{name}.json")

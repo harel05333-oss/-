@@ -17,6 +17,10 @@ def pace(s: float | None) -> str:
 
 
 def hmm(s: float) -> str:
+    """1:05 (hours) / 45 דק׳ / 2:30 דק׳ (short parts keep their seconds)"""
+    if s < 600 and round(s) % 60:
+        m, sec = divmod(round(s), 60)
+        return f"{m}:{sec:02d} דק׳"
     m = round(s / 60)
     h, m = divmod(m, 60)
     return f"{h}:{m:02d}" if h else f"{m} דק׳"
@@ -53,10 +57,15 @@ def _hr(p: dict) -> str:
 ROLE_HE = {"warmup": "חימום", "cooldown": "שחרור", "recovery": "קל", "main": ""}
 
 
-def _part_line(p: dict) -> str:
+def _part_line(p: dict, by_time: bool = False) -> str:
     if p["type"] == "repeats":
-        effort = dist(p["effort_distance_m"], p["effort_duration_s"])
-        rec = dist(p["recovery_distance_m"], p["recovery_duration_s"]) if p["recovery_duration_s"] else None
+        run_walk = p.get("recovery_kind") == "walk" and p.get("effort_kind") == "easy"
+        if by_time or run_walk:
+            effort = hmm(p["effort_duration_s"]) + (" ריצה" if run_walk else "")
+            rec = hmm(p["recovery_duration_s"]) if p["recovery_duration_s"] else None
+        else:
+            effort = dist(p["effort_distance_m"], p["effort_duration_s"])
+            rec = dist(p["recovery_distance_m"], p["recovery_duration_s"]) if p["recovery_duration_s"] else None
         paces = ""
         if p["pace_avg"] and p["pace_fastest"] == p["pace_slowest"]:
             paces = f"@{pace(p['pace_avg'])}"
@@ -68,10 +77,13 @@ def _part_line(p: dict) -> str:
         if p.get("avg_hr"):
             line += f" | דופק {p['avg_hr']}"
         if rec:
-            line += f"\n     התאוששות {rec} בין החזרות"
+            what = "הליכה" if p.get("recovery_kind") == "walk" else "התאוששות"
+            line += f"\n     {what} {rec} בין החזרות"
         return line
+    if p["kind"] == "walk":
+        return f"הליכה {hmm(p['duration_s'])}"
     label = ROLE_HE.get(p["role"], "")
-    d = dist(p["distance_m"], p["duration_s"])
+    d = hmm(p["duration_s"]) if by_time else dist(p["distance_m"], p["duration_s"])
     if p["kind"] == "easy":
         return f"{label + ' ' if label else ''}{d} {p['zone']}" + (f" @{pace(p['pace_s_per_km'])}" if p["pace_s_per_km"] else "")
     return f"*{d} {p['zone']}*" + (f" @{pace(p['pace_s_per_km'])}" if p["pace_s_per_km"] else "") + _hr(p)
@@ -118,22 +130,35 @@ def render_athlete(s: dict) -> str:
     # volume
     out.append("")
     out.append("*נפח*")
-    if v["runs"]:
+    by_time = s.get("unit") == "time"
+    if v["runs"] and by_time:
+        line = f"זמן: *{hmm(v['run_min'] * 60)}* | {v['runs']} אימונים"
+        if v.get("walk_min"):
+            share = v["jog_min"] / v["run_min"] if v["run_min"] else 0
+            line += f" | ריצה {hmm(v['jog_min'] * 60)} ({share:.0%}) | הליכה {hmm(v['walk_min'] * 60)}"
+        out.append(line)
+    elif v["runs"]:
         out.append(f"ריצה: *{v['run_km']:g} ק\"מ* | {hmm(v['run_s'])} | {v['runs']} ריצות")
+        if v.get("walk_min"):
+            out.append(f"מתוכם הליכה: {hmm(v['walk_min'] * 60)}")
     else:
         out.append("לא נרשמו ריצות השבוע")
     if v["other_s_by_sport"]:
         parts = ", ".join(f"{SPORT_HE.get(k, k)} {hmm(t)}" for k, t in v["other_s_by_sport"].items())
         out.append(f"אימונים נוספים: {parts} | סה\"כ {hmm(v['total_s'])}")
     cmp = []
-    if v["prev_week_run_km"]:
-        diff = v["run_km"] / v["prev_week_run_km"] - 1
-        cmp.append(f"שבוע שעבר {v['prev_week_run_km']:g} ({diff:+.0%})")
-    if v["avg4_run_km"]:
-        cmp.append(f"ממוצע 4 שבועות {v['avg4_run_km']:g}")
+    cur, prev, avg = ((v["run_min"], v["prev_week_run_min"], v["avg4_run_min"]) if by_time
+                      else (v["run_km"], v["prev_week_run_km"], v["avg4_run_km"]))
+    u = " דק׳" if by_time else ""
+    if prev:
+        cmp.append(f"שבוע שעבר {prev:g}{u} ({cur / prev - 1:+.0%})")
+    if avg:
+        cmp.append(f"ממוצע 4 שבועות {avg:g}{u}")
     if cmp:
         out.append(" | ".join(cmp))
-    if v["longest_run_km"]:
+    if by_time and v["longest_min"]:
+        out.append(f"אימון ארוך: {hmm(v['longest_min'] * 60)} | ריצה רציפה הכי ארוכה: {v['continuous_run_min']:g} דק׳")
+    elif v["longest_run_km"]:
         out.append(f"ריצה ארוכה: {v['longest_run_km']:g} ק\"מ")
     c = s.get("cycle")
     t = s.get("taper")
@@ -147,9 +172,19 @@ def render_athlete(s: dict) -> str:
             out.append(f"שבוע עומס {c['loading_weeks']} מתוך {c['load_weeks_planned']} במחזור")
 
     # intensity
-    kc = it["km_by_class"]
+    kc = {k: n for k, n in it["km_by_class"].items() if k != "walk"}
     run_km_zoned = sum(kc.values())
-    if run_km_zoned:
+    tc = it["time_by_class"]
+    run_s_zoned = sum(t for k, t in tc.items() if k != "walk")
+    if by_time and run_s_zoned:
+        out.append("")
+        out.append("*עצימות* (זמן ריצה, בלי הליכה)")
+        out.append(f"קל Z1–Z2: {hmm(tc['easy'])} ({_pct(tc['easy'], run_s_zoned)})")
+        if tc["moderate"]:
+            out.append(f"בינוני Z3: {hmm(tc['moderate'])} ({_pct(tc['moderate'], run_s_zoned)})")
+        if tc["hard"]:
+            out.append(f"עצים Z4+: *{hmm(tc['hard'])}* ({_pct(tc['hard'], run_s_zoned)})")
+    elif run_km_zoned:
         out.append("")
         th_txt = f"סף {pace(th['pace_s_per_km'])}/ק\"מ" if th["pace_s_per_km"] else ""
         if th["lthr"]:
@@ -164,12 +199,13 @@ def render_athlete(s: dict) -> str:
             out.append("   " + " | ".join(hard_z))
 
     # key sessions
-    key = [w for w in s["workouts"] if w.get("quality") or w.get("long")]
+    key = [w for w in s["workouts"] if w.get("quality") or w.get("long") or w.get("run_walk")]
     if key:
         out.append("")
         out.append("*אימוני מפתח*")
         for w in key:
-            head = f"*{_day_he(w['date'])} – {w['type']}* | {km(w['distance_m'])} | TSS {w['tss']}"
+            size = hmm(w["duration_s"]) if by_time else km(w["distance_m"])
+            head = f"*{_day_he(w['date'])} – {w['type']}* | {size} | TSS {w['tss']}"
             if w.get("rpe"):
                 head += f" | RPE {w['rpe']:g}"
             out.append(head)
@@ -177,7 +213,7 @@ def render_athlete(s: dict) -> str:
                 if p["type"] == "segment" and p["kind"] == "easy" and p["role"] == "main" and len(w["parts"]) == 1:
                     out.append(f"  {dist(p['distance_m'], p['duration_s'])} {p['zone']} @{pace(p['pace_s_per_km'])}{_hr(p)}")
                     continue
-                out.append("  " + _part_line(p))
+                out.append("  " + _part_line(p, by_time))
             if w.get("comment"):
                 out.append(f"  הערה: _{w['comment']}_")
 
@@ -194,7 +230,8 @@ def render_athlete(s: dict) -> str:
         out.append(f"_Fitness/Fatigue/Form יהיו מדויקים אחרי 4+ שבועות נתונים (יש {ld['history_days']} ימים)_")
 
     # feelings from other sessions (key sessions already showed theirs)
-    notes = [w for w in s["workouts"] if not (w.get("quality") or w.get("long")) and (w.get("comment") or w.get("rpe"))]
+    notes = [w for w in s["workouts"] if not (w.get("quality") or w.get("long") or w.get("run_walk"))
+             and (w.get("comment") or w.get("rpe"))]
     if notes:
         out.append("")
         out.append("*תחושות*")
@@ -235,8 +272,12 @@ def render_overview(summaries: list[dict]) -> str:
         status = "חשוב" if "alert" in levels else "לתשומת לב" if "warn" in levels else "תקין"
         v = s["volume"]
         when = "" if same_week else f" ({rng(s)})"
-        out.append(f"*{s['athlete']['name']}*{when} ({status}): {v['run_km']:g} ק\"מ, "
-                   f"{s['intensity']['km_by_class']['hard']:g} עצים, TSS {s['load']['week_tss']}")
+        if s.get("unit") == "time":
+            out.append(f"*{s['athlete']['name']}*{when} ({status}): {hmm(v['run_min'] * 60)}, "
+                       f"ריצה רציפה עד {v['continuous_run_min']:g} דק׳, TSS {s['load']['week_tss']}")
+        else:
+            out.append(f"*{s['athlete']['name']}*{when} ({status}): {v['run_km']:g} ק\"מ, "
+                       f"{s['intensity']['km_by_class']['hard']:g} עצים, TSS {s['load']['week_tss']}")
     out.append("")
     out.append("_פירוט לכל מתאמן בהודעות הבאות_")
     return "\n".join(out)

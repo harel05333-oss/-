@@ -213,21 +213,27 @@ def compare_week(plan: SeasonPlan, summary: dict) -> dict | None:
         return None
     v = summary["volume"]
     flags: list[tuple[str, str]] = []
+    # For athletes who work by time, the table's volume and long run are minutes.
+    by_time = summary.get("unit") == "time"
+    unit = "דק׳" if by_time else "ק\"מ"
+    vol = v["run_min"] if by_time else v["run_km"]
+    longest = v["longest_min"] if by_time else v["longest_run_km"]
+    lsd_tol = 5 if by_time else LSD_TOL
 
     if pw.volume_km:
         lo, hi = pw.volume_km
-        tol = max(VOLUME_TOL[0], hi * VOLUME_TOL[1])
+        tol = max(10 if by_time else VOLUME_TOL[0], hi * VOLUME_TOL[1])
         planned = f"{lo:g}" + (f"-{hi:g}" if hi != lo else "")
-        if v["run_km"] > hi + tol:
-            flags.append(("warn", f"נפח {v['run_km']:g} ק\"מ, בתכנון {planned}"))
-        elif v["run_km"] < lo - tol:
-            flags.append(("info", f"נפח {v['run_km']:g} ק\"מ, בתכנון {planned}"))
+        if vol > hi + tol:
+            flags.append(("warn", f"נפח {vol:g} {unit}, בתכנון {planned}"))
+        elif vol < lo - tol:
+            flags.append(("info", f"נפח {vol:g} {unit}, בתכנון {planned}"))
     if pw.lsd_km and not pw.lsd_in_race:
-        diff = v["longest_run_km"] - pw.lsd_km
-        if diff > LSD_TOL:
-            flags.append(("warn", f"ריצה ארוכה {v['longest_run_km']:g} ק\"מ, בתכנון {pw.lsd_km:g}"))
-        elif diff < -LSD_TOL:
-            flags.append(("info", f"ריצה ארוכה {v['longest_run_km']:g} ק\"מ, בתכנון {pw.lsd_km:g}"))
+        diff = longest - pw.lsd_km
+        if diff > lsd_tol:
+            flags.append(("warn", f"ריצה ארוכה {longest:g} {unit}, בתכנון {pw.lsd_km:g}"))
+        elif diff < -lsd_tol:
+            flags.append(("info", f"ריצה ארוכה {longest:g} {unit}, בתכנון {pw.lsd_km:g}"))
 
     types = [w.get("type", "") for w in summary["workouts"] if w.get("quality")]
     if pw.tempo_km:

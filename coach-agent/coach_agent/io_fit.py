@@ -28,6 +28,14 @@ def _speed(m: dict) -> float | None:
     return m.get("enhanced_avg_speed") or m.get("avg_speed") or m.get("enhanced_speed") or m.get("speed")
 
 
+def _cadence(m: dict, run: bool = True) -> float | None:
+    c = m.get("avg_running_cadence") or m.get("avg_cadence") or m.get("cadence")
+    if c is None:
+        return None
+    frac = m.get("avg_fractional_cadence") or m.get("fractional_cadence") or 0
+    return (float(c) + float(frac)) * 2 if run else float(c)
+
+
 def _to_local(ts, tz: str) -> datetime:
     if not isinstance(ts, datetime):
         ts = datetime.fromtimestamp(float(ts), tz=timezone.utc)
@@ -48,6 +56,7 @@ def activity_from_messages(messages: dict, activity_id: str, tz: str = "Asia/Jer
             avg_hr=l.get("avg_heart_rate"),
             elevation_gain_m=l.get("total_ascent"),
             intensity=str(l["intensity"]) if l.get("intensity") is not None else None,
+            cadence_spm=_cadence(l),
         ))
     raw = messages.get("record_mesgs", [])
     records = []
@@ -55,7 +64,7 @@ def activity_from_messages(messages: dict, activity_id: str, tz: str = "Asia/Jer
         t0 = raw[0]["timestamp"]
         for r in raw:
             dt = (r["timestamp"] - t0).total_seconds() if isinstance(t0, datetime) else r["timestamp"] - t0
-            records.append(Record(t=float(dt), speed_mps=_speed(r), hr=r.get("heart_rate")))
+            records.append(Record(t=float(dt), speed_mps=_speed(r), hr=r.get("heart_rate"), cadence_spm=_cadence(r)))
     start = s.get("start_time") or (raw[0]["timestamp"] if raw else datetime.now(timezone.utc))
     duration = s.get("total_timer_time") or sum(l.duration_s for l in laps)
     return Activity(

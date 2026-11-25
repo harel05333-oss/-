@@ -19,6 +19,7 @@ class Lap:
     elevation_gain_m: float | None = None
     # warmup / active / rest / cooldown when the watch knows it (structured workouts)
     intensity: str | None = None
+    cadence_spm: float | None = None  # steps per minute (running ~150-190, walking ~100-130)
 
     @property
     def pace_s_per_km(self) -> float | None:
@@ -34,6 +35,7 @@ class Record:
     t: float  # seconds since the activity started
     speed_mps: float | None = None
     hr: float | None = None
+    cadence_spm: float | None = None
 
 
 @dataclass
@@ -96,6 +98,10 @@ class PlannedWorkout:
     pace_fast_s: float | None = None  # fastest planned pace, s/km
     pace_slow_s: float | None = None
     rpe: float | None = None
+    # run/walk sessions for beginners: e.g. 8 x (2:00 run / 1:00 walk)
+    run_s: float | None = None
+    walk_s: float | None = None
+    reps: int | None = None
 
 
 @dataclass
@@ -112,6 +118,9 @@ class Profile:
     """What the coach told us about the athlete in the questionnaire."""
 
     week_start: str = "sunday"  # any day: sunday, monday, ... saturday
+    # "distance": volume in km (default). "time": volume in minutes, for beginners on run/walk.
+    volume_unit: str = "distance"
+    walk_pace_s: float = 600.0  # slower than this (s/km) is walking; 10:00 by default
     season_start: date | None = None  # week 1 of the athlete's season plan
     zone_source: str = "pace"  # pace / hr / max (the harder of the two)
     birth_year: int | None = None
@@ -126,6 +135,9 @@ class Profile:
     # Long run (LSD) progression vs the longest run of the last 3 weeks, in km.
     lsd_increase_min_km: float = 0.5
     lsd_increase_max_km: float = 2.5
+    # the same, in minutes, for athletes who work by time
+    lsd_increase_min_min: float = 5.0
+    lsd_increase_max_min: float = 15.0
     # Intensity progression: hard km (Z4+) per week vs the last 3 weeks. None = not checked.
     hard_km_increase_max: float | None = None
     injuries: list[str] = field(default_factory=list)  # body areas to watch, e.g. "אכילס", "שוק"

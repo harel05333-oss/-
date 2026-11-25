@@ -1,0 +1,2169 @@
+{
+ "athlete": {
+  "id": "roni",
+  "name": "רוני אבן",
+  "races": [
+   {
+    "date": "2026-10-30",
+    "distance_km": 5,
+    "time": "36:00",
+    "is_race": true
+   }
+  ],
+  "profile": {
+   "week_start": "sunday",
+   "volume_unit": "time",
+   "walk_pace_s": 600,
+   "weekly_km_min": 90,
+   "weekly_km_max": 150,
+   "cycle_load_weeks": 3
+  }
+ },
+ "activities": [
+  {
+   "id": "2026-10-04-ריצה-הליכה",
+   "start": "2026-10-04T07:00:00",
+   "sport": "run",
+   "title": "ריצה-הליכה",
+   "laps": [
+    {
+     "distance_km": 0.435,
+     "duration": 300,
+     "avg_hr": 110
+    },
+    {
+     "distance_km": 0.111,
+     "duration": 60,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.111,
+     "duration": 60,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.111,
+     "duration": 60,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.111,
+     "duration": 60,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.111,
+     "duration": 60,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.111,
+     "duration": 60,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.111,
+     "duration": 60,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.111,
+     "duration": 60,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.435,
+     "duration": 300,
+     "avg_hr": 115
+    }
+   ]
+  },
+  {
+   "id": "2026-10-06-ריצה-הליכה",
+   "start": "2026-10-06T07:00:00",
+   "sport": "run",
+   "title": "ריצה-הליכה",
+   "laps": [
+    {
+     "distance_km": 0.435,
+     "duration": 300,
+     "avg_hr": 110
+    },
+    {
+     "distance_km": 0.111,
+     "duration": 60,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.111,
+     "duration": 60,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.111,
+     "duration": 60,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.111,
+     "duration": 60,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.111,
+     "duration": 60,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.111,
+     "duration": 60,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.111,
+     "duration": 60,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.111,
+     "duration": 60,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.435,
+     "duration": 300,
+     "avg_hr": 115
+    }
+   ]
+  },
+  {
+   "id": "2026-10-08-ריצה-הליכה ארוכה",
+   "start": "2026-10-08T07:00:00",
+   "sport": "run",
+   "title": "ריצה-הליכה ארוכה",
+   "laps": [
+    {
+     "distance_km": 0.435,
+     "duration": 300,
+     "avg_hr": 110
+    },
+    {
+     "distance_km": 0.111,
+     "duration": 60,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.111,
+     "duration": 60,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.111,
+     "duration": 60,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.111,
+     "duration": 60,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.111,
+     "duration": 60,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.111,
+     "duration": 60,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.111,
+     "duration": 60,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.111,
+     "duration": 60,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.111,
+     "duration": 60,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.111,
+     "duration": 60,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.435,
+     "duration": 300,
+     "avg_hr": 115
+    }
+   ]
+  },
+  {
+   "id": "2026-10-11-ריצה-הליכה",
+   "start": "2026-10-11T07:00:00",
+   "sport": "run",
+   "title": "ריצה-הליכה",
+   "laps": [
+    {
+     "distance_km": 0.435,
+     "duration": 300,
+     "avg_hr": 110
+    },
+    {
+     "distance_km": 0.139,
+     "duration": 75,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.139,
+     "duration": 75,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.139,
+     "duration": 75,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.139,
+     "duration": 75,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.139,
+     "duration": 75,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.139,
+     "duration": 75,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.139,
+     "duration": 75,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.139,
+     "duration": 75,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.435,
+     "duration": 300,
+     "avg_hr": 115
+    }
+   ]
+  },
+  {
+   "id": "2026-10-13-ריצה-הליכה",
+   "start": "2026-10-13T07:00:00",
+   "sport": "run",
+   "title": "ריצה-הליכה",
+   "laps": [
+    {
+     "distance_km": 0.435,
+     "duration": 300,
+     "avg_hr": 110
+    },
+    {
+     "distance_km": 0.139,
+     "duration": 75,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.139,
+     "duration": 75,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.139,
+     "duration": 75,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.139,
+     "duration": 75,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.139,
+     "duration": 75,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.139,
+     "duration": 75,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.139,
+     "duration": 75,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.139,
+     "duration": 75,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.435,
+     "duration": 300,
+     "avg_hr": 115
+    }
+   ]
+  },
+  {
+   "id": "2026-10-15-ריצה-הליכה ארוכה",
+   "start": "2026-10-15T07:00:00",
+   "sport": "run",
+   "title": "ריצה-הליכה ארוכה",
+   "laps": [
+    {
+     "distance_km": 0.435,
+     "duration": 300,
+     "avg_hr": 110
+    },
+    {
+     "distance_km": 0.139,
+     "duration": 75,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.139,
+     "duration": 75,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.139,
+     "duration": 75,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.139,
+     "duration": 75,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.139,
+     "duration": 75,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.139,
+     "duration": 75,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.139,
+     "duration": 75,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.139,
+     "duration": 75,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.139,
+     "duration": 75,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.139,
+     "duration": 75,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.435,
+     "duration": 300,
+     "avg_hr": 115
+    }
+   ]
+  },
+  {
+   "id": "2026-10-18-ריצה-הליכה",
+   "start": "2026-10-18T07:00:00",
+   "sport": "run",
+   "title": "ריצה-הליכה",
+   "laps": [
+    {
+     "distance_km": 0.435,
+     "duration": 300,
+     "avg_hr": 110
+    },
+    {
+     "distance_km": 0.167,
+     "duration": 90,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.167,
+     "duration": 90,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.167,
+     "duration": 90,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.167,
+     "duration": 90,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.167,
+     "duration": 90,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.167,
+     "duration": 90,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.167,
+     "duration": 90,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.167,
+     "duration": 90,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.435,
+     "duration": 300,
+     "avg_hr": 115
+    }
+   ]
+  },
+  {
+   "id": "2026-10-20-ריצה-הליכה",
+   "start": "2026-10-20T07:00:00",
+   "sport": "run",
+   "title": "ריצה-הליכה",
+   "laps": [
+    {
+     "distance_km": 0.435,
+     "duration": 300,
+     "avg_hr": 110
+    },
+    {
+     "distance_km": 0.167,
+     "duration": 90,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.167,
+     "duration": 90,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.167,
+     "duration": 90,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.167,
+     "duration": 90,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.167,
+     "duration": 90,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.167,
+     "duration": 90,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.167,
+     "duration": 90,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.167,
+     "duration": 90,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.435,
+     "duration": 300,
+     "avg_hr": 115
+    }
+   ]
+  },
+  {
+   "id": "2026-10-22-ריצה-הליכה ארוכה",
+   "start": "2026-10-22T07:00:00",
+   "sport": "run",
+   "title": "ריצה-הליכה ארוכה",
+   "laps": [
+    {
+     "distance_km": 0.435,
+     "duration": 300,
+     "avg_hr": 110
+    },
+    {
+     "distance_km": 0.167,
+     "duration": 90,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.167,
+     "duration": 90,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.167,
+     "duration": 90,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.167,
+     "duration": 90,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.167,
+     "duration": 90,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.167,
+     "duration": 90,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.167,
+     "duration": 90,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.167,
+     "duration": 90,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.167,
+     "duration": 90,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.167,
+     "duration": 90,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.435,
+     "duration": 300,
+     "avg_hr": 115
+    }
+   ]
+  },
+  {
+   "id": "2026-10-25-ריצה-הליכה",
+   "start": "2026-10-25T07:00:00",
+   "sport": "run",
+   "title": "ריצה-הליכה",
+   "laps": [
+    {
+     "distance_km": 0.435,
+     "duration": 300,
+     "avg_hr": 110
+    },
+    {
+     "distance_km": 0.111,
+     "duration": 60,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.111,
+     "duration": 60,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.111,
+     "duration": 60,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.111,
+     "duration": 60,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.111,
+     "duration": 60,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.111,
+     "duration": 60,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.435,
+     "duration": 300,
+     "avg_hr": 115
+    }
+   ]
+  },
+  {
+   "id": "2026-10-27-ריצה-הליכה",
+   "start": "2026-10-27T07:00:00",
+   "sport": "run",
+   "title": "ריצה-הליכה",
+   "laps": [
+    {
+     "distance_km": 0.435,
+     "duration": 300,
+     "avg_hr": 110
+    },
+    {
+     "distance_km": 0.111,
+     "duration": 60,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.111,
+     "duration": 60,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.111,
+     "duration": 60,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.111,
+     "duration": 60,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.111,
+     "duration": 60,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.111,
+     "duration": 60,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.435,
+     "duration": 300,
+     "avg_hr": 115
+    }
+   ]
+  },
+  {
+   "id": "2026-10-29-ריצה-הליכה ארוכה",
+   "start": "2026-10-29T07:00:00",
+   "sport": "run",
+   "title": "ריצה-הליכה ארוכה",
+   "laps": [
+    {
+     "distance_km": 0.435,
+     "duration": 300,
+     "avg_hr": 110
+    },
+    {
+     "distance_km": 0.111,
+     "duration": 60,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.111,
+     "duration": 60,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.111,
+     "duration": 60,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.111,
+     "duration": 60,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.111,
+     "duration": 60,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.111,
+     "duration": 60,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.111,
+     "duration": 60,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.111,
+     "duration": 60,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.435,
+     "duration": 300,
+     "avg_hr": 115
+    }
+   ]
+  },
+  {
+   "id": "2026-11-01-ריצה-הליכה",
+   "start": "2026-11-01T07:00:00",
+   "sport": "run",
+   "title": "ריצה-הליכה",
+   "laps": [
+    {
+     "distance_km": 0.435,
+     "duration": 300,
+     "avg_hr": 110
+    },
+    {
+     "distance_km": 0.167,
+     "duration": 90,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.167,
+     "duration": 90,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.167,
+     "duration": 90,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.167,
+     "duration": 90,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.167,
+     "duration": 90,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.167,
+     "duration": 90,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.167,
+     "duration": 90,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.167,
+     "duration": 90,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.435,
+     "duration": 300,
+     "avg_hr": 115
+    }
+   ]
+  },
+  {
+   "id": "2026-11-03-ריצה-הליכה",
+   "start": "2026-11-03T07:00:00",
+   "sport": "run",
+   "title": "ריצה-הליכה",
+   "laps": [
+    {
+     "distance_km": 0.435,
+     "duration": 300,
+     "avg_hr": 110
+    },
+    {
+     "distance_km": 0.167,
+     "duration": 90,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.167,
+     "duration": 90,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.167,
+     "duration": 90,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.167,
+     "duration": 90,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.167,
+     "duration": 90,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.167,
+     "duration": 90,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.167,
+     "duration": 90,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.167,
+     "duration": 90,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.435,
+     "duration": 300,
+     "avg_hr": 115
+    }
+   ]
+  },
+  {
+   "id": "2026-11-05-ריצה-הליכה ארוכה",
+   "start": "2026-11-05T07:00:00",
+   "sport": "run",
+   "title": "ריצה-הליכה ארוכה",
+   "laps": [
+    {
+     "distance_km": 0.435,
+     "duration": 300,
+     "avg_hr": 110
+    },
+    {
+     "distance_km": 0.167,
+     "duration": 90,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.167,
+     "duration": 90,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.167,
+     "duration": 90,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.167,
+     "duration": 90,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.167,
+     "duration": 90,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.167,
+     "duration": 90,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.167,
+     "duration": 90,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.167,
+     "duration": 90,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.167,
+     "duration": 90,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.167,
+     "duration": 90,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.435,
+     "duration": 300,
+     "avg_hr": 115
+    }
+   ]
+  },
+  {
+   "id": "2026-11-08-ריצה-הליכה",
+   "start": "2026-11-08T07:00:00",
+   "sport": "run",
+   "title": "ריצה-הליכה",
+   "laps": [
+    {
+     "distance_km": 0.435,
+     "duration": 300,
+     "avg_hr": 110
+    },
+    {
+     "distance_km": 0.194,
+     "duration": 105,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.194,
+     "duration": 105,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.194,
+     "duration": 105,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.194,
+     "duration": 105,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.194,
+     "duration": 105,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.194,
+     "duration": 105,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.194,
+     "duration": 105,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.194,
+     "duration": 105,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.435,
+     "duration": 300,
+     "avg_hr": 115
+    }
+   ]
+  },
+  {
+   "id": "2026-11-10-ריצה-הליכה",
+   "start": "2026-11-10T07:00:00",
+   "sport": "run",
+   "title": "ריצה-הליכה",
+   "laps": [
+    {
+     "distance_km": 0.435,
+     "duration": 300,
+     "avg_hr": 110
+    },
+    {
+     "distance_km": 0.194,
+     "duration": 105,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.194,
+     "duration": 105,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.194,
+     "duration": 105,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.194,
+     "duration": 105,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.194,
+     "duration": 105,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.194,
+     "duration": 105,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.194,
+     "duration": 105,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.194,
+     "duration": 105,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.435,
+     "duration": 300,
+     "avg_hr": 115
+    }
+   ]
+  },
+  {
+   "id": "2026-11-12-ריצה-הליכה ארוכה",
+   "start": "2026-11-12T07:00:00",
+   "sport": "run",
+   "title": "ריצה-הליכה ארוכה",
+   "laps": [
+    {
+     "distance_km": 0.435,
+     "duration": 300,
+     "avg_hr": 110
+    },
+    {
+     "distance_km": 0.194,
+     "duration": 105,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.194,
+     "duration": 105,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.194,
+     "duration": 105,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.194,
+     "duration": 105,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.194,
+     "duration": 105,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.194,
+     "duration": 105,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.194,
+     "duration": 105,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.194,
+     "duration": 105,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.194,
+     "duration": 105,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.194,
+     "duration": 105,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.435,
+     "duration": 300,
+     "avg_hr": 115
+    }
+   ]
+  },
+  {
+   "id": "2026-11-15-ריצה-הליכה",
+   "start": "2026-11-15T07:00:00",
+   "sport": "run",
+   "title": "ריצה-הליכה",
+   "laps": [
+    {
+     "distance_km": 0.435,
+     "duration": 300,
+     "avg_hr": 110
+    },
+    {
+     "distance_km": 0.222,
+     "duration": 120,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.087,
+     "duration": 60,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.222,
+     "duration": 120,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.087,
+     "duration": 60,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.222,
+     "duration": 120,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.087,
+     "duration": 60,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.222,
+     "duration": 120,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.087,
+     "duration": 60,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.222,
+     "duration": 120,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.087,
+     "duration": 60,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.222,
+     "duration": 120,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.087,
+     "duration": 60,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.222,
+     "duration": 120,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.087,
+     "duration": 60,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.222,
+     "duration": 120,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.087,
+     "duration": 60,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.435,
+     "duration": 300,
+     "avg_hr": 115
+    }
+   ],
+   "rpe": 4
+  },
+  {
+   "id": "2026-11-17-ריצה-הליכה",
+   "start": "2026-11-17T06:00:00",
+   "sport": "run",
+   "title": "ריצה-הליכה",
+   "laps": [
+    {
+     "distance_km": 0.43,
+     "duration": 300,
+     "avg_hr": 110
+    },
+    {
+     "distance_km": 0.78,
+     "duration": 360,
+     "avg_hr": 168
+    },
+    {
+     "distance_km": 0.13,
+     "duration": 90,
+     "avg_hr": 130
+    },
+    {
+     "distance_km": 0.222,
+     "duration": 120,
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 0.087,
+     "duration": 60,
+     "avg_hr": 128
+    },
+    {
+     "distance_km": 0.222,
+     "duration": 120,
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 0.087,
+     "duration": 60,
+     "avg_hr": 128
+    },
+    {
+     "distance_km": 0.222,
+     "duration": 120,
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 0.087,
+     "duration": 60,
+     "avg_hr": 128
+    },
+    {
+     "distance_km": 0.222,
+     "duration": 120,
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 0.087,
+     "duration": 60,
+     "avg_hr": 128
+    },
+    {
+     "distance_km": 0.222,
+     "duration": 120,
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 0.087,
+     "duration": 60,
+     "avg_hr": 128
+    },
+    {
+     "distance_km": 0.43,
+     "duration": 300,
+     "avg_hr": 115
+    }
+   ],
+   "rpe": 7,
+   "comment": "הרגשתי טוב אז המשכתי לרוץ"
+  },
+  {
+   "id": "2026-11-19-ריצה-הליכה ארוכה",
+   "start": "2026-11-19T07:00:00",
+   "sport": "run",
+   "title": "ריצה-הליכה ארוכה",
+   "laps": [
+    {
+     "distance_km": 0.435,
+     "duration": 300,
+     "avg_hr": 110
+    },
+    {
+     "distance_km": 0.278,
+     "duration": 150,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.087,
+     "duration": 60,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.278,
+     "duration": 150,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.087,
+     "duration": 60,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.278,
+     "duration": 150,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.087,
+     "duration": 60,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.278,
+     "duration": 150,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.087,
+     "duration": 60,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.278,
+     "duration": 150,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.087,
+     "duration": 60,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.278,
+     "duration": 150,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.087,
+     "duration": 60,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.278,
+     "duration": 150,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.087,
+     "duration": 60,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.278,
+     "duration": 150,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.087,
+     "duration": 60,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.278,
+     "duration": 150,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.087,
+     "duration": 60,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.278,
+     "duration": 150,
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 0.087,
+     "duration": 60,
+     "avg_hr": 125
+    },
+    {
+     "distance_km": 0.435,
+     "duration": 300,
+     "avg_hr": 115
+    }
+   ],
+   "rpe": 5
+  }
+ ],
+ "planned": [
+  {
+   "date": "2026-11-15",
+   "title": "ריצה-הליכה 8×(2:00/1:00)",
+   "run": "2:00",
+   "walk": "1:00",
+   "reps": 8
+  },
+  {
+   "date": "2026-11-17",
+   "title": "ריצה-הליכה 8×(2:00/1:00)",
+   "run": "2:00",
+   "walk": "1:00",
+   "reps": 8
+  },
+  {
+   "date": "2026-11-19",
+   "title": "ריצה-הליכה 10×(2:30/1:00)",
+   "run": "2:30",
+   "walk": "1:00",
+   "reps": 10
+  }
+ ]
+}

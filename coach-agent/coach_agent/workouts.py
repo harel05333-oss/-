@@ -4,14 +4,17 @@ Consecutive laps of the same kind (easy / moderate / hard) are merged into one
 segment, so a tempo recorded as eight 1 km auto-laps becomes
 "8 km Z4 low -> high", and a fartlek keeps every fast and easy part apart.
 Equal repeats (6 x 1000 m) are folded into one line.
+
+Walking is its own kind, so a beginner's run/walk session reads as
+"8 x (2 min run / 1 min walk)", and time running and time walking are counted apart.
 """
 from __future__ import annotations
 
 from dataclasses import dataclass, field
 
-from .models import Activity
+from .models import Activity, Lap
 from .threshold import Thresholds
-from .zones import EASY, HARD, MODERATE, LapZone, classify_lap, zone_rank
+from .zones import EASY, HARD, KIND_RANK, MODERATE, WALK, WALK_PACE_S, LapZone, classify_lap, zone_rank
 
 POS_RANK = {"low": 0, "mid": 1, "high": 2, None: 1}
 POS_HE = {"low": "נמוך", "mid": "אמצע", "high": "גבוה"}
@@ -23,6 +26,9 @@ LONG_RUN_S = 90 * 60
 LONG_RUN_M = 18000
 HILL_M_PER_KM = 25.0
 REPEAT_TOLERANCE = 0.15
+RUN_WALK_MIN_SHARE = 0.10  # walking at least 10% of the time, in 2+ parts -> a run/walk session
+RECORD_SMOOTH_S = 10  # seconds of smoothing before deciding run or walk from the stream
+RECORD_MIN_PART_S = 20  # shorter run/walk parts are noise and join their neighbour
 
 
 @dataclass
@@ -106,6 +112,11 @@ class WorkoutAnalysis:
     dist_by_class: dict[str, float] = field(default_factory=dict)
     time_by_zone: dict[str, float] = field(default_factory=dict)
     dist_by_zone: dict[str, float] = field(default_factory=dict)
+    run_s: float = 0.0  # time running (not walking)
+    walk_s: float = 0.0
+    longest_run_s: float = 0.0  # longest stretch of running without a walk
+    run_walk: bool = False
+    by_time: bool = False  # the athlete works by time (beginner)
 
 
 def _lap_class(z: LapZone) -> str:
@@ -129,12 +140,12 @@ def _fold_repeats(segments: list[Segment]) -> list:
     i = 0
     while i < len(segments):
         s = segments[i]
-        if s.kind != EASY:
+        if s.kind != WALK:
             efforts, recs, j = [s], [], i
             while (
                 j + 2 < len(segments)
-                and segments[j + 1].kind == EASY
-                and segments[j + 2].kind != EASY
+                and KIND_RANK[segments[j + 1].kind] < KIND_RANK[s.kind]
+                and segments[j + 2].kind == s.kind
                 and _same_effort(s, segments[j + 2])
             ):
                 recs.append(segments[j + 1])
@@ -149,8 +160,59 @@ def _fold_repeats(segments: list[Segment]) -> list:
     return out
 
 
-def analyze_run(a: Activity, th: Thresholds, prefer: str = "pace") -> WorkoutAnalysis:
-    lap_zones = [classify_lap(l, th, prefer) for l in a.laps_or_whole()]
+def laps_from_records(records, walk_pace_s: float = WALK_PACE_S) -> list[Lap]:
+    """Run / walk parts from the second-by-second stream (for watches that record no laps)."""
+    pts = [r for r in records if r.speed_mps is not None]
+    if len(pts) < 2:
+        return []
+    walk_speed = 1000.0 / walk_pace_s
+    rows = []  # (dt, speed, hr, walking)
+    for i, r in enumerate(pts):
+        dt = (pts[i + 1].t - r.t) if i + 1 < len(pts) else (r.t - pts[i - 1].t)
+        window = [p.speed_mps for p in pts[max(0, i - RECORD_SMOOTH_S // 2): i + RECORD_SMOOTH_S // 2 + 1]]
+        smooth = sum(window) / len(window)
+        walking = r.cadence_spm < 140 if r.cadence_spm else smooth < walk_speed
+        rows.append((max(dt, 0.0), r.speed_mps, r.hr, walking))
+    parts: list[list] = []
+    for row in rows:
+        if parts and parts[-1][0][3] == row[3]:
+            parts[-1].append(row)
+        else:
+            parts.append([row])
+    merged: list[list] = []
+    for part in parts:  # glue short noise to the part before it
+        if merged and sum(r[0] for r in part) < RECORD_MIN_PART_S:
+            merged[-1].extend((dt, sp, hr, merged[-1][0][3]) for dt, sp, hr, _ in part)
+        elif merged and merged[-1][0][3] == part[0][3]:
+            merged[-1].extend(part)
+        else:
+            merged.append(part)
+    if len(merged) > 1 and sum(r[0] for r in merged[0]) < RECORD_MIN_PART_S:  # noise at the very start
+        state = merged[1][0][3]
+        merged[1] = [(dt, sp, hr, state) for dt, sp, hr, _ in merged[0]] + merged[1]
+        merged.pop(0)
+    laps = []
+    for part in merged:
+        dur = sum(r[0] for r in part)
+        hrs = [(r[2], r[0]) for r in part if r[2]]
+        t_hr = sum(t for _, t in hrs)
+        laps.append(Lap(
+            duration_s=dur,
+            distance_m=sum(r[0] * r[1] for r in part),
+            avg_hr=round(sum(h * t for h, t in hrs) / t_hr) if t_hr else None,
+            cadence_spm=100.0 if part[0][3] else 170.0,  # the decision is already made
+        ))
+    return laps
+
+
+def analyze_run(a: Activity, th: Thresholds, prefer: str = "pace", profile=None) -> WorkoutAnalysis:
+    """`profile` (the athlete's questionnaire) sets the walking pace, and for athletes who
+    work by time, run/walk parts are taken from the stream when there is one."""
+    walk_pace = profile.walk_pace_s if profile else WALK_PACE_S
+    laps = a.laps_or_whole()
+    if profile and profile.volume_unit == "time" and a.records and len(a.laps) <= 1:
+        laps = laps_from_records(a.records, walk_pace) or laps
+    lap_zones = [classify_lap(l, th, prefer, walk_pace) for l in laps]
 
     segments: list[Segment] = []
     for z in lap_zones:
@@ -159,7 +221,7 @@ def analyze_run(a: Activity, th: Thresholds, prefer: str = "pace") -> WorkoutAna
         else:
             segments.append(Segment([z]))
 
-    res = WorkoutAnalysis(a, lap_zones, segments)
+    res = WorkoutAnalysis(a, lap_zones, segments, by_time=bool(profile and profile.volume_unit == "time"))
     for z in lap_zones:
         c, sec, m = _lap_class(z), z.lap.duration_s, z.lap.distance_m
         res.time_by_class[c] = res.time_by_class.get(c, 0) + sec
@@ -172,11 +234,18 @@ def analyze_run(a: Activity, th: Thresholds, prefer: str = "pace") -> WorkoutAna
     res.is_quality = hard_s >= QUALITY_MIN_HARD_S
     res.is_long = a.duration_s >= LONG_RUN_S or a.distance_m >= LONG_RUN_M
 
+    res.walk_s = res.time_by_class.get(WALK, 0)
+    res.run_s = sum(t for c, t in res.time_by_class.items() if c != WALK)
+    runs = [s.duration_s for s in segments if s.kind != WALK]
+    res.longest_run_s = max(runs, default=0)
+    walks = [s for s in segments if s.kind == WALK]
+    res.run_walk = bool(a.duration_s) and len(walks) >= 2 and res.walk_s / a.duration_s >= RUN_WALK_MIN_SHARE
+
     # roles: easy parts before / between / after the hard work
-    work = [i for i, s in enumerate(segments) if s.kind != EASY]
+    work = [i for i, s in enumerate(segments) if s.kind in (MODERATE, HARD)]
     if work:
         for i, s in enumerate(segments):
-            if s.kind == EASY:
+            if s.kind in (EASY, WALK):
                 s.role = "warmup" if i < work[0] else "cooldown" if i > work[-1] else "recovery"
 
     res.items = _fold_repeats(segments)
@@ -199,6 +268,10 @@ def analyze_run(a: Activity, th: Thresholds, prefer: str = "pace") -> WorkoutAna
 
 def _name_workout(res: WorkoutAnalysis) -> str:
     a, segs = res.activity, res.segments
+    if res.run_walk and (res.by_time or not res.is_quality):
+        # a beginner's session stays a run/walk; anything too hard shows in the alerts.
+        # Intervals with walking recoveries are still intervals.
+        return "ריצה-הליכה"
     if not res.is_quality:
         if res.time_by_class.get(MODERATE, 0) >= 20 * 60:
             base = "ריצה בינונית (Z3)"
@@ -208,7 +281,7 @@ def _name_workout(res: WorkoutAnalysis) -> str:
             base = "ריצה קלה"
         return "ריצה ארוכה" if res.is_long and base == "ריצה קלה" else base
 
-    hard_segs = [s for s in segs if s.kind != EASY]
+    hard_segs = [s for s in segs if s.kind in (MODERATE, HARD)]
     hard_km = sum(s.distance_m for s in hard_segs) / 1000
     climb = sum(s.elevation_gain_m for s in hard_segs)
     sets = [i for i in res.items if isinstance(i, RepeatSet)]

@@ -38,9 +38,13 @@ HR_ZONES: list[tuple[str, float]] = [
 ]
 
 # How the weekly report groups the zones.
-EASY, MODERATE, HARD = "easy", "moderate", "hard"
+EASY, MODERATE, HARD, WALK = "easy", "moderate", "hard", "walk"
 ZONE_CLASS = {"Z1": EASY, "Z2": EASY, "Z3": MODERATE, "Z4": HARD, "Z5a": HARD, "Z5b": HARD, "Z5c": HARD}
-CLASS_HE = {EASY: "קל", MODERATE: "בינוני", HARD: "עצים"}
+CLASS_HE = {EASY: "קל", MODERATE: "בינוני", HARD: "עצים", WALK: "הליכה"}
+KIND_RANK = {WALK: 0, EASY: 1, MODERATE: 2, HARD: 3}
+
+WALK_PACE_S = 600.0  # slower than 10:00 / km is walking (per athlete in the questionnaire)
+WALK_CADENCE = 140.0  # fewer steps per minute than this is walking
 
 # Slower than this is walking or standing, not a pace to judge.
 MAX_RUN_PACE_S = 15 * 60
@@ -85,14 +89,30 @@ class LapZone:
     pace_zone: str | None
     hr_zone: str | None
     position: str | None  # low / mid / high inside the pace zone
+    walking: bool = False
 
     @property
     def zone_class(self) -> str | None:
+        if self.walking:
+            return WALK
         return ZONE_CLASS[self.zone] if self.zone else None
 
 
-def classify_lap(lap: Lap, th: Thresholds, prefer: str = "pace") -> LapZone:
-    """Zone of one lap. Pace decides by default; heart rate is the fallback."""
+def is_walking(lap: Lap, walk_pace_s: float = WALK_PACE_S) -> bool:
+    """Cadence decides when the watch has it; otherwise pace. Standing still counts as walking."""
+    if lap.cadence_spm:
+        return lap.cadence_spm < WALK_CADENCE
+    pace = lap.pace_s_per_km
+    if pace is None:
+        return lap.duration_s > 0 and lap.distance_m == 0
+    return pace > walk_pace_s
+
+
+def classify_lap(lap: Lap, th: Thresholds, prefer: str = "pace", walk_pace_s: float = WALK_PACE_S) -> LapZone:
+    """Zone of one lap. Pace decides by default; heart rate is the fallback. Walking has no run zone."""
+    if is_walking(lap, walk_pace_s):
+        hz = hr_zone(lap.avg_hr, th.lthr) if lap.avg_hr and th.lthr else None
+        return LapZone(lap, None, None, hz, None, walking=True)
     pz = hz = pos = None
     pace = lap.pace_s_per_km
     if pace and th.pace_s_per_km and pace <= MAX_RUN_PACE_S:

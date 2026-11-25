@@ -14,7 +14,7 @@ from .load import activity_tss, daily_tss, performance_chart
 from .models import Activity, Athlete, PlannedWorkout
 from .threshold import Thresholds, resolve_thresholds
 from .workouts import RepeatSet, Segment, WorkoutAnalysis, analyze_run
-from .zones import EASY, HARD, MODERATE, ZONES
+from .zones import EASY, HARD, MODERATE, WALK, ZONES
 
 # ---- flag thresholds (one place to tune) -----------------------------------
 HARD_SHARE_HIGH = 0.30  # of run time
@@ -73,15 +73,19 @@ def previous_weeks(athlete: Athlete, activities: list[Activity], start: date, pr
         if not runs:
             continue
         th = resolve_thresholds(athlete, e)
-        hard = sum(analyze_run(a, th, prefer).dist_by_class.get(HARD, 0) for a in runs)
+        ws = [analyze_run(a, th, prefer, athlete.profile) for a in runs]
         rows.append({
             "start": s.isoformat(),
             "longest_km": max(a.distance_m for a in runs) / 1000,
             "run_km": sum(a.distance_m for a in runs) / 1000,
-            "hard_km": hard / 1000,
+            "hard_km": sum(w.dist_by_class.get(HARD, 0) for w in ws) / 1000,
+            "longest_min": max(a.duration_s for a in runs) / 60,
+            "run_min": sum(a.duration_s for a in runs) / 60,
+            "continuous_run_min": max(w.longest_run_s for w in ws) / 60,
         })
-    best = lambda k: round(max(r[k] for r in rows), 1) if rows else None
-    return {"weeks": rows, "longest_km": best("longest_km"), "run_km": best("run_km"), "hard_km": best("hard_km")}
+    best = lambda k: (round(max(r[k] for r in rows), 0 if k.endswith("_min") else 1)) if rows else None
+    keys = ("longest_km", "run_km", "hard_km", "longest_min", "run_min", "continuous_run_min")
+    return {"weeks": rows, **{k: best(k) for k in keys}}
 
 
 def _taper_context(goal: dict | None, rows: list[dict]) -> dict | None:
@@ -186,6 +190,8 @@ def _item_dict(i) -> dict:
         return {
             "type": "repeats",
             "count": len(i.efforts),
+            "effort_kind": i.efforts[0].kind,
+            "recovery_kind": i.recoveries[0].kind if i.recoveries else None,
             "effort_distance_m": round(sum(e.distance_m for e in i.efforts) / len(i.efforts)),
             "effort_duration_s": round(sum(e.duration_s for e in i.efforts) / len(i.efforts)),
             "zone": zones[0] if len(zones) == 1 else " / ".join(zones),
@@ -214,7 +220,7 @@ def analyze_week(
 
     week = sorted([a for a in activities if _in(a, start, end)], key=lambda a: a.start)
     runs = [a for a in week if a.is_run]
-    analyses = [analyze_run(a, th, prefer) for a in runs]
+    analyses = [analyze_run(a, th, prefer, athlete.profile) for a in runs]
 
     # ---- volume ------------------------------------------------------------
     run_km = sum(a.distance_m for a in runs) / 1000
@@ -228,13 +234,15 @@ def analyze_week(
     for k in range(1, 5):
         s, e = start - timedelta(days=7 * k), end - timedelta(days=7 * k)
         wr = [a for a in activities if a.is_run and _in(a, s, e)]
-        prev_weeks.append({"start": s.isoformat(), "run_km": sum(a.distance_m for a in wr) / 1000})
-    have_prev = [w for w in prev_weeks if w["run_km"] > 0]
+        prev_weeks.append({"start": s.isoformat(), "run_km": sum(a.distance_m for a in wr) / 1000,
+                           "run_min": sum(a.duration_s for a in wr) / 60})
+    have_prev = [w for w in prev_weeks if w["run_km"] > 0 or w["run_min"] > 0]
     avg4 = sum(w["run_km"] for w in have_prev) / len(have_prev) if have_prev else None
+    avg4_min = sum(w["run_min"] for w in have_prev) / len(have_prev) if have_prev else None
 
     # ---- intensity ---------------------------------------------------------
-    time_by_class = {c: 0.0 for c in (EASY, MODERATE, HARD)}
-    dist_by_class = {c: 0.0 for c in (EASY, MODERATE, HARD)}
+    time_by_class = {c: 0.0 for c in (WALK, EASY, MODERATE, HARD)}
+    dist_by_class = {c: 0.0 for c in (WALK, EASY, MODERATE, HARD)}
     time_by_zone = {z: 0.0 for z in ZONES}
     dist_by_zone = {z: 0.0 for z in ZONES}
     for w in analyses:
@@ -283,7 +291,11 @@ def analyze_week(
             "hard_m": round(w.dist_by_class.get(HARD, 0)),
             "dominant_hard_zone": w.dominant_hard_zone,
             "recovery_hours": w.recovery_hours,
-            "parts": [_item_dict(i) for i in w.items] if w.is_quality or w.is_long else [],
+            "parts": [_item_dict(i) for i in w.items] if w.is_quality or w.is_long or w.run_walk else [],
+            "run_walk": w.run_walk,
+            "run_s": round(w.run_s),
+            "walk_s": round(w.walk_s),
+            "longest_run_s": round(w.longest_run_s),
             "decoupling": round(_decoupling(w), 3) if w.is_long and _decoupling(w) is not None else None,
         })
     for a in other:
@@ -300,7 +312,7 @@ def analyze_week(
     ef_now = _ef(analyses)
     prev_runs = [a for a in activities if a.is_run and start - timedelta(days=28) <= a.day < start]
     prev_th = resolve_thresholds(athlete, start - timedelta(days=1))
-    ef_prev = _ef([analyze_run(a, prev_th, prefer) for a in prev_runs])
+    ef_prev = _ef([analyze_run(a, prev_th, prefer, athlete.profile) for a in prev_runs])
     ef_change = (ef_now - ef_prev) / ef_prev if ef_now and ef_prev else None
 
     # ---- planned vs done -------------------------------------------------------
@@ -310,6 +322,7 @@ def analyze_week(
             missed.append({"date": p.date.isoformat(), "title": p.title})
 
     summary = {
+        "unit": athlete.profile.volume_unit,
         "athlete": {"id": athlete.id, "name": athlete.name},
         "week": {"start": start.isoformat(), "end": end.isoformat()},
         "thresholds": {
@@ -328,6 +341,14 @@ def analyze_week(
             "prev_week_run_km": round(prev_weeks[0]["run_km"], 1),
             "avg4_run_km": round(avg4, 1) if avg4 is not None else None,
             "longest_run_km": round(max((a.distance_m for a in runs), default=0) / 1000, 1),
+            # by time (beginners)
+            "run_min": round(run_s / 60),
+            "jog_min": round(sum(w.run_s for w in analyses) / 60),
+            "walk_min": round(sum(w.walk_s for w in analyses) / 60),
+            "longest_min": round(max((a.duration_s for a in runs), default=0) / 60),
+            "continuous_run_min": round(max((w.longest_run_s for w in analyses), default=0) / 60, 1),
+            "prev_week_run_min": round(prev_weeks[0]["run_min"]),
+            "avg4_run_min": round(avg4_min) if avg4_min is not None else None,
         },
         "intensity": {
             "time_by_class": {k: round(v) for k, v in time_by_class.items()},
@@ -357,7 +378,7 @@ def analyze_week(
     summary["goal"] = _goal_context(athlete, start, end)
     summary["progression"] = previous_weeks(athlete, activities, start, prefer)
     rows = weekly_series(athlete, activities, start, prefer)
-    summary["cycle"] = analyze_cycle(rows, athlete.profile.cycle_load_weeks)
+    summary["cycle"] = analyze_cycle(rows, athlete.profile.cycle_load_weeks, athlete.profile.volume_unit)
     summary["taper"] = _taper_context(summary["goal"], rows)
     recovery = bool(summary["cycle"] and summary["cycle"]["recovery_week"])
     g = summary["goal"]
@@ -380,14 +401,24 @@ def _flags(s: dict, th: Thresholds, end: date, athlete: Athlete) -> tuple[list[d
         flags.append({"level": level, "text": text})
 
     v, it, ld = s["volume"], s["intensity"], s["load"]
+    ref = s.get("progression") or {}
+
+    # Beginners who work by time: volume and long run in minutes.
+    by_time = prof.volume_unit == "time"
+    unit = "דק׳" if by_time else "ק\"מ"
+    vol = v["run_min"] if by_time else v["run_km"]
+    avg4 = v["avg4_run_min"] if by_time else v["avg4_run_km"]
+    longest = v["longest_min"] if by_time else v["longest_run_km"]
+    ref_longest = ref.get("longest_min" if by_time else "longest_km")
+    lsd_lo, lsd_hi = ((prof.lsd_increase_min_min, prof.lsd_increase_max_min) if by_time
+                      else (prof.lsd_increase_min_km, prof.lsd_increase_max_km))
 
     goal = s.get("goal")
     in_taper = goal and goal["phase"] in ("taper", "race_week")
-    if not in_taper and v["avg4_run_km"] and v["run_km"] > v["avg4_run_km"] * (1 + prof.max_weekly_increase):
-        up = v["run_km"] / v["avg4_run_km"] - 1
-        flag("warn", f"קפיצה בנפח: {v['run_km']:g} ק\"מ, {up:.0%} מעל ממוצע 4 השבועות ({v['avg4_run_km']:g})")
+    if not in_taper and avg4 and vol > avg4 * (1 + prof.max_weekly_increase):
+        up = vol / avg4 - 1
+        flag("warn", f"קפיצה בנפח: {vol:g} {unit}, {up:.0%} מעל ממוצע 4 השבועות ({avg4:g})")
 
-    ref = s.get("progression") or {}
     cyc = s.get("cycle")
     taper = s.get("taper")
     if taper and goal["phase"] == "taper":
@@ -408,23 +439,27 @@ def _flags(s: dict, th: Thresholds, end: date, athlete: Athlete) -> tuple[list[d
             flag(level, text)
     else:
         recovery_week = bool(ref.get("run_km")) and v["run_km"] < ref["run_km"] * RECOVERY_WEEK
-    if ref.get("longest_km") and v["longest_run_km"]:
-        up = round(v["longest_run_km"] - ref["longest_km"], 1)
-        if up > prof.lsd_increase_max_km:
-            flag("warn", f"הריצה הארוכה עלתה ב-{up:g} ק\"מ ({ref['longest_km']:g} ← {v['longest_run_km']:g}), "
-                         f"מעל {prof.lsd_increase_max_km:g} ק\"מ")
-        elif up < prof.lsd_increase_min_km and not recovery_week and not in_taper:
-            flag("info", f"הריצה הארוכה לא התקדמה: {v['longest_run_km']:g} ק\"מ, לעומת {ref['longest_km']:g} "
-                         f"(התקדמות מתוכננת {prof.lsd_increase_min_km:g}–{prof.lsd_increase_max_km:g})")
+    if ref_longest and longest:
+        up = round(longest - ref_longest, 1)
+        if up > lsd_hi:
+            flag("warn", f"הריצה הארוכה עלתה ב-{up:g} {unit} ({ref_longest:g} ← {longest:g}), מעל {lsd_hi:g} {unit}")
+        elif up < lsd_lo and not recovery_week and not in_taper:
+            flag("info", f"הריצה הארוכה לא התקדמה: {longest:g} {unit}, לעומת {ref_longest:g} "
+                         f"(התקדמות מתוכננת {lsd_lo:g}–{lsd_hi:g})")
+    if by_time and v["continuous_run_min"] and ref.get("continuous_run_min") is not None \
+            and v["continuous_run_min"] > ref["continuous_run_min"]:
+        good.append(f"ריצה רציפה של {v['continuous_run_min']:g} דק׳ בלי הליכה, הארוכה עד עכשיו "
+                    f"(לפני כן {ref['continuous_run_min']:g})")
     if prof.hard_km_increase_max is not None and ref.get("hard_km") is not None:
         up = round(it["km_by_class"]["hard"] - ref["hard_km"], 1)
         if up > prof.hard_km_increase_max:
             flag("warn", f"הנפח העצים עלה ב-{up:g} ק\"מ ({ref['hard_km']:g} ← {it['km_by_class']['hard']:g}), "
                          f"מעל {prof.hard_km_increase_max:g} ק\"מ")
-    if prof.weekly_km_max and v["run_km"] > prof.weekly_km_max:
-        flag("warn", f"מעל הנפח המתוכנן: {v['run_km']:g} ק\"מ (תכנון עד {prof.weekly_km_max:g})")
-    elif prof.weekly_km_min and v["run_km"] < prof.weekly_km_min and not in_taper:
-        flag("info", f"מתחת לנפח המתוכנן: {v['run_km']:g} ק\"מ (תכנון {prof.weekly_km_min:g}–{prof.weekly_km_max or prof.weekly_km_min:g})")
+    # the planned weekly range is in the athlete's unit (km, or minutes when working by time)
+    if prof.weekly_km_max and vol > prof.weekly_km_max:
+        flag("warn", f"מעל הנפח המתוכנן: {vol:g} {unit} (תכנון עד {prof.weekly_km_max:g})")
+    elif prof.weekly_km_min and vol < prof.weekly_km_min and not in_taper:
+        flag("info", f"מתחת לנפח המתוכנן: {vol:g} {unit} (תכנון {prof.weekly_km_min:g}–{prof.weekly_km_max or prof.weekly_km_min:g})")
     n_quality = sum(1 for w in s["workouts"] if w.get("quality"))
     if prof.max_quality_per_week is not None and n_quality > prof.max_quality_per_week:
         flag("warn", f"{n_quality} אימוני איכות (מתוכנן עד {prof.max_quality_per_week})")
@@ -442,9 +477,14 @@ def _flags(s: dict, th: Thresholds, end: date, athlete: Athlete) -> tuple[list[d
         hard_share = it["time_by_class"]["hard"] / run_s
         if hard_share > HARD_SHARE_HIGH:
             flag("warn", f"הרבה עצימות: {hard_share:.0%} מזמן הריצה ב-Z4 ומעלה")
-    run_m = sum(it["km_by_class"].values())
-    if run_m and it["km_by_class"]["moderate"] / run_m > GREY_ZONE_SHARE:
-        flag("info", f"{it['km_by_class']['moderate']:g} ק\"מ באזור האפור (Z3): ריצות קלות שיצאו מהירות מדי?")
+    if by_time:
+        run_t = sum(t for k, t in it["time_by_class"].items() if k != WALK)
+        if run_t and it["time_by_class"]["moderate"] / run_t > GREY_ZONE_SHARE:
+            flag("info", f"{round(it['time_by_class']['moderate'] / 60)} דק׳ באזור האפור (Z3): ריצות קלות שיצאו מהירות מדי?")
+    else:
+        run_m = sum(k for c, k in it["km_by_class"].items() if c != WALK)
+        if run_m and it["km_by_class"]["moderate"] / run_m > GREY_ZONE_SHARE:
+            flag("info", f"{it['km_by_class']['moderate']:g} ק\"מ באזור האפור (Z3): ריצות קלות שיצאו מהירות מדי?")
 
     quality = [w for w in s["workouts"] if w.get("quality")]
     for a, b in zip(quality, quality[1:]):

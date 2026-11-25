@@ -13,7 +13,7 @@ from .report import hmm, km, pace
 from .threshold import resolve_thresholds
 from .week import FATIGUE_WORDS, PAIN_WORDS, _day_he, _found, previous_weeks, week_bounds
 from .workouts import analyze_run
-from .zones import HARD, zone_rank
+from .zones import HARD, WALK, zone_rank
 
 ABOVE_TARGET_MIN_S = 10 * 60  # at least this much time above the planned zone ...
 ABOVE_TARGET_SHARE = 0.20  # ... or this share of the run
@@ -27,7 +27,7 @@ HR_GAP_MIN_S = 10 * 60
 # Intent from the planned title when the coach gave no zones.
 TITLE_INTENT = [
     (("התאוששות", "recovery"), ("Z1", "Z1")),
-    (("קלה", "קל", "easy", "aerobic", "אירובי", "ארוכה", "long", "lsd"), ("Z1", "Z2")),
+    (("קלה", "קל", "easy", "aerobic", "אירובי", "ארוכה", "long", "lsd", "הליכה", "walk"), ("Z1", "Z2")),
     (("טמפו", "tempo", "סף", "threshold"), ("Z4", "Z5a")),
     (("אינטרוול", "interval", "חזרות", "reps", "פארטלק", "fartlek", "עליות", "hill"), ("Z4", "Z5c")),
 ]
@@ -73,7 +73,7 @@ def check_workout(
         return alerts
 
     th = resolve_thresholds(athlete, activity.day)
-    w = analyze_run(activity, th, prof.zone_source)
+    w = analyze_run(activity, th, prof.zone_source, prof)
     intent = planned_intent(planned)
     meant_easy = intent[1] in ("Z1", "Z2") if intent else not w.is_quality
     rpe = activity.rpe
@@ -85,9 +85,12 @@ def check_workout(
         above_s = sum(above.values())
         if above_s >= ABOVE_TARGET_MIN_S or (activity.duration_s and above_s / activity.duration_s >= ABOVE_TARGET_SHARE):
             ordered = sorted(above.items(), key=lambda x: zone_rank(x[0]))
-            zones = ordered[0][0] if len(ordered) == 1 else ", ".join(f"{z} {hmm(t)}" for z, t in ordered)
             plan = f"תוכנן עד {top}" if intent else "ריצה רציפה (בלי מבנה של אימון איכות)"
-            add("warn", f"{plan}, בפועל {hmm(above_s)} ב-{zones}")
+            if len(ordered) == 1:
+                add("warn", f"{plan}, בפועל {hmm(above_s)} ב-{ordered[0][0]}")
+            else:
+                zones = ", ".join(f"{z} {hmm(t)}" for z, t in ordered)
+                add("warn", f"{plan}, בפועל {hmm(above_s)} מעל {top}: {zones}")
 
     if planned and planned.pace_fast_s:
         hard = [s for s in w.segments if s.kind == HARD and s.pace_s_per_km]
@@ -95,12 +98,24 @@ def check_workout(
         if fastest and fastest < planned.pace_fast_s * (1 - FASTER_THAN_PLAN):
             add("warn", f"מהר מהקצבים: {pace(fastest)} מול תכנון {pace(planned.pace_fast_s)}–{pace(planned.pace_slow_s)}")
 
+    # ---- run/walk sessions (beginners) -------------------------------------------------
+    if planned and planned.run_s:
+        if w.longest_run_s > planned.run_s * 1.5 + 30:
+            add("warn", f"ריצה רציפה של {hmm(w.longest_run_s)}, בתכנון {hmm(planned.run_s)} ריצה"
+                        + (f" / {hmm(planned.walk_s)} הליכה" if planned.walk_s else ""))
+        walks = [s.duration_s for s in w.segments if s.kind == WALK]
+        if planned.walk_s and walks and sum(walks) / len(walks) < planned.walk_s * 0.5:
+            add("info", f"הליכות של {hmm(sum(walks) / len(walks))} בממוצע, בתכנון {hmm(planned.walk_s)}")
+        runs = [s for s in w.segments if s.kind != WALK]
+        if planned.reps and len(runs) < planned.reps - 1:
+            add("info", f"{len(runs)} קטעי ריצה, בתכנון {planned.reps}")
+
     # ---- how it felt -----------------------------------------------------------
     if rpe:
         if planned and planned.rpe and rpe >= planned.rpe + RPE_OVER_PLAN:
             add("warn", f"RPE {rpe:g}, תוכנן {planned.rpe:g}")
         elif meant_easy and rpe >= EASY_RPE_HIGH:
-            add("warn", f"ריצה קלה עם RPE {rpe:g}, סימן לעייפות")
+            add("warn", f"{w.workout_type} עם RPE {rpe:g}, סימן לעייפות")
         elif rpe >= ANY_RPE_HIGH:
             add("info", f"RPE {rpe:g}")
 
@@ -135,7 +150,7 @@ def check_workout(
     if w.is_quality and history:
         start, end = week_bounds(activity.day, prof.week_start)
         earlier = [
-            (a, analyze_run(a, th, prof.zone_source)) for a in history
+            (a, analyze_run(a, th, prof.zone_source, prof)) for a in history
             if a.is_run and a.id != activity.id and a.start < activity.start
             and (activity.start - a.start).total_seconds() < 4 * 86400
         ]
@@ -148,7 +163,7 @@ def check_workout(
             n = 1 + sum(
                 1 for a in history
                 if a.is_run and a.id != activity.id and start <= a.day <= end and a.start < activity.start
-                and analyze_run(a, th, prof.zone_source).is_quality
+                and analyze_run(a, th, prof.zone_source, prof).is_quality
             )
             if n > prof.max_quality_per_week:
                 add("warn", f"אימון האיכות ה-{n} השבוע (מתוכנן עד {prof.max_quality_per_week})")
@@ -167,7 +182,7 @@ def render_alert(athlete: Athlete, activity: Activity, alerts: list[dict], plann
     תוכנן עד Z2, בפועל 53 דק׳ ב-Z3
     """
     th = resolve_thresholds(athlete, activity.day)
-    w = analyze_run(activity, th, athlete.profile.zone_source) if activity.is_run else None
+    w = analyze_run(activity, th, athlete.profile.zone_source, athlete.profile) if activity.is_run else None
     what = w.workout_type if w else activity.title or activity.sport
     lines = [f"*{athlete.name}*, {_day_he(activity.day.isoformat())}, {what}"]
     if planned:

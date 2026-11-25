@@ -217,7 +217,7 @@ def test_first_start_creates_the_data_folder(tmp_path, monkeypatch):
     monkeypatch.setenv("COACH_WHATSAPP", "0501234567")
     config, state = ensure_data_dir(tmp_path / "data")
     cfg = json.loads(config.read_text(encoding="utf-8"))
-    assert cfg["coaches"][0]["whatsapp"] == "972501234567" and len(cfg["coaches"][0]["athletes"]) == 2
+    assert cfg["coaches"][0]["whatsapp"] == "972501234567" and len(cfg["coaches"][0]["athletes"]) == 3
     monkeypatch.setenv("COACH_WHATSAPP", "0509999999")
     ensure_data_dir(tmp_path / "data")  # second start: nothing is overwritten
     assert "972501234567" in config.read_text(encoding="utf-8")
