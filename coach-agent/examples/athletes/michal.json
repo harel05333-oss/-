@@ -1,0 +1,1955 @@
+{
+ "athlete": {
+  "id": "michal",
+  "name": "מיכל לוי",
+  "races": [
+   {
+    "date": "2026-10-23",
+    "distance_km": 5,
+    "time": "22:30",
+    "avg_hr": 186,
+    "is_race": true
+   }
+  ]
+ },
+ "activities": [
+  {
+   "id": "2026-09-27-קלה",
+   "start": "2026-09-27T06:00:00",
+   "sport": "run",
+   "title": "קלה",
+   "laps": [
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    }
+   ]
+  },
+  {
+   "id": "2026-09-29-טמפו",
+   "start": "2026-09-29T06:00:00",
+   "sport": "run",
+   "title": "טמפו",
+   "laps": [
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:02",
+     "avg_hr": 170
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:02",
+     "avg_hr": 170
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:02",
+     "avg_hr": 170
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:02",
+     "avg_hr": 170
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "6:00",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "6:00",
+     "avg_hr": 150
+    }
+   ],
+   "rpe": 7
+  },
+  {
+   "id": "2026-10-01-קלה",
+   "start": "2026-10-01T06:00:00",
+   "sport": "run",
+   "title": "קלה",
+   "laps": [
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    }
+   ]
+  },
+  {
+   "id": "2026-10-03-קלה",
+   "start": "2026-10-03T06:00:00",
+   "sport": "run",
+   "title": "קלה",
+   "laps": [
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    }
+   ]
+  },
+  {
+   "id": "2026-10-04-קלה",
+   "start": "2026-10-04T06:00:00",
+   "sport": "run",
+   "title": "קלה",
+   "laps": [
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    }
+   ]
+  },
+  {
+   "id": "2026-10-06-טמפו",
+   "start": "2026-10-06T06:00:00",
+   "sport": "run",
+   "title": "טמפו",
+   "laps": [
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:02",
+     "avg_hr": 170
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:02",
+     "avg_hr": 170
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:02",
+     "avg_hr": 170
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:02",
+     "avg_hr": 170
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "6:00",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "6:00",
+     "avg_hr": 150
+    }
+   ],
+   "rpe": 7
+  },
+  {
+   "id": "2026-10-08-קלה",
+   "start": "2026-10-08T06:00:00",
+   "sport": "run",
+   "title": "קלה",
+   "laps": [
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    }
+   ]
+  },
+  {
+   "id": "2026-10-10-קלה",
+   "start": "2026-10-10T06:00:00",
+   "sport": "run",
+   "title": "קלה",
+   "laps": [
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    }
+   ]
+  },
+  {
+   "id": "2026-10-11-קלה",
+   "start": "2026-10-11T06:00:00",
+   "sport": "run",
+   "title": "קלה",
+   "laps": [
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    }
+   ]
+  },
+  {
+   "id": "2026-10-13-טמפו",
+   "start": "2026-10-13T06:00:00",
+   "sport": "run",
+   "title": "טמפו",
+   "laps": [
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:02",
+     "avg_hr": 170
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:02",
+     "avg_hr": 170
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:02",
+     "avg_hr": 170
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:02",
+     "avg_hr": 170
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "6:00",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "6:00",
+     "avg_hr": 150
+    }
+   ],
+   "rpe": 7
+  },
+  {
+   "id": "2026-10-15-קלה",
+   "start": "2026-10-15T06:00:00",
+   "sport": "run",
+   "title": "קלה",
+   "laps": [
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    }
+   ]
+  },
+  {
+   "id": "2026-10-17-קלה",
+   "start": "2026-10-17T06:00:00",
+   "sport": "run",
+   "title": "קלה",
+   "laps": [
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    }
+   ]
+  },
+  {
+   "id": "2026-10-18-קלה",
+   "start": "2026-10-18T06:00:00",
+   "sport": "run",
+   "title": "קלה",
+   "laps": [
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    }
+   ]
+  },
+  {
+   "id": "2026-10-20-טמפו",
+   "start": "2026-10-20T06:00:00",
+   "sport": "run",
+   "title": "טמפו",
+   "laps": [
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:02",
+     "avg_hr": 170
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:02",
+     "avg_hr": 170
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:02",
+     "avg_hr": 170
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:02",
+     "avg_hr": 170
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "6:00",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "6:00",
+     "avg_hr": 150
+    }
+   ],
+   "rpe": 7
+  },
+  {
+   "id": "2026-10-22-קלה",
+   "start": "2026-10-22T06:00:00",
+   "sport": "run",
+   "title": "קלה",
+   "laps": [
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    }
+   ]
+  },
+  {
+   "id": "2026-10-24-קלה",
+   "start": "2026-10-24T06:00:00",
+   "sport": "run",
+   "title": "קלה",
+   "laps": [
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    }
+   ]
+  },
+  {
+   "id": "2026-10-25-קלה",
+   "start": "2026-10-25T06:00:00",
+   "sport": "run",
+   "title": "קלה",
+   "laps": [
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    }
+   ]
+  },
+  {
+   "id": "2026-10-27-טמפו",
+   "start": "2026-10-27T06:00:00",
+   "sport": "run",
+   "title": "טמפו",
+   "laps": [
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:02",
+     "avg_hr": 170
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:02",
+     "avg_hr": 170
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:02",
+     "avg_hr": 170
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:02",
+     "avg_hr": 170
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "6:00",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "6:00",
+     "avg_hr": 150
+    }
+   ],
+   "rpe": 7
+  },
+  {
+   "id": "2026-10-29-קלה",
+   "start": "2026-10-29T06:00:00",
+   "sport": "run",
+   "title": "קלה",
+   "laps": [
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    }
+   ]
+  },
+  {
+   "id": "2026-10-31-קלה",
+   "start": "2026-10-31T06:00:00",
+   "sport": "run",
+   "title": "קלה",
+   "laps": [
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    }
+   ]
+  },
+  {
+   "id": "2026-11-01-קלה",
+   "start": "2026-11-01T06:00:00",
+   "sport": "run",
+   "title": "קלה",
+   "laps": [
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    }
+   ]
+  },
+  {
+   "id": "2026-11-03-טמפו",
+   "start": "2026-11-03T06:00:00",
+   "sport": "run",
+   "title": "טמפו",
+   "laps": [
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:02",
+     "avg_hr": 170
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:02",
+     "avg_hr": 170
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:02",
+     "avg_hr": 170
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:02",
+     "avg_hr": 170
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "6:00",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "6:00",
+     "avg_hr": 150
+    }
+   ],
+   "rpe": 7
+  },
+  {
+   "id": "2026-11-05-קלה",
+   "start": "2026-11-05T06:00:00",
+   "sport": "run",
+   "title": "קלה",
+   "laps": [
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    }
+   ]
+  },
+  {
+   "id": "2026-11-07-קלה",
+   "start": "2026-11-07T06:00:00",
+   "sport": "run",
+   "title": "קלה",
+   "laps": [
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    }
+   ]
+  },
+  {
+   "id": "2026-11-08-קלה",
+   "start": "2026-11-08T06:00:00",
+   "sport": "run",
+   "title": "קלה",
+   "laps": [
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    }
+   ]
+  },
+  {
+   "id": "2026-11-10-טמפו",
+   "start": "2026-11-10T06:00:00",
+   "sport": "run",
+   "title": "טמפו",
+   "laps": [
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:02",
+     "avg_hr": 170
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:02",
+     "avg_hr": 170
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:02",
+     "avg_hr": 170
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:02",
+     "avg_hr": 170
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "6:00",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "6:00",
+     "avg_hr": 150
+    }
+   ],
+   "rpe": 7
+  },
+  {
+   "id": "2026-11-12-קלה",
+   "start": "2026-11-12T06:00:00",
+   "sport": "run",
+   "title": "קלה",
+   "laps": [
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:55",
+     "avg_hr": 148
+    }
+   ]
+  },
+  {
+   "id": "2026-11-14-קלה",
+   "start": "2026-11-14T06:00:00",
+   "sport": "run",
+   "title": "קלה",
+   "laps": [
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    }
+   ]
+  },
+  {
+   "id": "2026-11-15-קלה",
+   "start": "2026-11-15T06:00:00",
+   "sport": "run",
+   "title": "קלה",
+   "laps": [
+    {
+     "distance_km": 1.0,
+     "duration": "5:20",
+     "avg_hr": 164
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:20",
+     "avg_hr": 164
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:20",
+     "avg_hr": 164
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:20",
+     "avg_hr": 164
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:20",
+     "avg_hr": 164
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:20",
+     "avg_hr": 164
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:20",
+     "avg_hr": 164
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:20",
+     "avg_hr": 164
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:20",
+     "avg_hr": 164
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:20",
+     "avg_hr": 164
+    }
+   ],
+   "rpe": 6
+  },
+  {
+   "id": "2026-11-16-אינטרוולים",
+   "start": "2026-11-16T06:00:00",
+   "sport": "run",
+   "title": "אינטרוולים",
+   "laps": [
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 150
+    },
+    {
+     "distance_km": 1,
+     "duration": "4:38",
+     "avg_hr": 182
+    },
+    {
+     "distance_km": 0.4,
+     "duration": "2:32",
+     "avg_hr": 160
+    },
+    {
+     "distance_km": 1,
+     "duration": "4:38",
+     "avg_hr": 182
+    },
+    {
+     "distance_km": 0.4,
+     "duration": "2:32",
+     "avg_hr": 160
+    },
+    {
+     "distance_km": 1,
+     "duration": "4:38",
+     "avg_hr": 182
+    },
+    {
+     "distance_km": 0.4,
+     "duration": "2:32",
+     "avg_hr": 160
+    },
+    {
+     "distance_km": 1,
+     "duration": "4:38",
+     "avg_hr": 182
+    },
+    {
+     "distance_km": 0.4,
+     "duration": "2:32",
+     "avg_hr": 160
+    },
+    {
+     "distance_km": 1,
+     "duration": "4:38",
+     "avg_hr": 182
+    },
+    {
+     "distance_km": 0.4,
+     "duration": "2:32",
+     "avg_hr": 160
+    },
+    {
+     "distance_km": 1,
+     "duration": "4:38",
+     "avg_hr": 182
+    },
+    {
+     "distance_km": 0.4,
+     "duration": "2:32",
+     "avg_hr": 160
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "6:00",
+     "avg_hr": 155
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "6:00",
+     "avg_hr": 155
+    }
+   ],
+   "rpe": 9,
+   "comment": "היה קשה מאוד, כאב בשוק ימין בחזרות האחרונות"
+  },
+  {
+   "id": "2026-11-17-טמפו",
+   "start": "2026-11-17T18:00:00",
+   "sport": "run",
+   "title": "טמפו",
+   "laps": [
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 152
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:50",
+     "avg_hr": 152
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "4:58",
+     "avg_hr": 176
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "4:58",
+     "avg_hr": 176
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "4:58",
+     "avg_hr": 176
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "4:58",
+     "avg_hr": 176
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "4:58",
+     "avg_hr": 176
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "4:58",
+     "avg_hr": 176
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "6:00",
+     "avg_hr": 158
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "6:00",
+     "avg_hr": 158
+    }
+   ],
+   "rpe": 8
+  },
+  {
+   "id": "2026-11-18-קלה",
+   "start": "2026-11-18T06:00:00",
+   "sport": "run",
+   "title": "קלה",
+   "laps": [
+    {
+     "distance_km": 1.0,
+     "duration": "5:25",
+     "avg_hr": 165
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:25",
+     "avg_hr": 165
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:25",
+     "avg_hr": 165
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:25",
+     "avg_hr": 165
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:25",
+     "avg_hr": 165
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:25",
+     "avg_hr": 165
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:25",
+     "avg_hr": 165
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:25",
+     "avg_hr": 165
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:25",
+     "avg_hr": 165
+    }
+   ],
+   "rpe": 8,
+   "comment": "רגליים כבדות"
+  },
+  {
+   "id": "strength-1",
+   "start": "2026-11-19T19:00:00",
+   "sport": "strength",
+   "title": "כוח",
+   "duration": "45:00",
+   "rpe": 6
+  },
+  {
+   "id": "2026-11-21-קלה",
+   "start": "2026-11-21T06:00:00",
+   "sport": "run",
+   "title": "קלה",
+   "laps": [
+    {
+     "distance_km": 1.0,
+     "duration": "5:35",
+     "avg_hr": 160
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:35",
+     "avg_hr": 160
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:35",
+     "avg_hr": 160
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:35",
+     "avg_hr": 160
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:35",
+     "avg_hr": 160
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:35",
+     "avg_hr": 160
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:35",
+     "avg_hr": 160
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:35",
+     "avg_hr": 160
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:35",
+     "avg_hr": 160
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:35",
+     "avg_hr": 160
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:35",
+     "avg_hr": 160
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:35",
+     "avg_hr": 160
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:35",
+     "avg_hr": 160
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:35",
+     "avg_hr": 160
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:35",
+     "avg_hr": 160
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:35",
+     "avg_hr": 160
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:35",
+     "avg_hr": 160
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:35",
+     "avg_hr": 160
+    }
+   ],
+   "rpe": 7
+  }
+ ],
+ "planned": [
+  {
+   "date": "2026-11-20",
+   "title": "ריצת התאוששות 6 ק\"מ",
+   "distance_km": 6
+  }
+ ]
+}
