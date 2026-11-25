@@ -30,7 +30,7 @@ TZ = ZoneInfo("Asia/Jerusalem")
 WINDOW = timedelta(hours=23, minutes=30)  # WhatsApp allows free text 24h after the coach's last message
 ALERT_MAX_AGE = timedelta(days=3)  # do not alert on old workouts that arrive late
 TEMPLATE_WEEKLY = "coach_weekly_summary"  # "הסיכום השבועי מוכן: {{1}}. השב/י כדי לקבל אותו."
-TEMPLATE_ALERT = "coach_workout_alert"  # "⚡ אימון חריג: {{1}}. השב/י לפירוט."
+TEMPLATE_ALERT = "coach_workout_alert"  # "אימון חריג: {{1}}. השב/י כאן לפירוט."
 
 
 class Store:

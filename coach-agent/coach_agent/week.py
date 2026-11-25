@@ -57,6 +57,35 @@ def last_complete_week(today: date, week_start: str = "sunday") -> tuple[date, d
     return start - timedelta(days=7), start - timedelta(days=1)
 
 
+REFERENCE_WEEKS = 3  # progression is measured against the best of the last 3 weeks (3:1 / 2:1 cycles)
+RECOVERY_WEEK = 0.85  # a week under 85% of the reference volume is a recovery week
+
+
+def previous_weeks(athlete: Athlete, activities: list[Activity], start: date, prefer: str,
+                   weeks: int = REFERENCE_WEEKS) -> dict:
+    """Longest run, run km and hard km of each of the weeks before `start`, and the best of them.
+
+    Taking the best of the last weeks means a recovery week does not reset progression:
+    after 3 loading weeks and 1 easy week, the next long run is compared to the last loading week.
+    """
+    rows = []
+    for k in range(1, weeks + 1):
+        s, e = start - timedelta(days=7 * k), start - timedelta(days=7 * k - 6)
+        runs = [a for a in activities if a.is_run and _in(a, s, e)]
+        if not runs:
+            continue
+        th = resolve_thresholds(athlete, e)
+        hard = sum(analyze_run(a, th, prefer).dist_by_class.get(HARD, 0) for a in runs)
+        rows.append({
+            "start": s.isoformat(),
+            "longest_km": max(a.distance_m for a in runs) / 1000,
+            "run_km": sum(a.distance_m for a in runs) / 1000,
+            "hard_km": hard / 1000,
+        })
+    best = lambda k: round(max(r[k] for r in rows), 1) if rows else None
+    return {"weeks": rows, "longest_km": best("longest_km"), "run_km": best("run_km"), "hard_km": best("hard_km")}
+
+
 def _goal_context(athlete: Athlete, start: date, end: date) -> dict | None:
     upcoming = sorted((g for g in athlete.profile.goal_races if g.date >= start), key=lambda g: g.date)
     if not upcoming:
@@ -305,6 +334,7 @@ def analyze_week(
         "missed": missed,
     }
     summary["goal"] = _goal_context(athlete, start, end)
+    summary["progression"] = previous_weeks(athlete, activities, start, prefer)
     summary["flags"], summary["highlights"] = _flags(summary, th, end, athlete)
     return summary
 
@@ -327,6 +357,21 @@ def _flags(s: dict, th: Thresholds, end: date, athlete: Athlete) -> tuple[list[d
         up = v["run_km"] / v["avg4_run_km"] - 1
         flag("warn", f"קפיצה בנפח: {v['run_km']:g} ק\"מ, {up:.0%} מעל ממוצע 4 השבועות ({v['avg4_run_km']:g})")
 
+    ref = s.get("progression") or {}
+    recovery_week = bool(ref.get("run_km")) and v["run_km"] < ref["run_km"] * RECOVERY_WEEK
+    if ref.get("longest_km") and v["longest_run_km"]:
+        up = round(v["longest_run_km"] - ref["longest_km"], 1)
+        if up > prof.lsd_increase_max_km:
+            flag("warn", f"הריצה הארוכה עלתה ב-{up:g} ק\"מ ({ref['longest_km']:g} ← {v['longest_run_km']:g}), "
+                         f"מעל {prof.lsd_increase_max_km:g} ק\"מ")
+        elif up < prof.lsd_increase_min_km and not recovery_week and not in_taper:
+            flag("info", f"הריצה הארוכה לא התקדמה: {v['longest_run_km']:g} ק\"מ, לעומת {ref['longest_km']:g} "
+                         f"(התקדמות מתוכננת {prof.lsd_increase_min_km:g}–{prof.lsd_increase_max_km:g})")
+    if prof.hard_km_increase_max is not None and ref.get("hard_km") is not None:
+        up = round(it["km_by_class"]["hard"] - ref["hard_km"], 1)
+        if up > prof.hard_km_increase_max:
+            flag("warn", f"הנפח העצים עלה ב-{up:g} ק\"מ ({ref['hard_km']:g} ← {it['km_by_class']['hard']:g}), "
+                         f"מעל {prof.hard_km_increase_max:g} ק\"מ")
     if prof.weekly_km_max and v["run_km"] > prof.weekly_km_max:
         flag("warn", f"מעל הנפח המתוכנן: {v['run_km']:g} ק\"מ (תכנון עד {prof.weekly_km_max:g})")
     elif prof.weekly_km_min and v["run_km"] < prof.weekly_km_min and not in_taper:

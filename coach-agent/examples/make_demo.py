@@ -8,7 +8,6 @@ Michal: volume jump, quality sessions back to back, easy runs too fast, a pain n
 from __future__ import annotations
 
 import json
-import random
 from datetime import date, datetime, time, timedelta
 from pathlib import Path
 
@@ -53,7 +52,6 @@ def easy(day, km_, pace="5:10", hr=145, **kw):
 
 
 def dani():
-    rnd = random.Random(1)
     acts = []
     for w in range(WEEKS - 1, 0, -1):  # history weeks, easy HR a bit higher early on
         sun = TARGET_SUNDAY - timedelta(days=7 * w)
@@ -66,7 +64,8 @@ def dani():
             run(sun + timedelta(4), "אינטרוולים", laps(
                 (2, "5:10", hr_easy), *[(1, "4:10", 171), (0.4, "5:40", 150)] * 5, (2, "5:20", 148)), rpe=8),
             easy(sun + timedelta(5), 6, pace="5:40", hr=135),
-            easy(sun + timedelta(6), 16 + rnd.choice([0, 2, 4]), pace="5:05", hr=hr_easy + 2),
+            # long run grows 1.5 km a week, with an easier week every 4th week (3:1)
+            easy(sun + timedelta(6), 14 if w == 4 else 22 - 1.5 * w, pace="5:05", hr=hr_easy + 2),
         ]
     s = TARGET_SUNDAY
     acts += [

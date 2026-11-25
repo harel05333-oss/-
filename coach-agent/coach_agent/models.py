@@ -120,6 +120,11 @@ class Profile:
     weekly_km_max: float | None = None
     max_quality_per_week: int | None = None
     max_weekly_increase: float = 0.15  # 0.10 = 10%
+    # Long run (LSD) progression vs the longest run of the last 3 weeks, in km.
+    lsd_increase_min_km: float = 0.5
+    lsd_increase_max_km: float = 2.5
+    # Intensity progression: hard km (Z4+) per week vs the last 3 weeks. None = not checked.
+    hard_km_increase_max: float | None = None
     injuries: list[str] = field(default_factory=list)  # body areas to watch, e.g. "אכילס", "שוק"
     medical_notes: str = ""
     max_hr: int | None = None

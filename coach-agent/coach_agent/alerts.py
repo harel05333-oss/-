@@ -9,7 +9,7 @@ from __future__ import annotations
 from .models import Activity, Athlete, PlannedWorkout
 from .report import hmm, km, pace
 from .threshold import resolve_thresholds
-from .week import FATIGUE_WORDS, PAIN_WORDS, _day_he, _found, week_bounds
+from .week import FATIGUE_WORDS, PAIN_WORDS, _day_he, _found, previous_weeks, week_bounds
 from .workouts import analyze_run
 from .zones import HARD, zone_rank
 
@@ -59,11 +59,11 @@ def check_workout(
     comment = activity.comment or ""
     areas = [x for x in prof.injuries if x and x in comment]
     if areas:
-        add("alert", f"הערה על {', '.join(areas)} (אזור פציעה מוכר): 💬 \"{comment}\"")
+        add("alert", f"הערה על {', '.join(areas)} (אזור פציעה מוכר): \"{comment}\"")
     elif _found(PAIN_WORDS, comment):
-        add("alert", f"💬 \"{comment}\"")
+        add("alert", f"הערה: \"{comment}\"")
     elif _found(FATIGUE_WORDS, comment):
-        add("warn", f"💬 \"{comment}\"")
+        add("warn", f"הערה: \"{comment}\"")
 
     if not activity.is_run:
         if activity.rpe and activity.rpe >= ANY_RPE_HIGH:
@@ -100,7 +100,7 @@ def check_workout(
         elif meant_easy and rpe >= EASY_RPE_HIGH:
             add("warn", f"ריצה קלה עם RPE {rpe:g}, סימן לעייפות")
         elif rpe >= ANY_RPE_HIGH:
-            add("info", f"RPE {rpe:g}, מאמץ כמעט מרבי")
+            add("info", f"RPE {rpe:g}")
 
     # ---- heart rate that the pace does not explain -------------------------------
     gap_s = sum(
@@ -108,7 +108,18 @@ def check_workout(
         if z.pace_zone and z.hr_zone and zone_rank(z.hr_zone) - zone_rank(z.pace_zone) >= HR_GAP_ZONES
     )
     if gap_s >= HR_GAP_MIN_S:
-        add("info", f"דופק גבוה ביחס לקצב ב-{hmm(gap_s)} (חום, עליות, עייפות או תחילת מחלה?)")
+        add("info", f"דופק גבוה ביחס לקצב ב-{hmm(gap_s)} (חום, עליות, עייפות או תחילת מחלה)")
+
+    # ---- long run progression --------------------------------------------------------
+    if history and w.is_long:
+        start, end = week_bounds(activity.day, prof.week_start)
+        same_week = [a for a in history if a.is_run and a.id != activity.id and start <= a.day <= end]
+        if all(a.distance_m < activity.distance_m for a in same_week):
+            ref = previous_weeks(athlete, history, start, prof.zone_source)["longest_km"]
+            up = round(activity.distance_m / 1000 - ref, 1) if ref else None
+            if up is not None and up > prof.lsd_increase_max_km:
+                add("warn", f"הארוכה גדלה ב-{up:g} ק\"מ לעומת השבועות האחרונים ({ref:g} ק\"מ), "
+                            f"מותר עד {prof.lsd_increase_max_km:g}")
 
     # ---- quality sessions in the week ----------------------------------------------
     if w.is_quality and history:
@@ -138,26 +149,32 @@ def check_workout(
 
 
 def render_alert(athlete: Athlete, activity: Activity, alerts: list[dict], planned: PlannedWorkout | None = None) -> str:
+    """Short plain message, e.g.
+
+    מיכל לוי, א׳ 15.11, ריצה בינונית (Z3)
+    תוכנן: ריצה קלה 10 ק"מ
+    10 ק"מ, 5:20 לק"מ, 53 דק׳, דופק 164, RPE 6
+    תוכנן עד Z2, בפועל 53 דק׳ ב-Z3
+    """
     th = resolve_thresholds(athlete, activity.day)
     w = analyze_run(activity, th, athlete.profile.zone_source) if activity.is_run else None
-    icon = {"alert": "🔴", "warn": "🟠", "info": "🔵"}
     what = w.workout_type if w else activity.title or activity.sport
-    lines = [f"⚡ *{athlete.name}* | {_day_he(activity.day.isoformat())} | {what}"]
+    lines = [f"*{athlete.name}*, {_day_he(activity.day.isoformat())}, {what}"]
     if planned:
         lines.append(f"תוכנן: {planned.title}")
     facts = []
     if activity.distance_m:
         facts.append(km(activity.distance_m))
         if activity.is_run:
-            facts.append(f"@{pace(activity.duration_s / (activity.distance_m / 1000))}")
+            facts.append(f"{pace(activity.duration_s / (activity.distance_m / 1000))} לק\"מ")
     facts.append(hmm(activity.duration_s))
     if activity.avg_hr:
-        facts.append(f"♥{activity.avg_hr:g}")
+        facts.append(f"דופק {activity.avg_hr:g}")
     if activity.rpe:
         facts.append(f"RPE {activity.rpe:g}")
-    lines.append(" | ".join(facts))
+    lines.append(", ".join(facts))
     for a in alerts:
-        lines.append(f"{icon[a['level']]} {a['text']}")
+        lines.append(("חשוב: " if a["level"] == "alert" else "") + a["text"])
     return "\n".join(lines)
 
 

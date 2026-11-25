@@ -445,28 +445,8 @@
      "avg_hr": 155
     },
     {
-     "distance_km": 1.0,
-     "duration": "5:05",
-     "avg_hr": 155
-    },
-    {
-     "distance_km": 1.0,
-     "duration": "5:05",
-     "avg_hr": 155
-    },
-    {
-     "distance_km": 1.0,
-     "duration": "5:05",
-     "avg_hr": 155
-    },
-    {
-     "distance_km": 1.0,
-     "duration": "5:05",
-     "avg_hr": 155
-    },
-    {
-     "distance_km": 1.0,
-     "duration": "5:05",
+     "distance_km": 0.5,
+     "duration": "2:32",
      "avg_hr": 155
     }
    ]
@@ -822,41 +802,6 @@
    "sport": "run",
    "title": "קלה",
    "laps": [
-    {
-     "distance_km": 1.0,
-     "duration": "5:05",
-     "avg_hr": 154
-    },
-    {
-     "distance_km": 1.0,
-     "duration": "5:05",
-     "avg_hr": 154
-    },
-    {
-     "distance_km": 1.0,
-     "duration": "5:05",
-     "avg_hr": 154
-    },
-    {
-     "distance_km": 1.0,
-     "duration": "5:05",
-     "avg_hr": 154
-    },
-    {
-     "distance_km": 1.0,
-     "duration": "5:05",
-     "avg_hr": 154
-    },
-    {
-     "distance_km": 1.0,
-     "duration": "5:05",
-     "avg_hr": 154
-    },
-    {
-     "distance_km": 1.0,
-     "duration": "5:05",
-     "avg_hr": 154
-    },
     {
      "distance_km": 1.0,
      "duration": "5:05",
@@ -1346,13 +1291,8 @@
      "avg_hr": 153
     },
     {
-     "distance_km": 1.0,
-     "duration": "5:05",
-     "avg_hr": 153
-    },
-    {
-     "distance_km": 1.0,
-     "duration": "5:05",
+     "distance_km": 0.5,
+     "duration": "2:32",
      "avg_hr": 153
     }
    ]
@@ -1708,26 +1648,6 @@
    "sport": "run",
    "title": "קלה",
    "laps": [
-    {
-     "distance_km": 1.0,
-     "duration": "5:05",
-     "avg_hr": 152
-    },
-    {
-     "distance_km": 1.0,
-     "duration": "5:05",
-     "avg_hr": 152
-    },
-    {
-     "distance_km": 1.0,
-     "duration": "5:05",
-     "avg_hr": 152
-    },
-    {
-     "distance_km": 1.0,
-     "duration": "5:05",
-     "avg_hr": 152
-    },
     {
      "distance_km": 1.0,
      "duration": "5:05",
@@ -2230,6 +2150,16 @@
      "distance_km": 1.0,
      "duration": "5:05",
      "avg_hr": 151
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:05",
+     "avg_hr": 151
+    },
+    {
+     "distance_km": 0.5,
+     "duration": "2:32",
+     "avg_hr": 151
     }
    ]
   },
@@ -2584,6 +2514,11 @@
    "sport": "run",
    "title": "קלה",
    "laps": [
+    {
+     "distance_km": 1.0,
+     "duration": "5:05",
+     "avg_hr": 150
+    },
     {
      "distance_km": 1.0,
      "duration": "5:05",
@@ -3115,6 +3050,21 @@
     {
      "distance_km": 1.0,
      "duration": "5:05",
+     "avg_hr": 149
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:05",
+     "avg_hr": 149
+    },
+    {
+     "distance_km": 1.0,
+     "duration": "5:05",
+     "avg_hr": 149
+    },
+    {
+     "distance_km": 0.5,
+     "duration": "2:32",
      "avg_hr": 149
     }
    ]

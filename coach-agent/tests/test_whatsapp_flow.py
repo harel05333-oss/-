@@ -156,3 +156,49 @@ def test_webhook_parsing_and_signature():
     assert valid_signature("secret", raw, sig)
     assert not valid_signature("secret", raw + b" ", sig)
     assert not valid_signature("secret", raw, None)
+
+
+# ---- progression -------------------------------------------------------------
+
+def _weeks_of_long_runs(longs, last_week_km=None):
+    """One easy 10 km + one long run per week, ending with the week of 15.11.2026."""
+    from datetime import timedelta
+    from coach_agent.models import Activity, Athlete, Lap, RaceResult
+
+    acts = []
+    first = date(2026, 11, 15) - timedelta(days=7 * (len(longs) - 1))
+    for i, long_km in enumerate(longs):
+        sun = first + timedelta(days=7 * i)
+        for day, d in ((sun + timedelta(2), 10), (sun + timedelta(6), long_km)):
+            lap = Lap(duration_s=d * 310, distance_m=d * 1000)
+            acts.append(Activity(f"{day}", datetime.combine(day, datetime.min.time()), "run",
+                                 lap.duration_s, lap.distance_m, laps=[lap]))
+    athlete = Athlete("x", "X", races=[RaceResult(date(2026, 10, 1), 10000, 42 * 60)])
+    return athlete, acts
+
+
+@pytest.mark.parametrize("longs, expected", [
+    ([16, 17, 18, 22], "warn"),          # +4 km
+    ([16, 17, 18, 20], None),            # +2 km, fine
+    ([16, 17, 18, 18.2], "info"),        # did not progress
+    ([16, 17, 18, 12, 20], None),        # after a 3:1 recovery week, compared to the last loading week (18)
+    ([16, 17, 18, 12, 21], "warn"),      # +3 over the last loading week
+])
+def test_long_run_progression(longs, expected):
+    from coach_agent.week import analyze_week
+
+    athlete, acts = _weeks_of_long_runs(longs)
+    s = analyze_week(athlete, acts, date(2026, 11, 15))
+    found = [f["level"] for f in s["flags"] if "הארוכה" in f["text"]]
+    assert found == ([expected] if expected else [])
+
+
+def test_long_run_alert_on_upload_and_plain_text():
+    from coach_agent.alerts import render_alert
+
+    athlete, acts = _weeks_of_long_runs([16, 17, 18, 22])
+    long_run = acts[-1]
+    alerts = check_workout(athlete, long_run, None, acts)
+    assert any("גדלה ב-4" in a["text"] for a in alerts)
+    text = render_alert(athlete, long_run, alerts)
+    assert not any(ord(ch) > 0x2000 and not 0x2010 <= ord(ch) <= 0x2027 for ch in text)  # no emoji
