@@ -102,6 +102,7 @@ python -m coach_agent report athlete.json --fit-dir ./fits --week 2026-11-15
 | `coach_agent/whatsapp.py` | שליחה ל-WhatsApp Cloud API |
 | `coach_agent/dispatch.py` | מה לשלוח, למי ומתי, ותשובה לפקודות |
 | `coach_agent/server.py` | webhook ושליחה כל שעה |
+| `coach_agent/bootstrap.py` | יצירת תיקיית הנתונים בשרת בהפעלה הראשונה |
 
 בדיקות: `python -m pytest`.
 
@@ -292,7 +293,42 @@ python -m coach_agent serve --config coaches.json --state state.json --port 8080
 השרת מקבל את ההודעות מוואטסאפ ושולח כל שעה מה שצריך. בלי משתני סביבה הוא רץ במצב ניסיון: מדפיס את ההודעות למסך ולא שולח.
 סבב שליחה ידני: `python -m coach_agent dispatch --config examples/coaches.json --state state.json`.
 
-### הקמת המספר (פעם אחת, אצל Meta)
+### העלאה לשרת (Render) ומספר הניסיון של Meta
+
+**1. מספר ניסיון ב-Meta (חינם, בלי סים)**
+1. ב-[developers.facebook.com](https://developers.facebook.com) בוחרים My Apps ← Create App. בשלב בחירת השימוש בוחרים WhatsApp ומקשרים לחשבון Meta Business.
+2. נכנסים ל-WhatsApp ← API Setup. שם כבר מופיע מספר ניסיון (From).
+3. ב-To מוסיפים את המספר האישי שלך ומאמתים בקוד. אפשר להוסיף עד 5 מספרים.
+4. שומרים בצד שלושה דברים:
+   - **Phone number ID:** מופיע באותו מסך.
+   - **App secret:** ב-App settings ← Basic.
+   - **טוקן:** הטוקן הזמני שמופיע במסך פג אחרי 24 שעות. לטוקן קבוע נכנסים ל-Business Settings ← System users, יוצרים משתמש Admin, נותנים לו את האפליקציה, ומפיקים טוקן עם ההרשאות `whatsapp_business_messaging` ו-`whatsapp_business_management`.
+
+**2. Render**
+1. ב-[render.com](https://render.com) בוחרים New ← Blueprint ומחברים את הריפו הזה ואת ה-branch.
+2. Render קורא את `render.yaml` שבשורש הריפו, ומבקש למלא:
+   - `WHATSAPP_TOKEN`
+   - `WHATSAPP_PHONE_NUMBER_ID`
+   - `WHATSAPP_APP_SECRET`
+   - `COACH_WHATSAPP`: המספר שלך, למשל 050-1234567
+   - `COACH_NAME`
+3. מאשרים. השירות עולה עם דיסק קבוע ב-`/var/data`. בהפעלה הראשונה נוצרים שם הקבצים `coaches.json` ו-`state.json`, ושני מתאמני הדמו.
+4. עלות: תוכנית Starter, בערך $7 לחודש, ועוד בערך 25 סנט לחודש על דיסק של 1GB. השירות החינמי לא מתאים: הוא נרדם אחרי 15 דקות בלי פעילות ושוכח את הנתונים בכל הפעלה מחדש.
+
+**3. חיבור ה-Webhook**
+1. ב-Render, בלשונית Environment, מעתיקים את הערך של `WHATSAPP_VERIFY_TOKEN`. Render יצר אותו.
+2. ב-Meta נכנסים ל-WhatsApp ← Configuration ← Webhook ← Edit וממלאים:
+   - Callback URL: `https://<שם-השירות>.onrender.com/webhook`
+   - Verify token: הערך שהעתקת
+3. לוחצים Verify and save. בשדות של ה-Webhook מסמנים `messages`.
+
+**4. בדיקה**
+- שולחים מהוואטסאפ שלך "היי" למספר הניסיון. הבוט עונה עם רשימת הפקודות, וגם שולח כל סיכום שחיכה.
+- `סיכום דני 15.11` מחזיר את הסיכום של מתאמן הדמו.
+
+כל עוד התבניות (templates) לא אושרו, הבוט לא יכול לפתוח שיחה בעצמו. ההודעות מחכות עד שאת כותבת לו, ואז הן נשלחות כולן.
+
+### הקמת המספר הקבוע (אחרי שיש סים)
 
 1. פותחים [Meta Business](https://business.facebook.com) ומאמתים את העסק.
 2. ב-[developers.facebook.com](https://developers.facebook.com) יוצרים אפליקציה מסוג Business ומוסיפים לה את המוצר WhatsApp.
@@ -313,7 +349,7 @@ Meta גובה תשלום קטן על כל שיחה שהעסק פותח (תבני
 
 ## השלבים הבאים
 
-1. **מקור נתונים**: TrainingPeaks API (דורש אישור שותף) או Garmin Connect Developer Program, במקום קבצים.
+1. **מקור נתונים**: intervals.icu. המתאמנים מחברים אליו את גארמין ישירות, לא דרך סטרבה, ומוסיפים את המאמן. הבוט קורא את הנתונים עם מפתח ה-API של המאמן. סטרבה לא מתאים: לפי התנאים שלו אסור להציג נתונים של מתאמן למישהו אחר, ואסור להעביר אותם למודלי AI.
 2. **פסקת מאמן מ-Claude** בכל סיכום, ושאלות חופשיות בוואטסאפ, למשל "למה ה-TSS של דני קפץ?".
 3. **מילוי השאלון בשיחה** בוואטסאפ, שאלה אחרי שאלה.
 4. **ריבוי מאמנים**: מאמנים, מתאמנים וספים ב-Supabase במקום בקבצים.

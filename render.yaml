@@ -1,0 +1,35 @@
+# Render Blueprint for the coaches' WhatsApp agent (coach-agent/).
+# Render -> New -> Blueprint -> pick this repository and branch. Fill the secret values when asked.
+services:
+  - type: web
+    name: coach-agent
+    runtime: python
+    rootDir: coach-agent
+    plan: starter            # a persistent disk needs a paid instance; the free one sleeps and forgets
+    region: frankfurt        # closest to Israel
+    buildCommand: pip install -r requirements.txt
+    startCommand: python -m coach_agent serve
+    healthCheckPath: /health
+    disk:
+      name: coach-data
+      mountPath: /var/data
+      sizeGB: 1
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.7
+      - key: DATA_DIR
+        value: /var/data
+      - key: TZ
+        value: Asia/Jerusalem
+      - key: WHATSAPP_VERIFY_TOKEN
+        generateValue: true  # copy it into Meta's webhook settings
+      - key: WHATSAPP_TOKEN
+        sync: false
+      - key: WHATSAPP_PHONE_NUMBER_ID
+        sync: false
+      - key: WHATSAPP_APP_SECRET
+        sync: false
+      - key: COACH_WHATSAPP
+        sync: false
+      - key: COACH_NAME
+        sync: false

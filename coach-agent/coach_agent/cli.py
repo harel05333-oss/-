@@ -136,9 +136,20 @@ def cmd_dispatch(args) -> int:
 
 
 def cmd_serve(args) -> int:
+    import os
+
     from .server import serve
 
-    serve(args.config, args.state, args.port)
+    config, state = args.config, args.state
+    data_dir = args.data_dir or os.environ.get("DATA_DIR")
+    if data_dir:
+        from .bootstrap import ensure_data_dir
+
+        config, state = ensure_data_dir(data_dir)
+    if not (config and state):
+        raise SystemExit("serve needs --data-dir (or DATA_DIR), or both --config and --state")
+    port = args.port or int(os.environ.get("PORT", "8080"))
+    serve(str(config), str(state), port)
     return 0
 
 
@@ -188,9 +199,10 @@ def main(argv=None) -> int:
     d.set_defaults(func=cmd_dispatch)
 
     s = sub.add_parser("serve", help="שרת וואטסאפ (webhook + שליחה כל שעה)")
-    s.add_argument("--config", required=True)
-    s.add_argument("--state", required=True)
-    s.add_argument("--port", type=int, default=8080)
+    s.add_argument("--data-dir", help="תיקיית נתונים (נוצרת בהפעלה הראשונה). אפשר גם DATA_DIR")
+    s.add_argument("--config")
+    s.add_argument("--state")
+    s.add_argument("--port", type=int, help="ברירת מחדל: PORT או 8080")
     s.set_defaults(func=cmd_serve)
 
     args = p.parse_args(argv)

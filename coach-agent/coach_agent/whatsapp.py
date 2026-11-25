@@ -17,6 +17,7 @@ from __future__ import annotations
 
 import json
 import os
+import urllib.error
 import urllib.request
 
 API = "https://graph.facebook.com/v21.0"
@@ -69,8 +70,13 @@ class WhatsAppClient:
             data=json.dumps(payload).encode(),
             headers={"Authorization": f"Bearer {self.token}", "Content-Type": "application/json"},
         )
-        with urllib.request.urlopen(req, timeout=30) as r:
-            return json.loads(r.read())
+        try:
+            with urllib.request.urlopen(req, timeout=30) as r:
+                return json.loads(r.read())
+        except urllib.error.HTTPError as e:
+            # Meta explains what went wrong in the body (e.g. template not approved,
+            # recipient not in the test number's list). The token is never in it.
+            raise RuntimeError(f"WhatsApp API {e.code}: {e.read().decode(errors='replace')[:500]}") from None
 
     def send_text(self, to: str, text: str) -> None:
         for part in split_text(text):

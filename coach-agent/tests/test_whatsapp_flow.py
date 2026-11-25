@@ -202,3 +202,31 @@ def test_long_run_alert_on_upload_and_plain_text():
     assert any("גדלה ב-4" in a["text"] for a in alerts)
     text = render_alert(athlete, long_run, alerts)
     assert not any(ord(ch) > 0x2000 and not 0x2010 <= ord(ch) <= 0x2027 for ch in text)  # no emoji
+
+
+def test_phone_numbers_are_normalized():
+    from coach_agent.bootstrap import normalize_phone
+
+    assert normalize_phone("050-123-4567") == "972501234567"
+    assert normalize_phone("+972 50 123 4567") == "972501234567"
+
+
+def test_first_start_creates_the_data_folder(tmp_path, monkeypatch):
+    from coach_agent.bootstrap import ensure_data_dir
+
+    monkeypatch.setenv("COACH_WHATSAPP", "0501234567")
+    config, state = ensure_data_dir(tmp_path / "data")
+    cfg = json.loads(config.read_text(encoding="utf-8"))
+    assert cfg["coaches"][0]["whatsapp"] == "972501234567" and len(cfg["coaches"][0]["athletes"]) == 2
+    monkeypatch.setenv("COACH_WHATSAPP", "0509999999")
+    ensure_data_dir(tmp_path / "data")  # second start: nothing is overwritten
+    assert "972501234567" in config.read_text(encoding="utf-8")
+
+
+def test_summary_of_a_given_week(tmp_path):
+    config = load_config(ROOT / "examples" / "coaches.json")
+    client = WhatsAppClient(token="", phone_number_id="")
+    handle_inbound(config, Store(tmp_path / "s.json"), client, "972500000000", "סיכום מיכל 15.11",
+                   now=datetime(2026, 12, 10, 9))
+    body = client.sent[-1]["text"]["body"]
+    assert "מיכל לוי" in body and "שבוע 15.11–21.11" in body

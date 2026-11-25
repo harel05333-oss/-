@@ -84,7 +84,11 @@ def deliver(client: WhatsAppClient, coach: dict, cstate: dict, messages: list[st
             client.send_text(coach["whatsapp"], m)
     else:
         cstate["pending"].extend(messages)
-        client.send_template(coach["whatsapp"], *template)
+        try:
+            client.send_template(coach["whatsapp"], *template)
+        except Exception as e:
+            # e.g. the template is not approved yet: the texts wait until the coach writes
+            print(f"template not sent, {len(messages)} messages wait for the coach: {e}")
 
 
 def dispatch(config: dict, store: Store, client: WhatsAppClient, now: datetime | None = None) -> None:
@@ -137,6 +141,7 @@ HELP = (
     "אני הסוכן של המתאמנים שלך.\n"
     "- *סיכום*: הסיכום של השבוע האחרון לכל המתאמנים\n"
     "- *סיכום* ושם: רק למתאמן אחד, למשל: סיכום דני\n"
+    "- *סיכום* ותאריך: שבוע אחר, למשל: סיכום דני 15.11\n"
     "- *שאלון*: השאלון למתאמן חדש\n"
     "- קובץ אקסל של תכנון עונתי, עם שם המתאמן ותאריך תחילת העונה בכיתוב, למשל: תכנון דני 26.7.2026\n"
     "התראות על אימונים חריגים ישלחו אליך אוטומטית, והסיכום השבועי בסוף כל שבוע של מתאמן."
@@ -197,13 +202,24 @@ def handle_inbound(config: dict, store: Store, client: WhatsAppClient, sender: s
     if document:
         _plan_upload(coach, client, sender, t, document)
     elif t.startswith("סיכום"):
-        name = t[len("סיכום"):].strip()
+        import re
+
+        from .questionnaire import _date
+
+        rest = t[len("סיכום"):]
+        m = re.search(r"\d{1,2}[./]\d{1,2}(?:[./]\d{2,4})?", rest)
+        day = None
+        if m:
+            raw = m.group()
+            day = _date(raw if raw.count(".") + raw.count("/") == 2 else f"{raw}.{now.year}")
+            rest = rest.replace(raw, "")
+        name = rest.strip()
         summaries = []
         for entry in coach["athletes"]:
             athlete, acts, planned = _load(entry)
             if name and name not in athlete.name:
                 continue
-            week_start, _ = last_complete_week(now.date(), athlete.profile.week_start)
+            week_start = day or last_complete_week(now.date(), athlete.profile.week_start)[0]
             summaries.append(analyze_week(athlete, acts, week_start, planned))
         if not summaries:
             client.send_text(sender, f"לא מצאתי מתאמן בשם \"{name}\"")
