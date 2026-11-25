@@ -80,17 +80,61 @@ class RaceResult:
 
 @dataclass
 class PlannedWorkout:
+    """A workout the coach planned (TrainingPeaks calendar).
+
+    The target zones / paces / RPE are optional. Without them, the intent is
+    guessed from the title ("קלה" -> Z1-Z2, "טמפו" -> Z4-Z5a ...).
+    """
+
     date: date
     title: str
     distance_m: float | None = None
     duration_s: float | None = None
     sport: str = "run"
+    zone_min: str | None = None  # e.g. "Z1"
+    zone_max: str | None = None  # e.g. "Z2"
+    pace_fast_s: float | None = None  # fastest planned pace, s/km
+    pace_slow_s: float | None = None
+    rpe: float | None = None
+
+
+@dataclass
+class GoalRace:
+    name: str
+    date: date
+    distance_m: float
+    target_time_s: float | None = None
+    priority: str = "A"  # A / B / C
+
+
+@dataclass
+class Profile:
+    """What the coach told us about the athlete in the questionnaire."""
+
+    week_start: str = "sunday"  # any day: sunday, monday, ... saturday
+    zone_source: str = "pace"  # pace / hr / max (the harder of the two)
+    birth_year: int | None = None
+    years_running: float | None = None
+    goal_races: list[GoalRace] = field(default_factory=list)
+    weekly_km_min: float | None = None
+    weekly_km_max: float | None = None
+    max_quality_per_week: int | None = None
+    max_weekly_increase: float = 0.15  # 0.10 = 10%
+    injuries: list[str] = field(default_factory=list)  # body areas to watch, e.g. "אכילס", "שוק"
+    medical_notes: str = ""
+    max_hr: int | None = None
+    resting_hr: int | None = None
+    sleep_hours: float | None = None
+    life_load: str = ""  # work, stress, kids, shifts
+    other_sports: list[str] = field(default_factory=list)
+    coach_notes: str = ""  # what to pay attention to with this athlete
 
 
 @dataclass
 class Athlete:
     id: str
     name: str
+    profile: Profile = field(default_factory=Profile)
     races: list[RaceResult] = field(default_factory=list)
     # Manual overrides by the coach. They win over anything calculated.
     threshold_pace_s_per_km: float | None = None

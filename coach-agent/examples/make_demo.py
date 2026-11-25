@@ -87,6 +87,13 @@ def dani():
     return {
         "athlete": {
             "id": "dani", "name": "דני כהן",
+            "profile": {
+                "week_start": "sunday", "zone_source": "pace", "birth_year": 1988, "years_running": 6,
+                "goal_races": [{"name": "מרתון תל אביב", "date": "2027-02-27", "distance_km": 42.195,
+                                "target_time": "2:59:00", "priority": "A"}],
+                "weekly_km_min": 70, "weekly_km_max": 85, "max_quality_per_week": 2,
+                "coach_notes": "נוטה לרוץ את הקלות מהר מדי",
+            },
             "races": [
                 {"date": "2026-10-09", "distance_km": 10, "time": "41:40", "is_race": True},
                 {"date": "2026-09-18", "distance_km": 5, "time": "20:05", "avg_hr": 178, "is_race": True},
@@ -121,10 +128,23 @@ def michal():
     return {
         "athlete": {
             "id": "michal", "name": "מיכל לוי",
+            "profile": {
+                "week_start": "sunday", "zone_source": "pace", "birth_year": 1979, "years_running": 3,
+                "goal_races": [{"name": "חצי מרתון ירושלים", "date": "2027-03-19", "distance_km": 21.1,
+                                "target_time": "1:45:00", "priority": "A"}],
+                "weekly_km_min": 35, "weekly_km_max": 45, "max_quality_per_week": 2,
+                "max_weekly_increase": 0.10, "injuries": ["שוק", "אכילס"],
+                "life_load": "עבודה במשמרות",
+            },
             "races": [{"date": "2026-10-23", "distance_km": 5, "time": "22:30", "avg_hr": 186, "is_race": True}],
         },
         "activities": acts,
-        "planned": [{"date": (s + timedelta(5)).isoformat(), "title": "ריצת התאוששות 6 ק\"מ", "distance_km": 6}],
+        "planned": [
+            {"date": s.isoformat(), "title": "ריצה קלה 10 ק\"מ", "distance_km": 10, "zone_min": "Z1", "zone_max": "Z2"},
+            {"date": (s + timedelta(1)).isoformat(), "title": "אינטרוולים 6×1000", "zone_min": "Z5a", "zone_max": "Z5a",
+             "pace_fast": "4:40", "pace_slow": "4:45", "rpe": 7},
+            {"date": (s + timedelta(5)).isoformat(), "title": "ריצת התאוששות 6 ק\"מ", "distance_km": 6},
+        ],
     }
 
 

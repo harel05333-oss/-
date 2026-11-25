@@ -2,6 +2,25 @@
  "athlete": {
   "id": "dani",
   "name": "דני כהן",
+  "profile": {
+   "week_start": "sunday",
+   "zone_source": "pace",
+   "birth_year": 1988,
+   "years_running": 6,
+   "goal_races": [
+    {
+     "name": "מרתון תל אביב",
+     "date": "2027-02-27",
+     "distance_km": 42.195,
+     "target_time": "2:59:00",
+     "priority": "A"
+    }
+   ],
+   "weekly_km_min": 70,
+   "weekly_km_max": 85,
+   "max_quality_per_week": 2,
+   "coach_notes": "נוטה לרוץ את הקלות מהר מדי"
+  },
   "races": [
    {
     "date": "2026-10-09",

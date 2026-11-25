@@ -2,6 +2,30 @@
  "athlete": {
   "id": "michal",
   "name": "מיכל לוי",
+  "profile": {
+   "week_start": "sunday",
+   "zone_source": "pace",
+   "birth_year": 1979,
+   "years_running": 3,
+   "goal_races": [
+    {
+     "name": "חצי מרתון ירושלים",
+     "date": "2027-03-19",
+     "distance_km": 21.1,
+     "target_time": "1:45:00",
+     "priority": "A"
+    }
+   ],
+   "weekly_km_min": 35,
+   "weekly_km_max": 45,
+   "max_quality_per_week": 2,
+   "max_weekly_increase": 0.1,
+   "injuries": [
+    "שוק",
+    "אכילס"
+   ],
+   "life_load": "עבודה במשמרות"
+  },
   "races": [
    {
     "date": "2026-10-23",
@@ -1946,6 +1970,22 @@
   }
  ],
  "planned": [
+  {
+   "date": "2026-11-15",
+   "title": "ריצה קלה 10 ק\"מ",
+   "distance_km": 10,
+   "zone_min": "Z1",
+   "zone_max": "Z2"
+  },
+  {
+   "date": "2026-11-16",
+   "title": "אינטרוולים 6×1000",
+   "zone_min": "Z5a",
+   "zone_max": "Z5a",
+   "pace_fast": "4:40",
+   "pace_slow": "4:45",
+   "rpe": 7
+  },
   {
    "date": "2026-11-20",
    "title": "ריצת התאוששות 6 ק\"מ",

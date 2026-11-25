@@ -15,7 +15,6 @@ from .workouts import RepeatSet, Segment, WorkoutAnalysis, analyze_run
 from .zones import EASY, HARD, MODERATE, ZONES
 
 # ---- flag thresholds (one place to tune) -----------------------------------
-VOLUME_JUMP = 0.15  # run km more than 15% above the 4-week average
 RAMP_HIGH = 7.0  # CTL points per week
 TSB_VERY_TIRED = -30.0
 TSB_FRESH = 5.0
@@ -38,13 +37,39 @@ FATIGUE_WORDS = [  # tiredness -> orange
     "exhausted", "tired", "heavy legs", "flat",
 ]
 
-WEEK_START = {"monday": 0, "sunday": 6}
+WEEKDAYS = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
+
+# Taper length before a goal race, by distance.
+TAPER_DAYS = [(30000, 21), (15000, 17), (0, 12)]
+TAPER_MAX_VOLUME = 0.90  # in taper, run km should be below 90% of the 4-week average
 
 
 def week_bounds(day: date, week_start: str = "sunday") -> tuple[date, date]:
-    first = WEEK_START[week_start]
+    """The 7 days containing `day`, for a week that starts on any weekday."""
+    first = WEEKDAYS.index(week_start)
     start = day - timedelta(days=(day.weekday() - first) % 7)
     return start, start + timedelta(days=6)
+
+
+def last_complete_week(today: date, week_start: str = "sunday") -> tuple[date, date]:
+    """The latest week that has fully ended before `today`."""
+    start, _ = week_bounds(today, week_start)
+    return start - timedelta(days=7), start - timedelta(days=1)
+
+
+def _goal_context(athlete: Athlete, start: date, end: date) -> dict | None:
+    upcoming = sorted((g for g in athlete.profile.goal_races if g.date >= start), key=lambda g: g.date)
+    if not upcoming:
+        return None
+    g = upcoming[0]
+    days = (g.date - end).days
+    taper = next(t for d, t in TAPER_DAYS if g.distance_m >= d)
+    phase = "race_week" if g.date <= end else "taper" if days <= taper else "training"
+    return {
+        "name": g.name, "date": g.date.isoformat(), "distance_m": g.distance_m,
+        "target_time_s": g.target_time_s, "priority": g.priority,
+        "days_after_week": days, "weeks_to_race": max(days, 0) // 7, "phase": phase,
+    }
 
 
 def _in(a: Activity, start: date, end: date) -> bool:
@@ -131,10 +156,12 @@ def analyze_week(
     activities: list[Activity],
     week_start: date,
     planned: list[PlannedWorkout] | None = None,
-    prefer: str = "pace",
-    week_start_day: str = "sunday",
+    prefer: str | None = None,
+    week_start_day: str | None = None,
 ) -> dict:
-    start, end = week_bounds(week_start, week_start_day)
+    """`prefer` and `week_start_day` default to what the coach set in the athlete's questionnaire."""
+    prefer = prefer or athlete.profile.zone_source
+    start, end = week_bounds(week_start, week_start_day or athlete.profile.week_start)
     th = resolve_thresholds(athlete, end)
 
     week = sorted([a for a in activities if _in(a, start, end)], key=lambda a: a.start)
@@ -277,11 +304,13 @@ def analyze_week(
         "workouts": workouts,
         "missed": missed,
     }
-    summary["flags"], summary["highlights"] = _flags(summary, th, end)
+    summary["goal"] = _goal_context(athlete, start, end)
+    summary["flags"], summary["highlights"] = _flags(summary, th, end, athlete)
     return summary
 
 
-def _flags(s: dict, th: Thresholds, end: date) -> tuple[list[dict], list[str]]:
+def _flags(s: dict, th: Thresholds, end: date, athlete: Athlete) -> tuple[list[dict], list[str]]:
+    prof = athlete.profile
     flags: list[dict] = []
     good: list[str] = []
 
@@ -290,9 +319,21 @@ def _flags(s: dict, th: Thresholds, end: date) -> tuple[list[dict], list[str]]:
 
     v, it, ld = s["volume"], s["intensity"], s["load"]
 
-    if v["avg4_run_km"] and v["run_km"] > v["avg4_run_km"] * (1 + VOLUME_JUMP):
+    goal = s.get("goal")
+    in_taper = goal and goal["phase"] in ("taper", "race_week")
+    if goal and goal["phase"] == "taper" and v["avg4_run_km"] and v["run_km"] > v["avg4_run_km"] * TAPER_MAX_VOLUME:
+        flag("warn", f"טייפר לפני {goal['name']}, אבל הנפח לא ירד ({v['run_km']:g} מול ממוצע {v['avg4_run_km']:g})")
+    if not in_taper and v["avg4_run_km"] and v["run_km"] > v["avg4_run_km"] * (1 + prof.max_weekly_increase):
         up = v["run_km"] / v["avg4_run_km"] - 1
         flag("warn", f"קפיצה בנפח: {v['run_km']:g} ק\"מ, {up:.0%} מעל ממוצע 4 השבועות ({v['avg4_run_km']:g})")
+
+    if prof.weekly_km_max and v["run_km"] > prof.weekly_km_max:
+        flag("warn", f"מעל הנפח המתוכנן: {v['run_km']:g} ק\"מ (תכנון עד {prof.weekly_km_max:g})")
+    elif prof.weekly_km_min and v["run_km"] < prof.weekly_km_min and not in_taper:
+        flag("info", f"מתחת לנפח המתוכנן: {v['run_km']:g} ק\"מ (תכנון {prof.weekly_km_min:g}–{prof.weekly_km_max or prof.weekly_km_min:g})")
+    n_quality = sum(1 for w in s["workouts"] if w.get("quality"))
+    if prof.max_quality_per_week is not None and n_quality > prof.max_quality_per_week:
+        flag("warn", f"{n_quality} אימוני איכות (מתוכנן עד {prof.max_quality_per_week})")
 
     enough_history = ld["history_days"] >= 28
     if enough_history and ld["ramp"] > RAMP_HIGH:
@@ -321,7 +362,10 @@ def _flags(s: dict, th: Thresholds, end: date) -> tuple[list[dict], list[str]]:
     for w in s["workouts"]:
         day = _day_he(w["date"])
         comment = w.get("comment") or ""
-        if _found(PAIN_WORDS, comment):
+        areas = [x for x in prof.injuries if x and x in comment]
+        if areas:
+            flag("alert", f"{day}: הערה על {', '.join(areas)} (אזור פציעה מוכר): 💬 \"{comment}\"")
+        elif _found(PAIN_WORDS, comment):
             flag("alert", f"{day}: 💬 \"{comment}\"")
         elif _found(FATIGUE_WORDS, comment):
             flag("warn", f"{day}: 💬 \"{comment}\"")

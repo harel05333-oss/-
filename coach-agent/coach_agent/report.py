@@ -22,6 +22,13 @@ def hmm(s: float) -> str:
     return f"{h}:{m:02d}" if h else f"{m} דק׳"
 
 
+def hmm_s(s: float) -> str:
+    """3:30:00 / 41:40"""
+    m, sec = divmod(round(s), 60)
+    h, m = divmod(m, 60)
+    return f"{h}:{m:02d}:{sec:02d}" if h else f"{m}:{sec:02d}"
+
+
 def km(m: float) -> str:
     v = m / 1000
     return f"{v:.1f}".rstrip("0").rstrip(".") + " ק\"מ"
@@ -81,6 +88,13 @@ def render_athlete(s: dict) -> str:
     out: list[str] = []
 
     out.append(f"*🏃 {a['name']}* | שבוע {start.day}.{start.month}–{end.day}.{end.month}")
+    g = s.get("goal")
+    if g:
+        gd = date.fromisoformat(g["date"])
+        when = {"race_week": "השבוע!", "taper": f"טייפר, עוד {g['days_after_week']} ימים"}.get(
+            g["phase"], f"עוד {g['weeks_to_race']} שבועות")
+        target = f", יעד {hmm_s(g['target_time_s'])}" if g.get("target_time_s") else ""
+        out.append(f"🏁 {g['name']} ({g['priority']}) {gd.day}.{gd.month}{target} | {when}")
 
     # headline
     alerts = [f for f in s["flags"] if f["level"] in ("alert", "warn")]
@@ -179,15 +193,21 @@ def render_overview(summaries: list[dict]) -> str:
     """Short opening message: who needs attention this week."""
     if not summaries:
         return "אין מתאמנים לסיכום השבוע."
-    start = date.fromisoformat(summaries[0]["week"]["start"])
-    end = date.fromisoformat(summaries[0]["week"]["end"])
-    out = [f"*סיכום שבועי {start.day}.{start.month}–{end.day}.{end.month}* | {len(summaries)} מתאמנים", ""]
+    def rng(s):
+        a, b = date.fromisoformat(s["week"]["start"]), date.fromisoformat(s["week"]["end"])
+        return f"{a.day}.{a.month}–{b.day}.{b.month}"
+
+    weeks = {rng(s) for s in summaries}
+    title = f"*סיכום שבועי {weeks.pop()}*" if len(weeks) == 1 else "*סיכום שבועי*"
+    out = [f"{title} | {len(summaries)} מתאמנים", ""]
+    same_week = len({rng(s) for s in summaries}) == 1
     for s in sorted(summaries, key=lambda s: min([{"alert": 0, "warn": 1, "info": 2}[f["level"]] for f in s["flags"]] or [3])):
         levels = [f["level"] for f in s["flags"]]
         icon = ICON["alert"] if "alert" in levels else ICON["warn"] if "warn" in levels else "🟢"
         v = s["volume"]
-        out.append(f"{icon} *{s['athlete']['name']}*: {v['run_km']:g} ק\"מ, {s['intensity']['km_by_class']['hard']:g} עצים, "
-                   f"TSS {s['load']['week_tss']}")
+        when = "" if same_week else f" ({rng(s)})"
+        out.append(f"{icon} *{s['athlete']['name']}*{when}: {v['run_km']:g} ק\"מ, "
+                   f"{s['intensity']['km_by_class']['hard']:g} עצים, TSS {s['load']['week_tss']}")
     out.append("")
     out.append("_פירוט לכל מתאמן בהודעות הבאות_")
     return "\n".join(out)

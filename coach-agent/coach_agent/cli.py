@@ -1,20 +1,25 @@
 """Command line.
 
   python -m coach_agent zones --race 10 41:40 [--hr 172 --test]
-  python -m coach_agent report examples/athletes/*.json --week 2026-11-16
-  python -m coach_agent report athlete.json --fit-dir ~/Downloads/fits --week 2026-11-16
+  python -m coach_agent report examples/athletes/*.json [--week 2026-11-16]
+  python -m coach_agent check examples/athletes/michal.json --from 2026-11-15
+  python -m coach_agent questionnaire                       # print the questions
+  python -m coach_agent intake athletes/new.json            # fill / edit an athlete's questionnaire
+  python -m coach_agent dispatch --config coaches.json --state state.json [--now 2026-11-22T09:00]
+  python -m coach_agent serve --config coaches.json --state state.json --port 8080
 """
 from __future__ import annotations
 
 import argparse
 import json
 import sys
-from datetime import date
+from datetime import date, datetime
+from pathlib import Path
 
 from .io_json import load_athlete_file, parse_time
 from .report import pace, render_athlete, render_overview
 from .threshold import hour_distance_m, lthr_from_5k, threshold_pace_from_race
-from .week import analyze_week
+from .week import WEEKDAYS, analyze_week, last_complete_week
 from .zones import HR_ZONES, PACE_ZONES
 
 
@@ -47,6 +52,7 @@ def cmd_zones(args) -> int:
 
 
 def cmd_report(args) -> int:
+    today = date.fromisoformat(args.today) if args.today else date.today()
     summaries = []
     for path in args.files:
         athlete, activities, planned = load_athlete_file(path)
@@ -54,16 +60,71 @@ def cmd_report(args) -> int:
             from .io_fit import read_fit_folder
 
             activities += read_fit_folder(args.fit_dir, athlete.timezone)
-        summaries.append(analyze_week(
-            athlete, activities, date.fromisoformat(args.week), planned,
-            prefer=args.prefer, week_start_day=args.week_start,
-        ))
+        week_start_day = args.week_start or athlete.profile.week_start
+        day = date.fromisoformat(args.week) if args.week else last_complete_week(today, week_start_day)[0]
+        summaries.append(analyze_week(athlete, activities, day, planned,
+                                      prefer=args.prefer, week_start_day=week_start_day))
     if args.json:
         json.dump(summaries, sys.stdout, ensure_ascii=False, indent=2)
         print()
         return 0
     messages = ([render_overview(summaries)] if len(summaries) > 1 else []) + [render_athlete(s) for s in summaries]
     print("\n\n──────────\n\n".join(messages))
+    return 0
+
+
+def cmd_check(args) -> int:
+    from .alerts import check_workout, planned_for, render_alert
+
+    athlete, activities, planned = load_athlete_file(args.file)
+    since = date.fromisoformat(args.since) if args.since else date.min
+    found_any = False
+    for a in sorted(activities, key=lambda a: a.start):
+        if a.day < since:
+            continue
+        p = planned_for(a, planned)
+        alerts = check_workout(athlete, a, p, activities)
+        if alerts:
+            found_any = True
+            print(render_alert(athlete, a, alerts, p) + "\n")
+    if not found_any:
+        print("אין אימונים חריגים")
+    return 0
+
+
+def cmd_questionnaire(args) -> int:
+    from .questionnaire import render_questionnaire
+
+    print(render_questionnaire())
+    return 0
+
+
+def cmd_intake(args) -> int:
+    from .questionnaire import run_interactive
+
+    path = Path(args.file)
+    data = json.loads(path.read_text(encoding="utf-8")) if path.exists() else {}
+    data["athlete"] = run_interactive(data.get("athlete"))
+    data.setdefault("activities", [])
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(data, ensure_ascii=False, indent=1), encoding="utf-8")
+    print(f"\nנשמר: {path}")
+    return 0
+
+
+def cmd_dispatch(args) -> int:
+    from .dispatch import Store, dispatch, load_config
+    from .whatsapp import WhatsAppClient
+
+    now = datetime.fromisoformat(args.now) if args.now else None
+    dispatch(load_config(args.config), Store(args.state), WhatsAppClient(), now)
+    return 0
+
+
+def cmd_serve(args) -> int:
+    from .server import serve
+
+    serve(args.config, args.state, args.port)
     return 0
 
 
@@ -79,12 +140,37 @@ def main(argv=None) -> int:
 
     r = sub.add_parser("report", help="סיכום שבועי")
     r.add_argument("files", nargs="+", help="קובץ JSON לכל מתאמן")
-    r.add_argument("--week", required=True, help="תאריך כלשהו בשבוע (YYYY-MM-DD)")
+    r.add_argument("--week", help="תאריך כלשהו בשבוע (YYYY-MM-DD). ברירת מחדל: השבוע האחרון שהסתיים")
+    r.add_argument("--today", help="להרצה כאילו היום הוא תאריך אחר")
     r.add_argument("--fit-dir", help="תיקייה עם קבצי FIT (למתאמן אחד)")
-    r.add_argument("--prefer", choices=["pace", "hr", "max"], default="pace", help="מה קובע את הזון")
-    r.add_argument("--week-start", choices=["sunday", "monday"], default="sunday")
+    r.add_argument("--prefer", choices=["pace", "hr", "max"], help="מה קובע את הזון (ברירת מחדל: מהשאלון)")
+    r.add_argument("--week-start", choices=WEEKDAYS, help="יום תחילת שבוע (ברירת מחדל: מהשאלון)")
     r.add_argument("--json", action="store_true", help="פלט JSON במקום טקסט")
     r.set_defaults(func=cmd_report)
+
+    c = sub.add_parser("check", help="התראות על אימונים חריגים")
+    c.add_argument("file")
+    c.add_argument("--from", dest="since", help="רק אימונים מהתאריך הזה")
+    c.set_defaults(func=cmd_check)
+
+    q = sub.add_parser("questionnaire", help="הדפסת שאלון המתאמן")
+    q.set_defaults(func=cmd_questionnaire)
+
+    i = sub.add_parser("intake", help="מילוי או עדכון שאלון למתאמן")
+    i.add_argument("file", help="קובץ ה-JSON של המתאמן (נוצר אם אינו קיים)")
+    i.set_defaults(func=cmd_intake)
+
+    d = sub.add_parser("dispatch", help="סבב שליחה אחד לוואטסאפ")
+    d.add_argument("--config", required=True)
+    d.add_argument("--state", required=True)
+    d.add_argument("--now", help="להרצה כאילו עכשיו הוא זמן אחר (YYYY-MM-DDTHH:MM)")
+    d.set_defaults(func=cmd_dispatch)
+
+    s = sub.add_parser("serve", help="שרת וואטסאפ (webhook + שליחה כל שעה)")
+    s.add_argument("--config", required=True)
+    s.add_argument("--state", required=True)
+    s.add_argument("--port", type=int, default=8080)
+    s.set_defaults(func=cmd_serve)
 
     args = p.parse_args(argv)
     return args.func(args)

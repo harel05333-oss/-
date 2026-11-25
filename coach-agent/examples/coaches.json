@@ -1,0 +1,14 @@
+{
+ "coaches": [
+  {
+   "id": "demo-coach",
+   "name": "מאמן לדוגמה",
+   "whatsapp": "972500000000",
+   "send_hour": 8,
+   "athletes": [
+    {"file": "athletes/dani.json"},
+    {"file": "athletes/michal.json"}
+   ]
+  }
+ ]
+}

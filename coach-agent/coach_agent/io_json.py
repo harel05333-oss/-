@@ -9,7 +9,7 @@ import json
 from datetime import date, datetime
 from pathlib import Path
 
-from .models import Activity, Athlete, Lap, PlannedWorkout, RaceResult, Record
+from .models import Activity, Athlete, GoalRace, Lap, PlannedWorkout, Profile, RaceResult, Record
 
 
 def parse_time(v) -> float | None:
@@ -28,10 +28,26 @@ def _km(v) -> float:
     return float(v or 0) * 1000.0
 
 
+def profile_from_dict(p: dict) -> Profile:
+    goals = [
+        GoalRace(
+            name=g.get("name", ""),
+            date=date.fromisoformat(g["date"]),
+            distance_m=_km(g["distance_km"]),
+            target_time_s=parse_time(g.get("target_time")),
+            priority=g.get("priority", "A"),
+        )
+        for g in p.get("goal_races", [])
+    ]
+    simple = {k: v for k, v in p.items() if k != "goal_races" and k in Profile.__dataclass_fields__}
+    return Profile(goal_races=goals, **simple)
+
+
 def athlete_from_dict(d: dict) -> Athlete:
     return Athlete(
         id=str(d["id"]),
         name=d["name"],
+        profile=profile_from_dict(d.get("profile", {})),
         races=[
             RaceResult(
                 date=date.fromisoformat(r["date"]),
@@ -89,6 +105,11 @@ def planned_from_dict(d: dict) -> PlannedWorkout:
         distance_m=_km(d["distance_km"]) if d.get("distance_km") else None,
         duration_s=parse_time(d.get("duration")),
         sport=d.get("sport", "run"),
+        zone_min=d.get("zone_min"),
+        zone_max=d.get("zone_max"),
+        pace_fast_s=parse_time(d.get("pace_fast")),
+        pace_slow_s=parse_time(d.get("pace_slow")),
+        rpe=d.get("rpe"),
     )
 
 
