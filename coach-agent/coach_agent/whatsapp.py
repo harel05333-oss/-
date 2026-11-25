@@ -79,6 +79,16 @@ class WhatsAppClient:
                 "text": {"body": part, "preview_url": False},
             })
 
+    def download_media(self, media_id: str) -> bytes:
+        """A file the coach sent (e.g. the season plan Excel)."""
+        if self.dry_run:
+            raise RuntimeError("no WhatsApp token: cannot download media in dry run")
+        auth = {"Authorization": f"Bearer {self.token}"}
+        with urllib.request.urlopen(urllib.request.Request(f"{API}/{media_id}", headers=auth), timeout=30) as r:
+            url = json.loads(r.read())["url"]
+        with urllib.request.urlopen(urllib.request.Request(url, headers=auth), timeout=60) as r:
+            return r.read()
+
     def send_template(self, to: str, name: str, params: list[str]) -> None:
         self._post({
             "messaging_product": "whatsapp", "to": to, "type": "template",
@@ -106,7 +116,14 @@ def parse_webhook(body: dict) -> list[dict]:
                 elif m.get("type") == "interactive":
                     i = m["interactive"]
                     text = (i.get("button_reply") or i.get("list_reply") or {}).get("title", "")
+                elif m.get("type") == "document":
+                    text = m["document"].get("caption", "")
                 else:
                     text = ""
-                out.append({"from": m.get("from"), "text": text, "id": m.get("id")})
+                msg = {"from": m.get("from"), "text": text, "id": m.get("id")}
+                if m.get("type") == "document":
+                    d = m["document"]
+                    msg["document"] = {"id": d.get("id"), "filename": d.get("filename", ""),
+                                       "mime_type": d.get("mime_type", "")}
+                out.append(msg)
     return out

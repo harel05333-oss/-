@@ -363,6 +363,10 @@ def analyze_week(
     g = summary["goal"]
     summary["_form"] = week_flags(chart, start, end, g["phase"] if g else None, recovery,
                                   g["days_after_week"] if g else None, history_days)
+    if athlete.season_plan:
+        from .season import compare_week
+
+        summary["plan"] = compare_week(athlete.season_plan, summary)
     summary["flags"], summary["highlights"] = _flags(summary, th, end, athlete)
     return summary
 
@@ -425,6 +429,9 @@ def _flags(s: dict, th: Thresholds, end: date, athlete: Athlete) -> tuple[list[d
     if prof.max_quality_per_week is not None and n_quality > prof.max_quality_per_week:
         flag("warn", f"{n_quality} אימוני איכות (מתוכנן עד {prof.max_quality_per_week})")
 
+    if s.get("plan"):
+        for level, text in s["plan"].pop("flags"):
+            flag(level, "מול התכנון: " + text)
     form_flags, form_good = s.pop("_form")
     for level, text in form_flags:
         flag(level, text)
@@ -451,11 +458,11 @@ def _flags(s: dict, th: Thresholds, end: date, athlete: Athlete) -> tuple[list[d
         comment = w.get("comment") or ""
         areas = [x for x in prof.injuries if x and x in comment]
         if areas:
-            flag("alert", f"{day}: הערה על {', '.join(areas)} (אזור פציעה מוכר): 💬 \"{comment}\"")
+            flag("alert", f"{day}: הערה על {', '.join(areas)} (אזור פציעה מוכר): \"{comment}\"")
         elif _found(PAIN_WORDS, comment):
-            flag("alert", f"{day}: 💬 \"{comment}\"")
+            flag("alert", f"{day}: הערה: \"{comment}\"")
         elif _found(FATIGUE_WORDS, comment):
-            flag("warn", f"{day}: 💬 \"{comment}\"")
+            flag("warn", f"{day}: הערה: \"{comment}\"")
         if w.get("type") in ("ריצה קלה", "ריצת התאוששות", "ריצה ארוכה") and (w.get("rpe") or 0) >= EASY_RUN_RPE_HIGH:
             flag("warn", f"{day}: {w['type']} שהרגישה קשה (RPE {w['rpe']:g}), סימן לעייפות")
         if w.get("decoupling") is not None and w["decoupling"] > DECOUPLING_HIGH:

@@ -65,7 +65,7 @@ def make_handler(config_path: str, state_path: str, client: WhatsAppClient):
             with LOCK:
                 config, store = load_config(config_path), Store(state_path)
                 for m in messages:
-                    handle_inbound(config, store, client, m["from"], m["text"])
+                    handle_inbound(config, store, client, m["from"], m["text"], document=m.get("document"))
 
         def log_message(self, fmt, *args):  # keep phone numbers out of the logs
             pass

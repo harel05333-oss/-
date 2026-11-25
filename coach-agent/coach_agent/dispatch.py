@@ -134,16 +134,53 @@ def dispatch(config: dict, store: Store, client: WhatsAppClient, now: datetime |
 
 
 HELP = (
-    "אני הסוכן של המתאמנים שלך 🏃\n"
-    "• *סיכום*: הסיכום של השבוע האחרון לכל המתאמנים\n"
-    "• *סיכום* ושם: רק למתאמן אחד, למשל: סיכום דני\n"
-    "• *שאלון*: השאלון למתאמן חדש\n"
+    "אני הסוכן של המתאמנים שלך.\n"
+    "- *סיכום*: הסיכום של השבוע האחרון לכל המתאמנים\n"
+    "- *סיכום* ושם: רק למתאמן אחד, למשל: סיכום דני\n"
+    "- *שאלון*: השאלון למתאמן חדש\n"
+    "- קובץ אקסל של תכנון עונתי, עם שם המתאמן ותאריך תחילת העונה בכיתוב, למשל: תכנון דני 26.7.2026\n"
     "התראות על אימונים חריגים ישלחו אליך אוטומטית, והסיכום השבועי בסוף כל שבוע של מתאמן."
 )
 
 
+def _plan_upload(coach: dict, client: WhatsAppClient, sender: str, caption: str, document: dict) -> None:
+    """The coach sent the season plan Excel. Caption: 'תכנון <name> [start date] [goal date]'."""
+    import re
+    import tempfile
+
+    from .questionnaire import _date
+    from .season import describe_plan, import_plan
+
+    if not document.get("filename", "").lower().endswith((".xlsx", ".xlsm")):
+        client.send_text(sender, "אפשר לשלוח תכנון עונתי רק כקובץ אקסל (xlsx)")
+        return
+    matches = []
+    for entry in coach["athletes"]:
+        athlete, _, _ = load_athlete_file(entry["file"])
+        if athlete.name in caption or athlete.name.split()[0] in caption.split():
+            matches.append((entry, athlete))
+    if len(matches) != 1:
+        names = ", ".join(load_athlete_file(e["file"])[0].name for e in coach["athletes"])
+        client.send_text(sender, "כתבו בכיתוב של הקובץ למי התכנון ומתי העונה מתחילה, למשל: תכנון דני 26.7.2026\n"
+                                 f"המתאמנים שלך: {names}")
+        return
+    entry, athlete = matches[0]
+    dates = [_date(d) for d in re.findall(r"\d{1,2}[./]\d{1,2}[./]\d{2,4}", caption)]
+    start = dates[0] if dates else None
+    goal = dates[1] if len(dates) > 1 else None
+    try:
+        with tempfile.NamedTemporaryFile(suffix=".xlsx") as f:
+            f.write(client.download_media(document["id"]))
+            f.flush()
+            plan, warnings = import_plan(entry["file"], f.name, start, goal)
+    except Exception as e:  # tell the coach instead of failing silently
+        client.send_text(sender, f"לא הצלחתי לטעון את התכנון: {e}")
+        return
+    client.send_text(sender, describe_plan(athlete.name, plan, warnings))
+
+
 def handle_inbound(config: dict, store: Store, client: WhatsAppClient, sender: str, text: str,
-                   now: datetime | None = None) -> None:
+                   now: datetime | None = None, document: dict | None = None) -> None:
     """A message from a coach: open the window, send what is waiting, answer simple commands."""
     now = now or datetime.now(TZ).replace(tzinfo=None)
     coach = next((c for c in config["coaches"] if c["whatsapp"] == sender), None)
@@ -157,7 +194,9 @@ def handle_inbound(config: dict, store: Store, client: WhatsAppClient, sender: s
         client.send_text(sender, m)
 
     t = (text or "").strip()
-    if t.startswith("סיכום"):
+    if document:
+        _plan_upload(coach, client, sender, t, document)
+    elif t.startswith("סיכום"):
         name = t[len("סיכום"):].strip()
         summaries = []
         for entry in coach["athletes"]:

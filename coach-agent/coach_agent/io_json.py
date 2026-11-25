@@ -40,6 +40,8 @@ def profile_from_dict(p: dict) -> Profile:
         for g in p.get("goal_races", [])
     ]
     simple = {k: v for k, v in p.items() if k != "goal_races" and k in Profile.__dataclass_fields__}
+    if simple.get("season_start"):
+        simple["season_start"] = date.fromisoformat(simple["season_start"])
     return Profile(goal_races=goals, **simple)
 
 
@@ -62,7 +64,16 @@ def athlete_from_dict(d: dict) -> Athlete:
         lthr=d.get("lthr"),
         tss_history={date.fromisoformat(k): float(v) for k, v in d.get("tss_history", {}).items()},
         timezone=d.get("timezone", "Asia/Jerusalem"),
+        season_plan=_plan(d.get("season_plan")),
     )
+
+
+def _plan(d):
+    if not d:
+        return None
+    from .season import plan_from_dict
+
+    return plan_from_dict(d)
 
 
 def activity_from_dict(d: dict) -> Activity:

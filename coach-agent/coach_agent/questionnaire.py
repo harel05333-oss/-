@@ -36,6 +36,7 @@ QUESTIONS: list[Question] = [
     Question("birth_year", "שנת לידה", "int", S1),
     Question("years_running", "כמה שנים רץ/ה?", "number", S1),
 
+    Question("season_start", "תאריך תחילת העונה של המתאמן (שבוע 1 בתכנון)", "date", S2, hint="למשל 26.7.2026"),
     Question("goal_name", "תחרות המטרה הקרובה (שם)", section=S2, hint="למשל: מרתון תל אביב"),
     Question("goal_date", "תאריך תחרות המטרה", "date", S2, hint="למשל 27.2.2027"),
     Question("goal_distance", "מרחק תחרות המטרה בק\"מ", "number", S2, hint="5 / 10 / 21.1 / 42.2"),
@@ -160,7 +161,7 @@ def answers_to_athlete(answers: dict, athlete_id: str | None = None) -> dict:
         athlete["lthr"] = a("lthr")
 
     profile = {"week_start": a("week_start") or "sunday", "zone_source": a("zone_source") or "pace"}
-    for key in ("birth_year", "years_running", "max_hr", "resting_hr", "sleep_hours"):
+    for key in ("birth_year", "years_running", "max_hr", "resting_hr", "sleep_hours", "season_start"):
         if a(key) is not None:
             profile[key] = a(key)
     if a("goal_date") and a("goal_distance"):
@@ -203,7 +204,7 @@ def athlete_to_answers(athlete: dict) -> dict:
         g = p["goal_races"][0]
         ans.update(goal_name=g.get("name"), goal_date=g["date"], goal_distance=g["distance_km"],
                    goal_time=g.get("target_time"), goal_priority=g.get("priority"))
-    for key in ("birth_year", "years_running", "max_hr", "resting_hr", "sleep_hours", "week_start",
+    for key in ("birth_year", "years_running", "max_hr", "resting_hr", "sleep_hours", "season_start", "week_start",
                 "zone_source", "injuries", "other_sports", "life_load", "coach_notes"):
         ans[key] = p.get(key)
     ans["medical"] = p.get("medical_notes")
@@ -237,7 +238,7 @@ def run_interactive(existing: dict | None = None, ask=input, say=print) -> dict:
             try:
                 value = parse_answer(q, raw)
             except ValueError as e:
-                say(f"  ⚠️ {e}")
+                say(f"  שגיאה: {e}")
                 continue
             if value is None:
                 answers.pop(q.id, None)

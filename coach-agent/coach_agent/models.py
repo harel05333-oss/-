@@ -112,6 +112,7 @@ class Profile:
     """What the coach told us about the athlete in the questionnaire."""
 
     week_start: str = "sunday"  # any day: sunday, monday, ... saturday
+    season_start: date | None = None  # week 1 of the athlete's season plan
     zone_source: str = "pace"  # pace / hr / max (the harder of the two)
     birth_year: int | None = None
     years_running: float | None = None
@@ -149,3 +150,4 @@ class Athlete:
     # Daily TSS before the data we have (e.g. from TrainingPeaks) so fitness starts right.
     tss_history: dict[date, float] = field(default_factory=dict)
     timezone: str = "Asia/Jerusalem"
+    season_plan: object | None = None  # season.SeasonPlan, from the coach's Excel

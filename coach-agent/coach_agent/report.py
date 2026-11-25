@@ -1,11 +1,11 @@
-"""WhatsApp text for the coach, in Hebrew. *bold* and _italic_ are WhatsApp formatting."""
+"""WhatsApp text for the coach, in Hebrew. Plain text, no icons; *bold* and _italic_ are WhatsApp formatting."""
 from __future__ import annotations
 
 from datetime import date
 
 from .week import _day_he
 
-ICON = {"alert": "🔴", "warn": "🟠", "info": "🔵"}
+LEVEL_HE = {"alert": "חשוב", "warn": "לתשומת לב", "info": "לידיעה"}
 SPORT_HE = {"bike": "אופניים", "swim": "שחייה", "strength": "כוח", "other": "אחר", "run": "ריצה"}
 
 
@@ -47,7 +47,7 @@ def _hr(p: dict) -> str:
     if not p.get("avg_hr"):
         return ""
     z = p.get("hr_zone")
-    return f" | ♥{p['avg_hr']}" + (f" ({z})" if z and z != p.get("zone", "").split(" ")[0] else "")
+    return f" | דופק {p['avg_hr']}" + (f" ({z})" if z and z != p.get("zone", "").split(" ")[0] else "")
 
 
 ROLE_HE = {"warmup": "חימום", "cooldown": "שחרור", "recovery": "קל", "main": ""}
@@ -66,7 +66,7 @@ def _part_line(p: dict) -> str:
         if paces:
             line += f" | {paces}"
         if p.get("avg_hr"):
-            line += f" | ♥{p['avg_hr']}"
+            line += f" | דופק {p['avg_hr']}"
         if rec:
             line += f"\n     התאוששות {rec} בין החזרות"
         return line
@@ -87,23 +87,37 @@ def render_athlete(s: dict) -> str:
     start, end = date.fromisoformat(wk["start"]), date.fromisoformat(wk["end"])
     out: list[str] = []
 
-    out.append(f"*🏃 {a['name']}* | שבוע {start.day}.{start.month}–{end.day}.{end.month}")
+    out.append(f"*{a['name']}* | שבוע {start.day}.{start.month}–{end.day}.{end.month}")
     g = s.get("goal")
     if g:
         gd = date.fromisoformat(g["date"])
         when = {"race_week": "השבוע!", "taper": f"טייפר, עוד {g['days_after_week']} ימים"}.get(
             g["phase"], f"עוד {g['weeks_to_race']} שבועות")
         target = f", יעד {hmm_s(g['target_time_s'])}" if g.get("target_time_s") else ""
-        out.append(f"🏁 {g['name']} ({g['priority']}) {gd.day}.{gd.month}{target} | {when}")
+        out.append(f"מטרה: {g['name']} ({g['priority']}) {gd.day}.{gd.month}{target} | {when}")
+    pl = s.get("plan")
+    if pl:
+        line = f"תכנון: {pl['phase']}, שבוע {pl['week']} מתוך {pl['weeks']}" if pl["phase"] else f"תכנון: שבוע {pl['week']} מתוך {pl['weeks']}"
+        bits = []
+        if pl.get("volume_km"):
+            lo, hi = pl["volume_km"]
+            bits.append(f"נפח {lo:g}" + (f"-{hi:g}" if hi != lo else ""))
+        if pl.get("lsd_km"):
+            bits.append(f"ארוכה {pl['lsd_km']:g}")
+        out.append(line + (" | " + ", ".join(bits) if bits else ""))
+        if pl.get("sessions"):
+            out.append("בתכנון: " + ", ".join(pl["sessions"]))
+        if pl.get("race"):
+            out.append(f"תחרות/טסט: {pl['race']}")
 
     # headline
     alerts = [f for f in s["flags"] if f["level"] in ("alert", "warn")]
     if alerts:
-        out.append(f"{ICON[alerts[0]['level']]} {alerts[0]['text']}")
+        out.append(f"{LEVEL_HE[alerts[0]['level']]}: {alerts[0]['text']}")
 
     # volume
     out.append("")
-    out.append("*📊 נפח*")
+    out.append("*נפח*")
     if v["runs"]:
         out.append(f"ריצה: *{v['run_km']:g} ק\"מ* | {hmm(v['run_s'])} | {v['runs']} ריצות")
     else:
@@ -140,7 +154,7 @@ def render_athlete(s: dict) -> str:
         th_txt = f"סף {pace(th['pace_s_per_km'])}/ק\"מ" if th["pace_s_per_km"] else ""
         if th["lthr"]:
             th_txt += (" | " if th_txt else "") + f"דופק סף {th['lthr']}"
-        out.append(f"*🎯 עצימות* _({th_txt})_" if th_txt else "*🎯 עצימות*")
+        out.append(f"*עצימות* _({th_txt})_" if th_txt else "*עצימות*")
         out.append(f"קל Z1–Z2: {kc['easy']:g} ק\"מ ({_pct(kc['easy'], run_km_zoned)})")
         if kc["moderate"]:
             out.append(f"בינוני Z3: {kc['moderate']:g} ק\"מ ({_pct(kc['moderate'], run_km_zoned)})")
@@ -153,7 +167,7 @@ def render_athlete(s: dict) -> str:
     key = [w for w in s["workouts"] if w.get("quality") or w.get("long")]
     if key:
         out.append("")
-        out.append("*💥 אימוני מפתח*")
+        out.append("*אימוני מפתח*")
         for w in key:
             head = f"*{_day_he(w['date'])} – {w['type']}* | {km(w['distance_m'])} | TSS {w['tss']}"
             if w.get("rpe"):
@@ -165,11 +179,11 @@ def render_athlete(s: dict) -> str:
                     continue
                 out.append("  " + _part_line(p))
             if w.get("comment"):
-                out.append(f"  💬 _{w['comment']}_")
+                out.append(f"  הערה: _{w['comment']}_")
 
     # load
     out.append("")
-    out.append("*🔋 עומס*")
+    out.append("*עומס*")
     tss_cmp = f" (שבוע שעבר {ld['prev_week_tss']})" if ld["prev_week_tss"] else ""
     out.append(f"TSS שבועי: *{ld['week_tss']}*{tss_cmp}")
     if ld["history_days"] >= 28:
@@ -183,20 +197,23 @@ def render_athlete(s: dict) -> str:
     notes = [w for w in s["workouts"] if not (w.get("quality") or w.get("long")) and (w.get("comment") or w.get("rpe"))]
     if notes:
         out.append("")
-        out.append("*💬 תחושות*")
+        out.append("*תחושות*")
         for w in notes:
             rpe = f"RPE {w['rpe']:g}" if w.get("rpe") else ""
             text = f"\"{w['comment']}\"" if w.get("comment") else ""
             out.append(f"{_day_he(w['date'])} {SPORT_HE.get(w['type'], w['type'])}: " + " – ".join(x for x in (rpe, text) if x))
 
     rest = s["flags"][1:] if alerts else s["flags"]
-    if rest or s["highlights"]:
+    for level in ("alert", "warn", "info"):
+        items = [f["text"] for f in rest if f["level"] == level]
+        if items:
+            out.append("")
+            out.append(f"*{LEVEL_HE[level]}*")
+            out.extend(f"- {t}" for t in items)
+    if s["highlights"]:
         out.append("")
-        out.append("*📌 לתשומת לבך*")
-        for f in rest:
-            out.append(f"{ICON[f['level']]} {f['text']}")
-        for g in s["highlights"]:
-            out.append(f"🟢 {g}")
+        out.append("*מה טוב*")
+        out.extend(f"- {g}" for g in s["highlights"])
 
     return "\n".join(out)
 
@@ -215,10 +232,10 @@ def render_overview(summaries: list[dict]) -> str:
     same_week = len({rng(s) for s in summaries}) == 1
     for s in sorted(summaries, key=lambda s: min([{"alert": 0, "warn": 1, "info": 2}[f["level"]] for f in s["flags"]] or [3])):
         levels = [f["level"] for f in s["flags"]]
-        icon = ICON["alert"] if "alert" in levels else ICON["warn"] if "warn" in levels else "🟢"
+        status = "חשוב" if "alert" in levels else "לתשומת לב" if "warn" in levels else "תקין"
         v = s["volume"]
         when = "" if same_week else f" ({rng(s)})"
-        out.append(f"{icon} *{s['athlete']['name']}*{when}: {v['run_km']:g} ק\"מ, "
+        out.append(f"*{s['athlete']['name']}*{when} ({status}): {v['run_km']:g} ק\"מ, "
                    f"{s['intensity']['km_by_class']['hard']:g} עצים, TSS {s['load']['week_tss']}")
     out.append("")
     out.append("_פירוט לכל מתאמן בהודעות הבאות_")

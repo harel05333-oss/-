@@ -5,6 +5,7 @@
   python -m coach_agent check examples/athletes/michal.json --from 2026-11-15
   python -m coach_agent questionnaire                       # print the questions
   python -m coach_agent intake athletes/new.json            # fill / edit an athlete's questionnaire
+  python -m coach_agent plan athletes/dani.json season.xlsx --start 2026-07-26 --goal 2027-04-11
   python -m coach_agent dispatch --config coaches.json --state state.json [--now 2026-11-22T09:00]
   python -m coach_agent serve --config coaches.json --state state.json --port 8080
 """
@@ -112,6 +113,19 @@ def cmd_intake(args) -> int:
     return 0
 
 
+def cmd_plan(args) -> int:
+    from .season import describe_plan, import_plan
+
+    plan, warnings = import_plan(
+        args.file, args.xlsx,
+        date.fromisoformat(args.start) if args.start else None,
+        date.fromisoformat(args.goal) if args.goal else None,
+    )
+    name = json.loads(Path(args.file).read_text(encoding="utf-8"))["athlete"]["name"]
+    print(describe_plan(name, plan, warnings))
+    return 0
+
+
 def cmd_dispatch(args) -> int:
     from .dispatch import Store, dispatch, load_config
     from .whatsapp import WhatsAppClient
@@ -159,6 +173,13 @@ def main(argv=None) -> int:
     i = sub.add_parser("intake", help="מילוי או עדכון שאלון למתאמן")
     i.add_argument("file", help="קובץ ה-JSON של המתאמן (נוצר אם אינו קיים)")
     i.set_defaults(func=cmd_intake)
+
+    pl = sub.add_parser("plan", help="טעינת תכנון עונתי מאקסל למתאמן")
+    pl.add_argument("file", help="קובץ ה-JSON של המתאמן")
+    pl.add_argument("xlsx", help="קובץ האקסל של התכנון")
+    pl.add_argument("--start", help="תאריך תחילת העונה (YYYY-MM-DD). ברירת מחדל: מהשאלון")
+    pl.add_argument("--goal", help="תאריך תחרות המטרה (YYYY-MM-DD). ברירת מחדל: מהשאלון")
+    pl.set_defaults(func=cmd_plan)
 
     d = sub.add_parser("dispatch", help="סבב שליחה אחד לוואטסאפ")
     d.add_argument("--config", required=True)
