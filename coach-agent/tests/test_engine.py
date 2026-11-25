@@ -120,10 +120,13 @@ def test_one_hour_at_threshold_is_100_tss():
 
 def test_ctl_and_atl_rise_and_tsb_uses_yesterday():
     days = {date(2026, 1, 1) + timedelta(d): 100.0 for d in range(60)}
-    chart = performance_chart(days, date(2026, 3, 1))
+    chart = performance_chart(days, date(2026, 3, 1), seed=False)
     last = chart[date(2026, 3, 1)]
     assert 70 < last["ctl"] < 100 and last["atl"] > last["ctl"]
     assert chart[date(2026, 1, 1)]["tsb"] == 0
+    # seeded: an athlete who always did 100 a day stays at 100, not climbing from 0
+    seeded = performance_chart(days, date(2026, 3, 1))
+    assert seeded[date(2026, 1, 1)]["ctl"] == pytest.approx(100)
 
 
 def test_week_bounds_sunday_and_monday():

@@ -6,6 +6,8 @@ a heart rate far above what the pace explains, or a second hard session too soon
 """
 from __future__ import annotations
 
+from .form import day_crossings
+from .load import daily_tss, performance_chart
 from .models import Activity, Athlete, PlannedWorkout
 from .report import hmm, km, pace
 from .threshold import resolve_thresholds
@@ -109,6 +111,14 @@ def check_workout(
     )
     if gap_s >= HR_GAP_MIN_S:
         add("info", f"דופק גבוה ביחס לקצב ב-{hmm(gap_s)} (חום, עליות, עייפות או תחילת מחלה)")
+
+    # ---- Fitness / Fatigue / Form after this workout -----------------------------------
+    if history:
+        acts = history if any(a.id == activity.id for a in history) else history + [activity]
+        days = daily_tss([a for a in acts if a.day <= activity.day], th, athlete.tss_history)
+        chart = performance_chart(days, activity.day)
+        for level, text in day_crossings(chart, activity.day, (activity.day - min(days)).days + 1):
+            add(level, text)
 
     # ---- long run progression --------------------------------------------------------
     if history and w.is_long:

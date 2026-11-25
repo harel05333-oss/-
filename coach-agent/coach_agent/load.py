@@ -77,15 +77,24 @@ def daily_tss(activities: list[Activity], th: Thresholds, history: dict[date, fl
     return days
 
 
-def performance_chart(days: dict[date, float], until: date) -> dict[date, dict[str, float]]:
+SEED_DAYS = 28
+
+
+def performance_chart(days: dict[date, float], until: date, seed: bool = True) -> dict[date, dict[str, float]]:
     """CTL (fitness), ATL (fatigue) and TSB (form) for every day up to `until`.
 
     TSB of a day is yesterday's CTL minus yesterday's ATL, as in TrainingPeaks.
+    Our data has a beginning, the athlete's training does not: starting from 0
+    would make Fitness look tiny for weeks. With `seed`, both start at the
+    average daily TSS of the first 4 weeks, as if the athlete had trained like that before.
     """
     if not days:
         return {}
     d = min(days)
     ctl = atl = 0.0
+    if seed:
+        first = [days.get(d + timedelta(days=i), 0.0) for i in range(SEED_DAYS)]
+        ctl = atl = sum(first) / SEED_DAYS
     out: dict[date, dict[str, float]] = {}
     while d <= until:
         tsb = ctl - atl

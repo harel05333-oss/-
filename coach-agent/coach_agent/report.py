@@ -122,7 +122,11 @@ def render_athlete(s: dict) -> str:
     if v["longest_run_km"]:
         out.append(f"ריצה ארוכה: {v['longest_run_km']:g} ק\"מ")
     c = s.get("cycle")
-    if c:
+    t = s.get("taper")
+    if t:
+        down = f", נפח {t['down_from_peak']:.0%}- מהשיא ({t['peak_km']:g})" if t.get("down_from_peak") is not None else ""
+        out.append(f"טייפר: שבוע {t['week']} מתוך {t['weeks']}{down}" if t["week"] <= t["weeks"] else "שבוע תחרות")
+    elif c:
         if c["recovery_week"]:
             out.append(f"שבוע הורדה (אחרי {c['loading_weeks']} שבועות עומס)")
         elif c.get("load_weeks_planned") and c.get("known"):
@@ -169,9 +173,11 @@ def render_athlete(s: dict) -> str:
     tss_cmp = f" (שבוע שעבר {ld['prev_week_tss']})" if ld["prev_week_tss"] else ""
     out.append(f"TSS שבועי: *{ld['week_tss']}*{tss_cmp}")
     if ld["history_days"] >= 28:
-        out.append(f"כושר CTL {ld['ctl']:g} ({ld['ramp']:+g}) | עייפות ATL {ld['atl']:g} | רעננות TSB {ld['tsb']:+g}")
+        out.append(f"Fitness (CTL) {ld['ctl']:.0f} ({ld['ramp']:+.1f} השבוע)")
+        out.append(f"Fatigue (ATL) {ld['atl']:.0f}" + (f" | פי {ld['fatigue_ratio']:.1f} מה-Fitness" if ld.get("fatigue_ratio") else ""))
+        out.append(f"Form (TSB) {ld['tsb']:+.0f}: {ld['form_zone']}")
     else:
-        out.append(f"_כושר/עייפות יהיו מדויקים אחרי 4+ שבועות נתונים (יש {ld['history_days']} ימים)_")
+        out.append(f"_Fitness/Fatigue/Form יהיו מדויקים אחרי 4+ שבועות נתונים (יש {ld['history_days']} ימים)_")
 
     # feelings from other sessions (key sessions already showed theirs)
     notes = [w for w in s["workouts"] if not (w.get("quality") or w.get("long")) and (w.get("comment") or w.get("rpe"))]

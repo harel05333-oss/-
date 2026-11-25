@@ -9,6 +9,7 @@ import re
 from datetime import date, datetime, timedelta
 
 from .cycles import analyze_cycle, weekly_series
+from .form import acwr, form_zone, week_flags
 from .load import activity_tss, daily_tss, performance_chart
 from .models import Activity, Athlete, PlannedWorkout
 from .threshold import Thresholds, resolve_thresholds
@@ -16,9 +17,6 @@ from .workouts import RepeatSet, Segment, WorkoutAnalysis, analyze_run
 from .zones import EASY, HARD, MODERATE, ZONES
 
 # ---- flag thresholds (one place to tune) -----------------------------------
-RAMP_HIGH = 7.0  # CTL points per week
-TSB_VERY_TIRED = -30.0
-TSB_FRESH = 5.0
 HARD_SHARE_HIGH = 0.30  # of run time
 GREY_ZONE_SHARE = 0.15  # Z3 of run distance
 EASY_RUN_RPE_HIGH = 7
@@ -42,7 +40,6 @@ WEEKDAYS = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", 
 
 # Taper length before a goal race, by distance.
 TAPER_DAYS = [(30000, 21), (15000, 17), (0, 12)]
-TAPER_MAX_VOLUME = 0.90  # in taper, run km should be below 90% of the 4-week average
 
 
 def week_bounds(day: date, week_start: str = "sunday") -> tuple[date, date]:
@@ -85,6 +82,27 @@ def previous_weeks(athlete: Athlete, activities: list[Activity], start: date, pr
         })
     best = lambda k: round(max(r[k] for r in rows), 1) if rows else None
     return {"weeks": rows, "longest_km": best("longest_km"), "run_km": best("run_km"), "hard_km": best("hard_km")}
+
+
+def _taper_context(goal: dict | None, rows: list[dict]) -> dict | None:
+    """Week n of N of the taper, and how far volume came down from the peak before it."""
+    if not goal or goal["phase"] not in ("taper", "race_week"):
+        return None
+    taper_days = next(t for d, t in TAPER_DAYS if goal["distance_m"] >= d)
+    n_weeks = -(-taper_days // 7)
+    left = goal["days_after_week"] // 7 if goal["phase"] == "taper" else -1
+    before = rows[:-1][-(n_weeks + 3):]
+    peak = max((r["run_km"] for r in before), default=0)
+    cur = rows[-1]["run_km"] if rows else 0
+    prev = rows[-2] if len(rows) >= 2 else None
+    return {
+        "week": n_weeks - left if goal["phase"] == "taper" else n_weeks + 1,
+        "weeks": n_weeks,
+        "peak_km": peak,
+        "down_from_peak": round(1 - cur / peak, 2) if peak else None,
+        "prev_run_km": prev["run_km"] if prev else None,
+        "prev_longest_km": prev["longest_km"] if prev else None,
+    }
 
 
 def _goal_context(athlete: Athlete, start: date, end: date) -> dict | None:
@@ -325,6 +343,8 @@ def analyze_week(
             "tsb": round(tsb_next, 1),
             "ramp": round(ramp, 1),
             "history_days": history_days,
+            "form_zone": form_zone(tsb_next)[1],
+            "fatigue_ratio": round(acwr(atl, ctl), 2) if acwr(atl, ctl) else None,
         },
         "efficiency": {
             "ef": round(ef_now, 4) if ef_now else None,
@@ -336,7 +356,13 @@ def analyze_week(
     }
     summary["goal"] = _goal_context(athlete, start, end)
     summary["progression"] = previous_weeks(athlete, activities, start, prefer)
-    summary["cycle"] = analyze_cycle(weekly_series(athlete, activities, start, prefer), athlete.profile.cycle_load_weeks)
+    rows = weekly_series(athlete, activities, start, prefer)
+    summary["cycle"] = analyze_cycle(rows, athlete.profile.cycle_load_weeks)
+    summary["taper"] = _taper_context(summary["goal"], rows)
+    recovery = bool(summary["cycle"] and summary["cycle"]["recovery_week"])
+    g = summary["goal"]
+    summary["_form"] = week_flags(chart, start, end, g["phase"] if g else None, recovery,
+                                  g["days_after_week"] if g else None, history_days)
     summary["flags"], summary["highlights"] = _flags(summary, th, end, athlete)
     return summary
 
@@ -353,15 +379,26 @@ def _flags(s: dict, th: Thresholds, end: date, athlete: Athlete) -> tuple[list[d
 
     goal = s.get("goal")
     in_taper = goal and goal["phase"] in ("taper", "race_week")
-    if goal and goal["phase"] == "taper" and v["avg4_run_km"] and v["run_km"] > v["avg4_run_km"] * TAPER_MAX_VOLUME:
-        flag("warn", f"טייפר לפני {goal['name']}, אבל הנפח לא ירד ({v['run_km']:g} מול ממוצע {v['avg4_run_km']:g})")
     if not in_taper and v["avg4_run_km"] and v["run_km"] > v["avg4_run_km"] * (1 + prof.max_weekly_increase):
         up = v["run_km"] / v["avg4_run_km"] - 1
         flag("warn", f"קפיצה בנפח: {v['run_km']:g} ק\"מ, {up:.0%} מעל ממוצע 4 השבועות ({v['avg4_run_km']:g})")
 
     ref = s.get("progression") or {}
     cyc = s.get("cycle")
-    if cyc:
+    taper = s.get("taper")
+    if taper and goal["phase"] == "taper":
+        # After the build the load comes down on purpose: the cycle rule does not apply.
+        if cyc:
+            cyc.pop("flags")
+        recovery_week = True
+        if taper["prev_run_km"] and v["run_km"] >= taper["prev_run_km"]:
+            flag("warn", f"טייפר: הנפח לא ירד לעומת השבוע הקודם ({v['run_km']:g} מול {taper['prev_run_km']:g})")
+        if taper["prev_longest_km"] and v["longest_run_km"] >= taper["prev_longest_km"]:
+            flag("info", f"טייפר: הארוכה לא התקצרה ({v['longest_run_km']:g} מול {taper['prev_longest_km']:g})")
+    elif cyc and in_taper:  # race week
+        cyc.pop("flags")
+        recovery_week = True
+    elif cyc:
         recovery_week = cyc["recovery_week"]
         for level, text in cyc.pop("flags"):
             flag(level, text)
@@ -388,13 +425,10 @@ def _flags(s: dict, th: Thresholds, end: date, athlete: Athlete) -> tuple[list[d
     if prof.max_quality_per_week is not None and n_quality > prof.max_quality_per_week:
         flag("warn", f"{n_quality} אימוני איכות (מתוכנן עד {prof.max_quality_per_week})")
 
-    enough_history = ld["history_days"] >= 28
-    if enough_history and ld["ramp"] > RAMP_HIGH:
-        flag("warn", f"העומס עלה מהר: הכושר (CTL) עלה ב-{ld['ramp']:g} נקודות השבוע")
-    if enough_history and ld["tsb"] < TSB_VERY_TIRED:
-        flag("alert", f"עייפות גבוהה מאוד: רעננות (TSB) {ld['tsb']:g}")
-    elif enough_history and ld["tsb"] > TSB_FRESH and s["volume"]["runs"]:
-        good.append(f"רענן לקראת השבוע הבא (TSB {ld['tsb']:+g})")
+    form_flags, form_good = s.pop("_form")
+    for level, text in form_flags:
+        flag(level, text)
+    good.extend(form_good)
 
     run_s = sum(it["time_by_class"].values())
     if run_s:
