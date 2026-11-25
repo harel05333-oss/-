@@ -8,6 +8,7 @@ from __future__ import annotations
 import re
 from datetime import date, datetime, timedelta
 
+from .cycles import analyze_cycle, weekly_series
 from .load import activity_tss, daily_tss, performance_chart
 from .models import Activity, Athlete, PlannedWorkout
 from .threshold import Thresholds, resolve_thresholds
@@ -335,6 +336,7 @@ def analyze_week(
     }
     summary["goal"] = _goal_context(athlete, start, end)
     summary["progression"] = previous_weeks(athlete, activities, start, prefer)
+    summary["cycle"] = analyze_cycle(weekly_series(athlete, activities, start, prefer), athlete.profile.cycle_load_weeks)
     summary["flags"], summary["highlights"] = _flags(summary, th, end, athlete)
     return summary
 
@@ -358,7 +360,13 @@ def _flags(s: dict, th: Thresholds, end: date, athlete: Athlete) -> tuple[list[d
         flag("warn", f"קפיצה בנפח: {v['run_km']:g} ק\"מ, {up:.0%} מעל ממוצע 4 השבועות ({v['avg4_run_km']:g})")
 
     ref = s.get("progression") or {}
-    recovery_week = bool(ref.get("run_km")) and v["run_km"] < ref["run_km"] * RECOVERY_WEEK
+    cyc = s.get("cycle")
+    if cyc:
+        recovery_week = cyc["recovery_week"]
+        for level, text in cyc.pop("flags"):
+            flag(level, text)
+    else:
+        recovery_week = bool(ref.get("run_km")) and v["run_km"] < ref["run_km"] * RECOVERY_WEEK
     if ref.get("longest_km") and v["longest_run_km"]:
         up = round(v["longest_run_km"] - ref["longest_km"], 1)
         if up > prof.lsd_increase_max_km:

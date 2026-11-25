@@ -120,6 +120,8 @@ class Profile:
     weekly_km_max: float | None = None
     max_quality_per_week: int | None = None
     max_weekly_increase: float = 0.15  # 0.10 = 10%
+    # Loading weeks per cycle: 3 = 3:1, 2 = 2:1. None = no fixed cycle.
+    cycle_load_weeks: int | None = 3
     # Long run (LSD) progression vs the longest run of the last 3 weeks, in km.
     lsd_increase_min_km: float = 0.5
     lsd_increase_max_km: float = 2.5

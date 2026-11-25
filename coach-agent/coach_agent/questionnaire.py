@@ -62,6 +62,8 @@ QUESTIONS: list[Question] = [
     Question("weekly_km", "טווח נפח שבועי מתוכנן בק\"מ", "range", S4, hint="למשל 60-80"),
     Question("max_quality", "כמה אימוני איכות לכל היותר בשבוע?", "int", S4),
     Question("max_increase", "עלייה מקסימלית בנפח משבוע לשבוע (%)", "number", S4, hint="ברירת מחדל 15"),
+    Question("cycle", "מחזוריות עומס/הורדה", "choice", S4,
+             [("3", "3:1"), ("2", "2:1"), ("4", "4:1"), ("0", "בלי מחזוריות קבועה")]),
     Question("lsd_progress", "התקדמות בריצה הארוכה משבוע לשבוע, בק\"מ", "range", S4, hint="ברירת מחדל 0.5-2.5"),
     Question("hard_increase", "עלייה מקסימלית בק\"מ עצימים (Z4 ומעלה) משבוע לשבוע", "number", S4,
              hint="ריק = לא לבדוק"),
@@ -173,6 +175,8 @@ def answers_to_athlete(answers: dict, athlete_id: str | None = None) -> dict:
         profile["max_quality_per_week"] = a("max_quality")
     if a("max_increase") is not None:
         profile["max_weekly_increase"] = a("max_increase") / 100
+    if a("cycle") is not None:
+        profile["cycle_load_weeks"] = int(a("cycle")) or None
     if a("lsd_progress"):
         profile["lsd_increase_min_km"], profile["lsd_increase_max_km"] = a("lsd_progress")
     if a("hard_increase") is not None:
@@ -211,6 +215,8 @@ def athlete_to_answers(athlete: dict) -> dict:
     if "lsd_increase_max_km" in p:
         ans["lsd_progress"] = [p.get("lsd_increase_min_km", 0.5), p["lsd_increase_max_km"]]
     ans["hard_increase"] = p.get("hard_km_increase_max")
+    if "cycle_load_weeks" in p:
+        ans["cycle"] = str(p["cycle_load_weeks"] or 0)
     return {k: v for k, v in ans.items() if v not in (None, "", [])}
 
 

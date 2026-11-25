@@ -121,6 +121,12 @@ def render_athlete(s: dict) -> str:
         out.append(" | ".join(cmp))
     if v["longest_run_km"]:
         out.append(f"ריצה ארוכה: {v['longest_run_km']:g} ק\"מ")
+    c = s.get("cycle")
+    if c:
+        if c["recovery_week"]:
+            out.append(f"שבוע הורדה (אחרי {c['loading_weeks']} שבועות עומס)")
+        elif c.get("load_weeks_planned"):
+            out.append(f"שבוע עומס {c['loading_weeks']} מתוך {c['load_weeks_planned']} במחזור")
 
     # intensity
     kc = it["km_by_class"]
